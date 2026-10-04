@@ -25,6 +25,7 @@ const SELECT_FULL = {
 } as const;
 
 const ALLOWED_DEFAULT_ROUTES = new Set([
+  "/dashboard/today",
   "/dashboard",
   "/dashboard/inventory",
   "/dashboard/orders",

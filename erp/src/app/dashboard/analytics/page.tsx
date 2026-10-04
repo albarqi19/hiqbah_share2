@@ -53,7 +53,7 @@ export default function AnalyticsPage() {
             <span className="font-semibold text-amber-700">{t("next30Days")}</span>
           </div>
           <p className="text-3xl font-bold text-amber-600">{upcomingOrders.length}</p>
-          <p className="text-xs text-amber-500">{t("expectedOrdersSoon")}</p>
+          <p className="text-xs text-amber-600">{t("expectedOrdersSoon")}</p>
         </div>
         <div className="bg-blue-50 rounded-2xl border border-blue-200 p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -125,7 +125,7 @@ export default function AnalyticsPage() {
           </table>
         </div>
         {predictions.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-gray-500">
             <TrendingUp size={40} className="mx-auto mb-2" /><p>{t("noAnalyticsData")}</p>
           </div>
         )}

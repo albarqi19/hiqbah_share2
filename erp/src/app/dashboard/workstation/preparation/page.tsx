@@ -154,7 +154,7 @@ export default function PreparationWorkstationPage() {
               </div>
             ))}
           </div>
-          <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border">
+          <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border">
             <PackageCheck size={40} className="mx-auto mb-2" />
             <p>{t("workstationEmpty")}</p>
           </div>
@@ -183,16 +183,16 @@ export default function PreparationWorkstationPage() {
                       <p className="text-sm text-brown font-medium">{order.customer.name}</p>
                     </div>
                     {isOpen ? (
-                      <ChevronUp size={22} className="text-brown/50 flex-shrink-0" />
+                      <ChevronUp size={22} className="text-brown flex-shrink-0" />
                     ) : (
-                      <ChevronDown size={22} className="text-brown/50 flex-shrink-0" />
+                      <ChevronDown size={22} className="text-brown flex-shrink-0" />
                     )}
                   </div>
                   <div className="flex items-center gap-2 flex-wrap mt-3">
                     <OrderStatusBadge status={order.status} />
                     {attention && <NeedsAttentionBadge />}
                   </div>
-                  <div className="flex items-center justify-between mt-3 text-xs text-brown/60 font-medium">
+                  <div className="flex items-center justify-between mt-3 text-xs text-brown font-medium">
                     <span>{order.items.length} {t("itemCountLabel")}</span>
                     <span className="flex items-center gap-1">
                       <Clock size={12} /> {formatDate(lastActivityTime(order))}

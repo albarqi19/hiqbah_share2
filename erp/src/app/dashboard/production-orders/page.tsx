@@ -110,20 +110,20 @@ export default function ProductionOrdersPage() {
                     <Link href={`/dashboard/production-orders/${r.id}`} className="font-bold text-orange hover:underline">
                       {r.productionNumber}
                     </Link>
-                    <p className="text-xs text-brown/70">{r._count.roastingBatches} {t("poBatches")}</p>
+                    <p className="text-xs text-brown">{r._count.roastingBatches} {t("poBatches")}</p>
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-semibold">{r.productSku.skuCode}</p>
-                    <p className="text-xs text-brown/70">{r.productSku.product.productNameEn}</p>
+                    <p className="text-xs text-brown">{r.productSku.product.productNameEn}</p>
                   </td>
                   <td className="px-4 py-3">
                     {r.sourceOrderItem ? (
                       <>
                         <p className="font-medium">#{r.sourceOrderItem.order.orderNumber}</p>
-                        <p className="text-xs text-brown/70">{r.sourceOrderItem.order.customer?.name}</p>
+                        <p className="text-xs text-brown">{r.sourceOrderItem.order.customer?.name}</p>
                       </>
                     ) : (
-                      <span className="text-xs text-brown/50 italic">—</span>
+                      <span className="text-xs text-brown italic">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-end tabular-nums font-semibold">{r.targetUnits}</td>
@@ -133,7 +133,7 @@ export default function ProductionOrdersPage() {
                     <ProgressBar produced={r.progress?.producedUnits ?? 0} target={r.targetUnits} />
                   </td>
                   <td className="px-4 py-3"><ProductionStatusBadge status={r.status} /></td>
-                  <td className="px-4 py-3 text-xs text-brown/70 whitespace-nowrap">{formatDate(r.createdAt)}</td>
+                  <td className="px-4 py-3 text-xs text-brown whitespace-nowrap">{formatDate(r.createdAt)}</td>
                 </tr>
               ))}
             </tbody>

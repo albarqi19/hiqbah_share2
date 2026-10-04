@@ -448,7 +448,7 @@ export default function PackagingPage() {
         </div>
       )}
       {filteredBatches.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-border text-brown/40">
+        <div className="text-center py-16 bg-white rounded-2xl border border-border text-brown">
           <Box size={40} className="mx-auto mb-3 opacity-50" />
           <p className="font-semibold text-lg">{t("noBatchesToPackage")}</p>
           <p className="text-sm mt-1">{t("batchesAfterQc")}</p>
@@ -465,7 +465,7 @@ export default function PackagingPage() {
             const remaining = +batch.roastedAvailableKg.toFixed(3);
             const legacyBags = packagedKg(batch);
             return (
-              <div key={batch.id} data-testid={`pack-batch-${batch.batchNumber}`} className="bg-white rounded-2xl border border-border p-4 hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+              <div key={batch.id} data-testid={`pack-batch-${batch.batchNumber}`} className="bg-white rounded-2xl border border-border p-4 hover:border-hq-control transition-all duration-300">
                 <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -473,7 +473,7 @@ export default function PackagingPage() {
                       {canEditDate && (
                         <button
                           onClick={() => setEditDateBatch(batch)}
-                          className="p-1 rounded-lg text-brown/40 hover:text-orange hover:bg-orange/10 transition-colors"
+                          className="p-1 rounded-lg text-brown hover:text-orange hover:bg-orange/10 transition-colors"
                           title={t("editDateBtn")}
                         >
                           <CalendarDays size={13} />
@@ -491,7 +491,7 @@ export default function PackagingPage() {
                     <p className="text-sm text-brown font-medium">
                       #{(batch.orderItem?.order.orderNumber ?? t("stockBatchLabel"))} — {(batch.orderItem?.order.customer.name ?? t("stockBatchLabel"))} — {batch.greenBean?.beanType || (batch.orderItem?.beanTypeName ?? "")}
                     </p>
-                    <p className="text-xs text-brown/50 mt-0.5">
+                    <p className="text-xs text-brown mt-0.5">
                       {batch.roastedBeanQuantity}kg {t("roastedLabel")} | {batch.greenBeanQuantity}kg {t("greenLabel")} | {formatDate(batch.date)}
                       {batch.roastProfile && ` | ${batch.roastProfile}`}
                     </p>
@@ -499,7 +499,7 @@ export default function PackagingPage() {
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {canCancelBatch && (
                       <button onClick={() => setCancelBatch(batch)}
-                        className="p-2 rounded-xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
+                        className="p-2 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
                         <Trash2 size={16} />
                       </button>
                     )}
@@ -508,7 +508,7 @@ export default function PackagingPage() {
                         named for whether this roast has been touched yet. */}
                     <button
                       onClick={() => openPacking(batch)}
-                      className="flex items-center justify-center gap-1.5 w-full xl:w-auto px-4 py-2.5 bg-orange text-white rounded-xl text-sm font-bold hover:bg-orange-dark shadow-md shadow-orange/20 active:scale-[0.98] transition-all"
+                      className="flex items-center justify-center gap-1.5 w-full xl:w-auto px-4 py-2.5 bg-orange text-white rounded-xl text-sm font-bold hover:bg-orange-dark active:scale-[0.98] transition-all"
                     >
                       <Package size={16} />
                       {batch.status === "Partially Packaged" ? t("continuePackaging") : t("startPackaging")}
@@ -519,7 +519,7 @@ export default function PackagingPage() {
                 <div className="mt-2">
                   <div className="flex justify-between text-xs font-bold mb-1">
                     <span className="text-brown">{packed}kg / {total}kg {t("statusPackaged")}</span>
-                    {remaining > 0 && <span className="text-brown/50">{remaining}kg {t("remainingKg")}</span>}
+                    {remaining > 0 && <span className="text-brown">{remaining}kg {t("remainingKg")}</span>}
                   </div>
                   <div className="w-full bg-muted rounded-full h-2.5">
                     <div
@@ -554,12 +554,12 @@ export default function PackagingPage() {
                 <h2 className="font-extrabold text-charcoal">
                   {packBatch.status === "Partially Packaged" ? t("continuePackaging") : t("startPackaging")}
                 </h2>
-                <p className="text-xs text-brown/60 font-mono">
+                <p className="text-xs text-brown font-mono">
                   {packBatch.batchNumber} — {packBatch.greenBean?.beanType || (packBatch.orderItem?.beanTypeName ?? "")}
                 </p>
               </div>
               <button type="button" onClick={closePacking} aria-label="Close" disabled={packing}>
-                <X size={20} className="text-brown/60" />
+                <X size={20} className="text-brown" />
               </button>
             </div>
 
@@ -618,7 +618,7 @@ export default function PackagingPage() {
                                 aria-label={t("pkgRemoveLine")}
                                 title={t("pkgRemoveLine")}
                                 onClick={() => setLines((prev) => prev.filter((l) => l.uid !== line.uid))}
-                                className="p-1.5 rounded-lg text-brown/40 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                className="p-1.5 rounded-lg text-brown hover:text-red-600 hover:bg-red-50 transition-colors"
                               >
                                 <X size={14} />
                               </button>
@@ -667,7 +667,7 @@ export default function PackagingPage() {
                               </label>
                               <div className="flex flex-col justify-end pb-2">
                                 {sku && (
-                                  <span className="text-[11px] text-brown/60">
+                                  <span className="text-[11px] text-brown">
                                     {t("pkgNominalWeight")}: <b className="tabular-nums">{Math.round(sku.weightGrams)} g</b>
                                   </span>
                                 )}
@@ -677,7 +677,7 @@ export default function PackagingPage() {
 
                           {line.kind === "topUp" && (
                             packState && packState.openPartials.length === 0 ? (
-                              <p className="text-xs font-semibold text-brown/60">{t("pkgNoOpenPartials")}</p>
+                              <p className="text-xs font-semibold text-brown">{t("pkgNoOpenPartials")}</p>
                             ) : (
                               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                 <label className="block sm:col-span-2">
@@ -713,7 +713,7 @@ export default function PackagingPage() {
                                   />
                                 </label>
                                 {partial && (
-                                  <p className="sm:col-span-3 text-[11px] text-brown/60">
+                                  <p className="sm:col-span-3 text-[11px] text-brown">
                                     {t("pkgActualWeight")}: <b className="tabular-nums">{partial.actualGrams} g</b> ·{" "}
                                     {t("pkgNominalWeight")}: <b className="tabular-nums">{partial.nominalGrams} g</b>
                                   </p>
@@ -759,7 +759,7 @@ export default function PackagingPage() {
                               {outcome.classification === "LOSS" && (
                                 <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-800">{t("pkgReconLoss")}</span>
                               )}
-                              <span className="text-brown/60 tabular-nums">
+                              <span className="text-brown tabular-nums">
                                 {outcome.gramsConsumed} g
                                 {outcome.kind !== "loss" && outcome.nominalGrams > 0 && (
                                   <> · {t("pkgActualWeight")} {outcome.actualGramsEach} / {outcome.nominalGrams} g</>
@@ -789,7 +789,7 @@ export default function PackagingPage() {
                       p.standardGrams + p.partialGrams + p.lossGrams + p.remainingGrams === p.availableGrams;
                     const row = (label: string, grams: number, extra?: string, tone = "text-charcoal") => (
                       <>
-                        <span className="text-[11px] text-brown/70">{label}</span>
+                        <span className="text-[11px] text-brown">{label}</span>
                         <span className={`text-xs font-bold tabular-nums text-end ${tone}`}>
                           {grams} g{extra ? ` · ${extra}` : ""}
                         </span>
@@ -797,7 +797,7 @@ export default function PackagingPage() {
                     );
                     return (
                       <div data-testid="packaging-reconciliation" className="rounded-xl border border-border p-3">
-                        <p className="text-[11px] font-bold text-brown/60 uppercase mb-1.5">{t("pkgReconTitle")}</p>
+                        <p className="text-[11px] font-bold text-brown uppercase mb-1.5">{t("pkgReconTitle")}</p>
                         <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                           {row(t("pkgReconAvailable"), p.availableGrams)}
                           {row(t("pkgReconStandard"), p.standardGrams, `${p.standardUnits} ${t("pkgSellableUnits")}`, "text-green-800")}
@@ -820,7 +820,7 @@ export default function PackagingPage() {
                         className={`rounded-xl border p-2.5 ${short ? "border-red-300 bg-red-50" : "border-border"}`}
                         role={short ? "alert" : undefined}
                       >
-                        <p className="text-[11px] font-bold text-brown/60 uppercase mb-1 flex items-center gap-1.5">
+                        <p className="text-[11px] font-bold text-brown uppercase mb-1 flex items-center gap-1.5">
                           {short && <AlertTriangle size={13} className="text-red-700" />}
                           {short ? t("pkgShortageTitle") : t("pkgMaterialsTitle")}
                         </p>
@@ -828,14 +828,14 @@ export default function PackagingPage() {
                           {preview.materials.map((m) => (
                             <li key={m.materialItemId} className="text-xs text-brown">
                               {m.label}: <b className="tabular-nums">{m.required}</b>{" "}
-                              <span className="text-brown/60">({t("pkgShortageAvailable")} {m.available})</span>
+                              <span className="text-brown">({t("pkgShortageAvailable")} {m.available})</span>
                               {m.missing > 0 && (
                                 <span className="text-red-700 font-semibold"> — {t("pkgShortageMissing")}: {m.missing}</span>
                               )}
                             </li>
                           ))}
                         </ul>
-                        {short && <p className="text-[11px] font-semibold text-brown/60 mt-1.5">{t("pkgShortageNoChange")}</p>}
+                        {short && <p className="text-[11px] font-semibold text-brown mt-1.5">{t("pkgShortageNoChange")}</p>}
                       </div>
                     );
                   })()}
@@ -871,7 +871,7 @@ export default function PackagingPage() {
                   )}
 
                   {hasIncompleteLine && (
-                    <p className="text-xs font-semibold text-brown/60">{t("pkgLineIncomplete")}</p>
+                    <p className="text-xs font-semibold text-brown">{t("pkgLineIncomplete")}</p>
                   )}
 
                   {/* Closing warning, next to the action that would close the batch. */}

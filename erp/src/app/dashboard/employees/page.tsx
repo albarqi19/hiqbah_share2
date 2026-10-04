@@ -27,6 +27,7 @@ function parsePerms(raw: string | Permissions): Permissions {
 }
 
 const ROUTE_OPTIONS: { value: string; label: string; module: string | null }[] = [
+  { value: "/dashboard/today",       label: "Home",            module: "dashboard" },
   { value: "/dashboard",             label: "Dashboard",       module: "dashboard" },
   { value: "/dashboard/inventory",   label: "Inventory",       module: "inventory" },
   { value: "/dashboard/orders",      label: "Orders",          module: "orders" },
@@ -43,7 +44,7 @@ const ROUTE_OPTIONS: { value: string; label: string; module: string | null }[] =
 const ACCESS_COLORS: Record<AccessLevel, string> = {
   edit: "bg-green-100 text-green-700 border-green-300",
   view: "bg-info-bg text-slate border-slate/30",
-  none: "bg-gray-100 text-gray-400 border-gray-200",
+  none: "bg-gray-100 text-gray-500 border-gray-200",
 };
 
 const ACCESS_ICONS: Record<AccessLevel, typeof Pencil> = {
@@ -60,7 +61,7 @@ export default function EmployeesPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", username: "", pin: "", password: "", role: "custom", defaultRoute: "/dashboard", active: true });
+  const [form, setForm] = useState({ name: "", username: "", pin: "", password: "", role: "custom", defaultRoute: "/dashboard/today", active: true });
   const [permissions, setPermissions] = useState<Permissions>(buildDefaultPermissions("custom"));
   const [toast, setToast] = useState<{ ok: boolean; text: string } | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -80,7 +81,7 @@ export default function EmployeesPage() {
 
   function openNew() {
     setEditingId(null);
-    setForm({ name: "", username: "", pin: "", password: "", role: "custom", defaultRoute: "/dashboard", active: true });
+    setForm({ name: "", username: "", pin: "", password: "", role: "custom", defaultRoute: "/dashboard/today", active: true });
     setPermissions(buildDefaultPermissions("custom"));
     setDeleteConfirm(false);
     setShowForm(true);
@@ -222,7 +223,7 @@ export default function EmployeesPage() {
         </div>
         {canCreate && (
           <button onClick={openNew}
-            className="flex items-center gap-2 px-5 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange-dark transition-all duration-200 shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98]">
+            className="flex items-center gap-2 px-5 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange-dark transition-all duration-200 active:scale-[0.98]">
             <Plus size={18} strokeWidth={2.5} /> {t("newEmployee")}
           </button>
         )}
@@ -233,15 +234,15 @@ export default function EmployeesPage() {
           const perms = parsePerms(emp.permissions);
           const { edit, view } = countAccess(perms);
           return (
-            <div key={emp.id} className={`bg-white rounded-2xl border p-5 hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300 group ${emp.active ? "border-border hover:border-border-light" : "border-red-200 bg-red-50/30 opacity-70"}`}>
+            <div key={emp.id} className={`bg-white rounded-2xl border p-5 hover:border-hq-control transition-all duration-300 group ${emp.active ? "border-border hover:border-border-light" : "border-red-200 bg-red-50/30 opacity-70"}`}>
               <div className="flex items-center gap-3 mb-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${emp.active ? "bg-slate/10 group-hover:bg-slate/15" : "bg-red-100"}`}>
-                  <Shield size={20} className={emp.active ? "text-slate" : "text-red-400"} />
+                  <Shield size={20} className={emp.active ? "text-slate" : "text-red-600"} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-charcoal">{emp.name}</p>
                   {emp.username && (
-                    <p className="text-[11px] text-brown/50 font-mono font-medium">@{emp.username}</p>
+                    <p className="text-[11px] text-brown font-mono font-medium">@{emp.username}</p>
                   )}
                   <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                     <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cream text-brown">
@@ -256,7 +257,7 @@ export default function EmployeesPage() {
                 </div>
                 {canEditPerms && (
                   <button onClick={() => openEdit(emp)}
-                    className="p-2.5 text-brown/40 hover:text-orange hover:bg-orange/10 rounded-xl transition-all duration-200 opacity-0 group-hover:opacity-100">
+                    className="p-2.5 text-brown hover:text-orange hover:bg-orange/10 rounded-xl transition-all duration-200 opacity-0 group-hover:opacity-100">
                     <Pencil size={16} />
                   </button>
                 )}
@@ -268,13 +269,13 @@ export default function EmployeesPage() {
                 <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-info-bg text-slate border border-slate/20">
                   {view} {t("view")}
                 </span>
-                <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-gray-50 text-gray-400 border border-gray-200">
+                <span className="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-gray-50 text-gray-500 border border-gray-200">
                   {ALL_MODULES.length - edit - view} hidden
                 </span>
               </div>
-              <div className="text-xs text-brown/50 font-medium space-y-0.5">
+              <div className="text-xs text-brown font-medium space-y-0.5">
                 <p className="flex items-center gap-1.5">
-                  <Navigation size={11} className="text-[#6B7280]" />
+                  <Navigation size={11} className="text-brown" />
                   {t("defaultPage")}: <span className="text-charcoal font-bold">{routeLabel(emp.defaultRoute || "/dashboard")}</span>
                 </p>
                 <p>{formatDate(emp.createdAt)}</p>
@@ -284,7 +285,7 @@ export default function EmployeesPage() {
           );
         })}
         {employees.length === 0 && (
-          <div className="col-span-full text-center py-16 text-brown/40">
+          <div className="col-span-full text-center py-16 text-brown">
             <Users size={48} className="mx-auto mb-3 opacity-50" /><p className="font-semibold">{t("noEmployeesFound")}</p>
           </div>
         )}
@@ -302,14 +303,14 @@ export default function EmployeesPage() {
                 <div>
                   <label className="block text-sm font-bold text-charcoal mb-1.5">{t("displayName")}</label>
                   <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required />
+                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-charcoal mb-1.5">{t("usernameLabel")} <span className="text-brown/50 font-normal">(login ID)</span></label>
+                  <label className="block text-sm font-bold text-charcoal mb-1.5">{t("usernameLabel")} <span className="text-brown font-normal">(login ID)</span></label>
                   <div className="relative">
-                    <span className="absolute ltr:left-3.5 rtl:right-3.5 top-1/2 -translate-y-1/2 text-brown/40 font-bold text-sm select-none">@</span>
+                    <span className="absolute ltr:left-3.5 rtl:right-3.5 top-1/2 -translate-y-1/2 text-brown font-bold text-sm select-none">@</span>
                     <input type="text" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "") })}
-                      className="w-full ltr:pl-8 rtl:pr-8 pr-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors font-mono"
+                      className="w-full ltr:pl-8 rtl:pr-8 pr-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors font-mono"
                       placeholder="e.g. ahmed" required />
                   </div>
                 </div>
@@ -322,7 +323,7 @@ export default function EmployeesPage() {
                     {editingId ? t("newPin") : t("pinLabel")}
                   </label>
                   <input type="text" value={form.pin} onChange={(e) => setForm({ ...form, pin: e.target.value.replace(/\D/g, "") })}
-                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors font-mono tracking-widest"
+                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors font-mono tracking-widest"
                     {...(!editingId ? { required: true, minLength: PIN_LENGTH } : {})}
                     inputMode="numeric" maxLength={PIN_LENGTH} placeholder={`${PIN_LENGTH} digits`} />
                 </div>
@@ -331,7 +332,7 @@ export default function EmployeesPage() {
                     {editingId ? t("passwordLabel") : t("passwordLabel")}
                   </label>
                   <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                    className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                     placeholder="For username+password login" autoComplete="new-password" />
                 </div>
               </div>
@@ -341,7 +342,7 @@ export default function EmployeesPage() {
                 <div className="flex items-center justify-between px-4 py-3 rounded-xl border-2 border-border bg-cream/50">
                   <div>
                     <p className="text-sm font-bold text-charcoal">حالة الحساب · Account Status</p>
-                    <p className="text-xs text-brown/50 mt-0.5">{form.active ? "Active — employee can log in" : "Inactive — login blocked"}</p>
+                    <p className="text-xs text-brown mt-0.5">{form.active ? "Active — employee can log in" : "Inactive — login blocked"}</p>
                   </div>
                   <button
                     type="button"
@@ -356,12 +357,12 @@ export default function EmployeesPage() {
               {/* Default Landing Page */}
               <div>
                 <label className="block text-sm font-bold text-charcoal mb-1.5 flex items-center gap-1.5">
-                  <Navigation size={14} className="text-[#6B7280]" /> {t("defaultPage")}
+                  <Navigation size={14} className="text-brown" /> {t("defaultPage")}
                 </label>
                 <select
                   value={form.defaultRoute}
                   onChange={(e) => setForm({ ...form, defaultRoute: e.target.value })}
-                  className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors bg-white text-charcoal text-sm"
+                  className="w-full px-4 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors bg-white text-charcoal text-sm"
                 >
                   {ROUTE_OPTIONS.map((opt) => {
                     const accessible = !opt.module || opt.module === "dashboard" || hasModuleAccess(permissions, opt.module);
@@ -377,7 +378,7 @@ export default function EmployeesPage() {
                     ⚠ This page requires access permissions for that module. Grant access above or change the landing page.
                   </p>
                 )}
-                <p className="text-xs text-brown/50 mt-1.5 font-medium">
+                <p className="text-xs text-brown mt-1.5 font-medium">
                   Only pages the employee can access are selectable. Greyed-out options require the relevant module permission.
                 </p>
               </div>
@@ -422,7 +423,7 @@ export default function EmployeesPage() {
                                 <button key={level} type="button"
                                   onClick={() => setModuleAccess(mod, level)}
                                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border-2 transition-all duration-200 ${
-                                    active ? ACCESS_COLORS[level] : "bg-white text-gray-400 border-gray-200 hover:border-gray-300"
+                                    active ? ACCESS_COLORS[level] : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
                                   }`}>
                                   <Icon size={12} />
                                   {level === "edit" ? t("edit") : level === "view" ? t("view") : t("noAccess")}
@@ -441,8 +442,8 @@ export default function EmployeesPage() {
                                   <label key={sub.key} className="flex items-center gap-2 cursor-pointer group/sub">
                                     <input type="checkbox" checked={enabled}
                                       onChange={() => toggleSub(mod, sub.key)}
-                                      className="w-4 h-4 rounded border-2 border-gray-300 text-orange focus:ring-orange/30 accent-orange" />
-                                    <span className={`text-xs font-medium transition-colors ${enabled ? "text-charcoal" : "text-gray-400"}`}>
+                                      className="w-4 h-4 rounded border-2 border-gray-300 text-orange focus:ring-orange accent-orange" />
+                                    <span className={`text-xs font-medium transition-colors ${enabled ? "text-charcoal" : "text-gray-500"}`}>
                                       {sub.label}
                                     </span>
                                   </label>
@@ -481,7 +482,7 @@ export default function EmployeesPage() {
                   </button>
                 )}
                 <button type="submit"
-                  className="flex-1 py-3 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark transition-all duration-200 shadow-md shadow-orange/20 active:scale-[0.98]">
+                  className="flex-1 py-3 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark transition-all duration-200 active:scale-[0.98]">
                   {editingId ? t("saveChanges") : t("createEmployee")}
                 </button>
                 <button type="button" onClick={() => setShowForm(false)}

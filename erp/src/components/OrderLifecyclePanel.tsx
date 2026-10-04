@@ -60,15 +60,15 @@ const ORDER_STATUS_LABEL_KEYS: Record<string, TranslationKey> = {
 // Icon and colour-token pairing per approved status — every status must be
 // distinguishable by icon + label, never by colour alone.
 //
-// Cancelled vs Rejected is the distinction to protect: Cancelled is NEUTRAL grey
-// (#3f3f46 on #f4f4f5, XCircle) because the order simply stopped; Rejected is
-// DESTRUCTIVE red (#b91c1c on #fef2f2, Ban) because it failed the approval gate.
-// They must never be merged.
+// Cancelled vs Rejected is the distinction to protect: Cancelled is NEUTRAL ink
+// (--oo-status-cancelled on the neutral surface, XCircle) because the order simply
+// stopped; Rejected is DESTRUCTIVE (--oo-status-rejected, the darker Hiqbah danger
+// step, Ban) because it failed the approval gate. They must never be merged.
 //
-// Rejected and Blocked intentionally share the red-50 background. That is not a
-// bug to "fix": Blocked is an item-level decision at #dc2626 with AlertTriangle,
-// Rejected is an order-level status one step darker at #b91c1c with Ban, so they
-// stay separable by foreground, icon, label and level.
+// Rejected and Blocked intentionally share the danger surface. That is not a bug to
+// "fix": Blocked is an item-level decision in Hiqbah danger with AlertTriangle,
+// Rejected is an order-level status one step darker with Ban, so they stay
+// separable by foreground, icon, label and level.
 const ORDER_STATUS_ICON: Record<string, React.ElementType> = {
   "Waiting Approval": Clock,
   "Waiting Preparation Review": ClipboardClock,
@@ -332,7 +332,7 @@ export function ActivityTimeline({ activities }: { activities: LifecycleActivity
   const { t } = useI18n();
 
   if (activities.length === 0) {
-    return <p className="text-xs text-brown/50 italic">{t("noActivityYet")}</p>;
+    return <p className="text-xs text-brown italic">{t("noActivityYet")}</p>;
   }
 
   return (
@@ -353,12 +353,12 @@ export function ActivityTimeline({ activities }: { activities: LifecycleActivity
                     {a.department}
                   </span>
                 )}
-                <span className="text-[10px] text-brown/50 ltr:ml-auto rtl:mr-auto">
+                <span className="text-[10px] text-brown ltr:ml-auto rtl:mr-auto">
                   {a.authorName} — {formatDate(a.createdAt)}
                 </span>
               </div>
               {/* Rendered as plain text only — never dangerouslySetInnerHTML. */}
-              <p className="text-xs text-charcoal/80 mt-1 whitespace-pre-wrap break-words">{a.message}</p>
+              <p className="text-xs text-charcoal mt-1 whitespace-pre-wrap break-words">{a.message}</p>
             </div>
           </li>
         );
@@ -422,7 +422,7 @@ export function AddNoteForm({ orderId, onSuccess }: { orderId: string; onSuccess
         <select
           value={department}
           onChange={(e) => setDepartment(e.target.value as OrderNoteDepartment)}
-          className="sm:w-44 px-3 py-2 border-2 border-border rounded-xl text-sm bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+          className="sm:w-44 px-3 py-2 border-2 border-border rounded-xl text-sm bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
         >
           {DEPARTMENT_OPTIONS.map((d) => (
             <option key={d.value} value={d.value}>{t(d.labelKey)}</option>
@@ -433,11 +433,11 @@ export function AddNoteForm({ orderId, onSuccess }: { orderId: string; onSuccess
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t("notePlaceholder")}
           rows={2}
-          className="flex-1 px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors resize-none"
+          className="flex-1 px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors resize-none"
         />
       </div>
       <div className="flex items-center justify-between gap-2">
-        <span className={`text-[11px] font-semibold ${overLimit ? "text-red-600" : "text-brown/40"}`}>
+        <span className={`text-[11px] font-semibold ${overLimit ? "text-red-600" : "text-brown"}`}>
           {message.length}/{NOTE_MAX_LENGTH}
         </span>
         <button
@@ -789,7 +789,7 @@ export function PreparationReviewTable({
   return (
     <div className="space-y-3">
       {!canEdit && (
-        <p className="text-xs text-brown/50 italic">{t("readOnlyPrepNotice")}</p>
+        <p className="text-xs text-brown italic">{t("readOnlyPrepNotice")}</p>
       )}
       {error && (
         <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold px-3 py-2 rounded-xl">
@@ -805,7 +805,7 @@ export function PreparationReviewTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm stack-table">
           <thead>
-            <tr className="text-xs text-brown/60">
+            <tr className="text-xs text-brown">
               <th className="text-start px-2 py-1 font-semibold">{t("beanType")}</th>
               <th className="text-end px-2 py-1 font-semibold">{t("prepColRequired")}</th>
               <th className="text-end px-2 py-1 font-semibold">{t("prepColAvailableNow")}</th>
@@ -842,13 +842,13 @@ export function PreparationReviewTable({
                       <td className="px-2 py-1.5 text-end font-medium" data-label={t("prepColRequired")}>{item.quantityKg}</td>
                       <td className="px-2 py-1.5 text-end tabular-nums" data-label={t("prepColAvailableNow")}>
                         {stockLoading && !s ? (
-                          <span className="text-brown/40">…</span>
+                          <span className="text-brown">…</span>
                         ) : s ? (
-                          <span className={s.freeToPromiseQty > 0 ? "text-green-600 font-semibold" : "text-brown/40"}>
+                          <span className={s.freeToPromiseQty > 0 ? "text-green-600 font-semibold" : "text-brown"}>
                             {s.freeToPromiseQty}
                           </span>
                         ) : (
-                          <span className="text-brown/40">—</span>
+                          <span className="text-brown">—</span>
                         )}
                       </td>
                       {/* A committed, unblocked line shows stock this order actually holds,
@@ -857,7 +857,7 @@ export function PreparationReviewTable({
                         <span
                           className={
                             isBlocked
-                              ? "text-brown/40"
+                              ? "text-brown"
                               : item.preparationDecision
                                 ? "font-bold text-oo-status-ready"
                                 : undefined
@@ -914,8 +914,8 @@ export function PreparationReviewTable({
                                 aria-required="true"
                                 className={`w-full px-3 py-2 border-2 rounded-xl text-sm focus:ring-2 outline-none transition-colors resize-none ${
                                   blockedWithoutNote
-                                    ? "border-oo-status-blocked focus:border-oo-status-blocked focus:ring-oo-status-blocked/20"
-                                    : "border-oo-border-default focus:border-oo-action-primary focus:ring-oo-action-primary/20"
+                                    ? "border-oo-status-blocked focus:border-oo-status-blocked focus:ring-oo-status-blocked"
+                                    : "border-oo-border-default focus:border-oo-action-primary focus:ring-oo-action-primary"
                                 }`}
                               />
                               {blockedWithoutNote && (
@@ -1000,8 +1000,8 @@ export function OwnerDisplay({ owner }: { owner: { name: string } | null }) {
   const { t } = useI18n();
   return (
     <span className="inline-flex items-center gap-1.5 text-sm text-charcoal">
-      <UserCircle2 size={15} className="text-brown/50" />
-      {owner ? owner.name : <span className="text-brown/40 italic">{t("unassignedOwner")}</span>}
+      <UserCircle2 size={15} className="text-brown" />
+      {owner ? owner.name : <span className="text-brown italic">{t("unassignedOwner")}</span>}
     </span>
   );
 }

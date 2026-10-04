@@ -385,7 +385,7 @@ export default function DispatchPage() {
                   <div className="min-w-0">
                     <p className="font-semibold">#{item.order.orderNumber} — {item.order.customer.name}</p>
                     <p className="text-sm text-brown font-medium">{item.beanTypeName} — {item.quantityKg}kg {t("kgOrdered")}</p>
-                    <p className="text-xs text-brown/70 mt-0.5">
+                    <p className="text-xs text-brown mt-0.5">
                       {t("packaged")}: {packed}kg · {t("availableForDelivery")}: {available}kg
                     </p>
                     {item.deliveredQty > 0 && (
@@ -400,7 +400,7 @@ export default function DispatchPage() {
                   {canDeliver && (
                     <button
                       onClick={() => startDelivery(item)}
-                      className="shrink-0 px-4 py-2 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark flex items-center gap-2 shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold"
+                      className="shrink-0 px-4 py-2 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark flex items-center gap-2 active:scale-[0.98] transition-all duration-200 font-bold"
                     >
                       <Truck size={16} /> {t("deliver")}
                     </button>
@@ -420,7 +420,7 @@ export default function DispatchPage() {
           <input
             type="text" placeholder={t("searchDeliveries")} value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+            className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
           />
         </div>
         <div className="bg-white rounded-2xl border border-border overflow-hidden">
@@ -502,7 +502,7 @@ export default function DispatchPage() {
                 </label>
 
                 {lotsLoading ? (
-                  <div className="flex items-center gap-2 px-3 py-2.5 border-2 border-border rounded-xl text-sm text-brown/60">
+                  <div className="flex items-center gap-2 px-3 py-2.5 border-2 border-border rounded-xl text-sm text-brown">
                     <div className="w-4 h-4 border-2 border-orange border-t-transparent rounded-full animate-spin" />
                     {/* Also hard-coded Arabic: an English session saw it while the
                         lot list loaded, which on a remote database is several seconds. */}
@@ -511,7 +511,7 @@ export default function DispatchPage() {
                 ) : lots.length === 0 ? (
                   <div className="space-y-1.5">
                     <div className="flex items-start gap-2 px-3 py-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
-                      <AlertTriangle size={15} className="shrink-0 mt-0.5 text-amber-500" />
+                      <AlertTriangle size={15} className="shrink-0 mt-0.5 text-amber-600" />
                       <span>{t("noLotsAvailable")}</span>
                     </div>
                   </div>
@@ -520,7 +520,7 @@ export default function DispatchPage() {
                     value={lotId}
                     onChange={(e) => setLotId(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm bg-white"
+                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm bg-white"
                   >
                     {/* Was hard-coded Arabic, so an English session saw one Arabic string
                         in the middle of an otherwise English form. */}
@@ -564,7 +564,7 @@ export default function DispatchPage() {
                         {lotFreeQty.toFixed(1)} kg {t("lotAvailableKg")}
                       </span>
                     </div>
-                    <p className="text-xs text-brown/60 mt-0.5">
+                    <p className="text-xs text-brown mt-0.5">
                       {lang === "ar"
                         ? (selectedLot.product.productNameAr ?? selectedLot.product.productNameEn)
                         : selectedLot.product.productNameEn}
@@ -592,13 +592,13 @@ export default function DispatchPage() {
                     })
                   }
                   required
-                  className={`w-full px-3 py-2.5 border-2 rounded-xl focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm ${
+                  className={`w-full px-3 py-2.5 border-2 rounded-xl focus:ring-2 focus:ring-orange outline-none transition-colors text-sm ${
                     lotExceedsQty ? "border-red-300 focus:border-red-400" : "border-border focus:border-orange"
                   }`}
                 />
                 {/* Outstanding hint. A SKU line reads it straight off the line; the legacy
                     path keeps its packaged-bags heuristic. */}
-                <p className="text-xs text-brown/60 mt-1">
+                <p className="text-xs text-brown mt-1">
                   {unitLine
                     ? `${t("maxLabel")} ${Math.max(0, (selectedItem.quantityUnits ?? 0) - selectedItem.deliveredUnits)} ${t("unitsLabel")}`
                     : `${t("maxLabel")} ${Math.max(0, +(packagedKg(selectedItem.roastingBatches) - selectedItem.deliveredQty).toFixed(3))} kg (${t("packaged")})`}
@@ -627,7 +627,7 @@ export default function DispatchPage() {
                 <select
                   value={form.deliveryType}
                   onChange={(e) => setForm({ ...form, deliveryType: e.target.value })}
-                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm bg-white"
+                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm bg-white"
                 >
                   <option value="full">{t("fullDelivery")}</option>
                   <option value="partial">{t("partialDelivery")}</option>
@@ -641,7 +641,7 @@ export default function DispatchPage() {
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm resize-none"
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm resize-none"
                 />
               </div>
 
@@ -650,7 +650,7 @@ export default function DispatchPage() {
                 <button
                   type="submit"
                   disabled={!canSubmit}
-                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange/90 shadow-md shadow-orange/20 active:scale-[0.98] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange/90 active:scale-[0.98] transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
                 >
                   {submitting ? "…" : t("confirmDelivery")}
                 </button>

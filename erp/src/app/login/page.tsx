@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Delete, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Delete, ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 import { PIN_LENGTH } from "@/lib/pin-policy";
+import { BrandMark } from "@/components/ui/BrandMark";
+import { InlineAlert } from "@/components/ui/InlineAlert";
 
 type Mode = "pin" | "password";
 
@@ -15,9 +17,11 @@ type Mode = "pin" | "password";
 const PIN_AUTO_SUBMIT_LENGTH = PIN_LENGTH;
 const PIN_MAX_LENGTH = PIN_LENGTH;
 
+// Nobody is signed in yet, so there is no language preference to read. The screen is
+// Arabic-first, with the English name of the PIN step kept beside it for staff who
+// work in English.
 export default function LoginPage() {
   const [logoBase64, setLogoBase64] = useState<string | null>(null);
-  const [logoLoading, setLogoLoading] = useState(true);
   const [mode, setMode] = useState<Mode>("pin");
   const [pin, setPin] = useState("");
   const [username, setUsername] = useState("");
@@ -78,8 +82,7 @@ export default function LoginPage() {
     fetch("/api/settings/logo")
       .then((r) => r.json())
       .then((d) => setLogoBase64(d.logoBase64 ?? null))
-      .catch(() => {})
-      .finally(() => setLogoLoading(false));
+      .catch(() => {});
   }, []);
 
   // ── Auto-submit when PIN hits the magic length ────────────────────────────
@@ -115,202 +118,208 @@ export default function LoginPage() {
     ["backspace", "0", "submit"],
   ];
 
+  const keyBase =
+    "h-14 rounded-lg flex items-center justify-center select-none transition-colors duration-150 disabled:cursor-not-allowed";
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-charcoal p-4 relative overflow-hidden">
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
+    <div dir="rtl" lang="ar" className="min-h-screen flex flex-col items-center justify-center gap-4 bg-hq-bg p-4">
+      <main className="w-full max-w-[420px] bg-white border border-hq-line rounded-2xl p-6 sm:p-8 space-y-6">
 
-      <div className="w-full max-w-sm relative z-10">
-        <div className="bg-white rounded-2xl shadow-2xl shadow-charcoal/20 p-7">
+        {/* Workspace */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <BrandMark logo={logoBase64} size="md" />
+          <h1 className="text-base leading-[26px] font-bold text-hq-ink">مقهى و محمصة حقبة</h1>
+          <p dir="ltr" className="text-xs leading-5 tracking-[2px] text-hq-muted">HIQBAH COFFEE ROASTERS</p>
+        </div>
 
-          {/* Logo */}
-          <div className="text-center mb-7">
-            <div className="flex flex-col items-center mb-3">
-              {logoLoading ? (
-                <div className="w-20 h-20" />
-              ) : logoBase64 ? (
-                <img src={logoBase64} alt="Logo" className="w-20 h-20 object-contain mx-auto" />
-              ) : (
-                <>
-                  <span
-                    className="text-[72px] leading-none"
-                    style={{ fontFamily: "'Scheherazade New', 'Amiri', 'Noto Naskh Arabic', serif", color: "#8B9DB5" }}
-                  >ح</span>
-                  <span className="block w-10 h-[5px] rounded-full mt-3" style={{ backgroundColor: "#7C3AED", transform: "rotate(-8deg)" }} />
-                </>
-              )}
-            </div>
-            <h1 className="text-lg font-bold text-charcoal/80" style={{ fontFamily: "'Scheherazade New', 'Amiri', serif" }}>مقهى و محمصة حقبة</h1>
-            <p className="text-[11px] tracking-[3px] text-brown/50 mt-0.5 uppercase">HIQBAH COFFEE ROASTERS</p>
-          </div>
+        {/* Sign-in method */}
+        <div role="group" aria-label="طريقة الدخول" className="flex gap-1 p-1 bg-hq-neutral rounded-lg">
+          {([
+            ["pin", "دخول سريع بـ PIN"],
+            ["password", "اسم المستخدم"],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={mode === value}
+              onClick={() => mode !== value && switchMode(value)}
+              className={`flex-1 h-9 rounded-md text-sm font-semibold transition-colors duration-150 ${
+                mode === value ? "bg-white border border-hq-line text-hq-ink" : "text-hq-ink hover:bg-hq-neutral-strong"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-          {mode === "pin" ? (
-            <>
-              {/* PIN dot display */}
-              <div className="mb-4">
-                <label className="block text-xs font-bold text-brown uppercase tracking-wider mb-1.5 text-center">
-                  Enter Your PIN
-                </label>
-                <div className="flex items-center justify-center gap-4 px-4 py-5 bg-cream rounded-xl border-2 border-border min-h-[68px] shadow-inner">
-                  {pin.length === 0 ? (
-                    <span className="text-brown/35 text-sm select-none">Tap the keypad below</span>
-                  ) : (
-                    Array.from({ length: pin.length }).map((_, i) => (
-                      <div
+        {mode === "pin" ? (
+          <>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm leading-6 font-semibold text-hq-ink">
+                  أدخل رقمك السري <span className="font-normal text-hq-muted">·</span> <span lang="en" dir="ltr" className="font-normal text-hq-muted">Enter Your PIN</span>
+                </p>
+                <p className="text-xs leading-5 text-hq-muted">{PIN_LENGTH} أرقام · يُرسل تلقائيًا عند الرقم الأخير</p>
+              </div>
+
+              {/* PIN progress. Digits are never shown, only how many have been entered. */}
+              <div
+                role="status"
+                aria-live="polite"
+                aria-label={`أُدخل ${pin.length} من ${PIN_LENGTH}`}
+                className="h-[68px] flex items-center justify-center gap-4 bg-hq-neutral border border-hq-control rounded-lg"
+              >
+                {pin.length === 0 ? (
+                  <span className="text-sm text-hq-muted select-none">اضغط على لوحة الأرقام للبدء</span>
+                ) : (
+                  <span dir="ltr" className="flex items-center gap-4" aria-hidden="true">
+                    {Array.from({ length: PIN_LENGTH }).map((_, i) => (
+                      <span
                         key={i}
-                        className={`w-3.5 h-3.5 rounded-full transition-all duration-150 ${
-                          i === pin.length - 1 ? "bg-orange scale-110" : "bg-charcoal"
+                        className={`w-3.5 h-3.5 rounded-full transition-colors duration-150 ${
+                          i < pin.length - 1
+                            ? "bg-hq-ink"
+                            : i === pin.length - 1
+                              ? "bg-hq-primary ring-2 ring-hq-primary-soft ring-offset-1"
+                              : "border-[1.5px] border-hq-control"
                         }`}
                       />
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </span>
+                )}
               </div>
+            </div>
 
-              {/* Error (inline so layout doesn't shift) */}
-              {error && (
-                <div className="bg-danger-bg text-danger px-4 py-2.5 rounded-xl text-sm font-semibold mb-4 text-center">
-                  {error}
-                </div>
-              )}
+            {error && (
+              <InlineAlert tone="danger" title="تعذّر تسجيل الدخول">
+                <span lang="en" dir="auto">{error}</span>
+              </InlineAlert>
+            )}
 
-              {/* Numpad */}
-              <div dir="ltr" className="grid grid-cols-3 gap-2.5 mb-5 place-items-center">
-                {numpadRows.flat().map((key) => {
-                  if (key === "backspace") {
-                    return (
-                      <button
-                        key="backspace"
-                        type="button"
-                        onClick={() => pressKey("backspace")}
-                        disabled={pin.length === 0 || loading}
-                        className="w-16 h-16 rounded-full bg-transparent text-charcoal hover:bg-cream/60 disabled:opacity-25 active:scale-90 transition-all duration-100 select-none flex items-center justify-center"
-                      >
-                        <Delete size={20} strokeWidth={2} />
-                      </button>
-                    );
-                  }
-                  if (key === "submit") {
-                    return (
-                      <button
-                        key="submit"
-                        type="button"
-                        onClick={() => submitPin(pin)}
-                        disabled={pin.length < PIN_LENGTH || loading}
-                        className="w-16 h-16 rounded-full bg-orange hover:bg-orange-dark text-white disabled:opacity-30 active:scale-90 transition-all duration-100 shadow-lg shadow-orange/25 select-none flex items-center justify-center"
-                      >
-                        {loading
-                          ? <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                          : <ArrowRight size={22} strokeWidth={2.5} />
-                        }
-                      </button>
-                    );
-                  }
+            {/* Numpad — left-to-right like every keypad; a digit is not mirrored in Arabic. */}
+            <div dir="ltr" className="grid grid-cols-3 gap-3">
+              {numpadRows.flat().map((key) => {
+                if (key === "backspace") {
                   return (
                     <button
-                      key={key}
+                      key="backspace"
                       type="button"
-                      onClick={() => pressKey(key)}
-                      disabled={loading}
-                      className="w-16 h-16 rounded-full border-2 border-border bg-white text-charcoal text-xl font-bold flex items-center justify-center active:scale-90 active:bg-cream transition-all duration-100 select-none disabled:opacity-40"
+                      aria-label="حذف آخر رقم"
+                      onClick={() => pressKey("backspace")}
+                      disabled={pin.length === 0 || loading}
+                      className={`${keyBase} text-hq-ink hover:bg-hq-neutral disabled:opacity-30`}
                     >
-                      {key}
+                      <Delete size={24} strokeWidth={1.8} aria-hidden="true" />
                     </button>
                   );
-                })}
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Username */}
-              <div className="mb-4">
-                <label className="block text-xs font-bold text-brown uppercase tracking-wider mb-1.5">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submitPassword()}
-                  placeholder="e.g. ahmed"
-                  autoCapitalize="none"
-                  autoComplete="username"
-                  className="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-orange/30 focus:border-orange outline-none transition-colors text-charcoal font-medium text-sm"
-                />
-              </div>
-
-              {/* Password */}
-              <div className="mb-5">
-                <label className="block text-xs font-bold text-brown uppercase tracking-wider mb-1.5">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && submitPassword()}
-                    placeholder="Enter your password"
-                    autoComplete="current-password"
-                    className="w-full px-4 py-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-orange/30 focus:border-orange outline-none transition-colors pr-12 text-charcoal font-medium text-sm"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brown/50 hover:text-charcoal transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={submitPassword}
-                disabled={loading}
-                className="w-full py-3.5 bg-orange hover:bg-orange-dark text-white font-bold rounded-xl transition-all duration-200 disabled:opacity-50 shadow-lg shadow-orange/25 hover:shadow-orange/40 active:scale-[0.98] mb-4 flex items-center justify-center gap-2"
-              >
-                {loading
-                  ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Signing in…</>
-                  : "Sign In"
                 }
-              </button>
+                if (key === "submit") {
+                  return (
+                    <button
+                      key="submit"
+                      type="button"
+                      aria-label="تسجيل الدخول"
+                      onClick={() => submitPin(pin)}
+                      disabled={pin.length < PIN_LENGTH || loading}
+                      className={`${keyBase} bg-hq-primary text-white hover:bg-hq-primary-strong ${loading ? "" : "disabled:opacity-35"}`}
+                    >
+                      {loading
+                        ? <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" aria-hidden="true" />
+                        : <ArrowLeft size={24} strokeWidth={2} aria-hidden="true" />
+                      }
+                    </button>
+                  );
+                }
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => pressKey(key)}
+                    disabled={loading}
+                    className={`${keyBase} bg-white border border-hq-line text-hq-ink text-[30px] leading-10 font-semibold hover:bg-hq-bg active:bg-hq-neutral disabled:opacity-35`}
+                  >
+                    {key}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <form
+            className="space-y-4"
+            onSubmit={(e) => { e.preventDefault(); submitPassword(); }}
+            noValidate
+          >
+            <div className="space-y-2">
+              <label htmlFor="login-username" className="flex items-baseline gap-2 text-sm leading-6 font-semibold text-hq-ink">
+                اسم المستخدم <span className="text-xs font-normal text-hq-muted">مطلوب</span>
+              </label>
+              <input
+                id="login-username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="مثال: ahmed"
+                autoCapitalize="none"
+                autoComplete="username"
+                required
+                aria-describedby="login-username-help"
+                className="w-full h-11 px-3 bg-white border border-hq-control rounded-md text-sm text-hq-ink placeholder:text-hq-muted focus:outline-none focus:ring-2 focus:ring-hq-primary focus:border-hq-primary"
+              />
+              <p id="login-username-help" className="text-xs leading-5 text-hq-muted">اسم المستخدم كما هو مسجّل في النظام.</p>
+            </div>
 
+            <div className="space-y-2">
+              <label htmlFor="login-password" className="flex items-baseline gap-2 text-sm leading-6 font-semibold text-hq-ink">
+                كلمة المرور <span className="text-xs font-normal text-hq-muted">مطلوب</span>
+              </label>
+              <div className="relative">
+                <input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? "login-error" : undefined}
+                  className={`w-full h-11 ps-3 pe-11 bg-white border rounded-md text-sm text-hq-ink focus:outline-none focus:ring-2 focus:ring-hq-primary focus:border-hq-primary ${
+                    error ? "border-hq-danger border-[1.5px]" : "border-hq-control"
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                  className="absolute end-1 top-1/2 -translate-y-1/2 w-9 h-9 rounded-md flex items-center justify-center text-hq-muted hover:text-hq-ink"
+                >
+                  {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+                </button>
+              </div>
               {error && (
-                <div className="bg-danger-bg text-danger px-4 py-2.5 rounded-xl text-sm font-semibold mb-4 text-center">
-                  {error}
-                </div>
+                <p id="login-error" role="alert" className="text-xs leading-5 text-hq-danger">
+                  <span lang="en" dir="auto">{error}</span>
+                </p>
               )}
-            </>
-          )}
+            </div>
 
-          {/* Mode toggle */}
-          <div className="text-center pt-4 mt-2 border-t border-border">
-            {mode === "pin" ? (
-              <button
-                type="button"
-                onClick={() => switchMode("password")}
-                className="text-sm text-brown/50 hover:text-orange transition-colors font-medium"
-              >
-                الدخول باسم المستخدم وكلمة المرور →
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => switchMode("pin")}
-                className="text-sm text-brown/50 hover:text-orange transition-colors font-medium"
-              >
-                ← العودة للدخول السريع بالـ PIN
-              </button>
-            )}
-          </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 bg-hq-primary hover:bg-hq-primary-strong text-white text-sm font-semibold rounded-md transition-colors duration-150 disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              {loading
+                ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" aria-hidden="true" /> جارٍ التحقق…</>
+                : "تسجيل الدخول"
+              }
+            </button>
+          </form>
+        )}
 
-        </div>
-      </div>
+        <p className="text-xs leading-5 text-hq-muted text-center">
+          نسيت رقمك أو كلمة المرور؟ تواصل مع مسؤول النظام لإعادة تعيينها.
+        </p>
+      </main>
     </div>
   );
 }

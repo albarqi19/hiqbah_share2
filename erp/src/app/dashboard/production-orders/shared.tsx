@@ -69,7 +69,7 @@ export function ProgressBar({ produced, target }: { produced: number; target: nu
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-[11px] tabular-nums text-brown/70 w-9 text-end">{pct}%</span>
+      <span className="text-[11px] tabular-nums text-brown w-9 text-end">{pct}%</span>
     </div>
   );
 }

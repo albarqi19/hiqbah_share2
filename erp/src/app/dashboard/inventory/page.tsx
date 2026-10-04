@@ -164,7 +164,7 @@ function BeanForm({
       <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[92vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-extrabold text-charcoal">{title}</h2>
-          <button onClick={onClose} className="text-brown/40 hover:text-charcoal transition-colors"><X size={20} /></button>
+          <button onClick={onClose} className="text-brown hover:text-charcoal transition-colors"><X size={20} /></button>
         </div>
 
         {formError && (
@@ -178,13 +178,13 @@ function BeanForm({
             <div>
               <label className="block text-xs font-bold text-brown uppercase tracking-wide mb-1">
                 {t("serialNumber")}
-                <span className="ml-1 normal-case text-brown/40 font-normal">(auto-generated)</span>
+                <span className="ml-1 normal-case text-brown font-normal">(auto-generated)</span>
               </label>
               <input
                 value={form.serialNumber}
                 onChange={(e) => set("serialNumber", e.target.value)}
                 placeholder="GB-20260511-142"
-                className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm font-mono transition-colors"
+                className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm font-mono transition-colors"
               />
             </div>
             <div>
@@ -192,13 +192,13 @@ function BeanForm({
               <input
                 type="number" step="0.01" min="0" value={form.quantityKg} required
                 onChange={(e) => set("quantityKg", parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm transition-colors"
+                className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm transition-colors"
               />
             </div>
           </div>
 
           <div className="rounded-xl border border-border overflow-hidden">
-            <div className="grid grid-cols-2 bg-cream text-xs font-extrabold text-brown/60 uppercase tracking-widest">
+            <div className="grid grid-cols-2 bg-cream text-xs font-extrabold text-brown uppercase tracking-widest">
               <div className="px-4 py-2 border-r border-border">{t("enFields")}</div>
               <div className="px-4 py-2">{t("arFields")} (العربية)</div>
             </div>
@@ -212,7 +212,7 @@ function BeanForm({
                         value={form[enKey] as string}
                         onChange={(e) => set(enKey, e.target.value)}
                         required={required}
-                        className="flex-1 min-w-0 px-2.5 py-1.5 text-sm border-2 border-border rounded-lg focus:border-orange focus:ring-1 focus:ring-orange/20 outline-none transition-colors"
+                        className="flex-1 min-w-0 px-2.5 py-1.5 text-sm border-2 border-border rounded-lg focus:border-orange focus:ring-1 focus:ring-orange outline-none transition-colors"
                       />
                       <TranslateBtn sourceKey={arKey} targetKey={enKey} targetLang="en" />
                     </div>
@@ -225,7 +225,7 @@ function BeanForm({
                         value={form[arKey] as string}
                         onChange={(e) => set(arKey, e.target.value)}
                         dir="rtl" placeholder="اختياري"
-                        className="flex-1 min-w-0 px-2.5 py-1.5 text-sm border-2 border-border rounded-lg focus:border-orange focus:ring-1 focus:ring-orange/20 outline-none transition-colors text-right"
+                        className="flex-1 min-w-0 px-2.5 py-1.5 text-sm border-2 border-border rounded-lg focus:border-orange focus:ring-1 focus:ring-orange outline-none transition-colors text-right"
                       />
                     </div>
                   </div>
@@ -245,7 +245,7 @@ function BeanForm({
                 <input
                   value={(form as Record<string, string | number>)[key] as string}
                   onChange={(e) => set(key as keyof FormState, e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm transition-colors"
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm transition-colors"
                 />
               </div>
             ))}
@@ -284,10 +284,10 @@ function DeleteConfirmModal({
           </div>
           <div>
             <p className="font-extrabold text-charcoal">{bean.beanType}</p>
-            <p className="text-xs text-brown/50 font-mono">{bean.serialNumber}</p>
+            <p className="text-xs text-brown font-mono">{bean.serialNumber}</p>
           </div>
         </div>
-        <p className="text-sm text-brown/70">{t("confirmDeleteBean")}</p>
+        <p className="text-sm text-brown">{t("confirmDeleteBean")}</p>
         <div className="flex gap-2">
           <button onClick={onConfirm} disabled={deleting}
             className="flex-1 py-2.5 bg-red-500 text-white rounded-xl font-bold text-sm hover:bg-red-600 disabled:opacity-50 transition-colors">
@@ -354,10 +354,10 @@ function AdjustmentModal({
             </div>
             <div>
               <h2 className="text-base font-extrabold text-charcoal">{t("adjustTitle")}</h2>
-              <p className="text-xs text-brown/60 font-mono">{bean.serialNumber}</p>
+              <p className="text-xs text-brown font-mono">{bean.serialNumber}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-brown/40 hover:text-charcoal transition-colors">
+          <button onClick={onClose} className="text-brown hover:text-charcoal transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -365,8 +365,8 @@ function AdjustmentModal({
         {/* Bean identity */}
         <div className="mb-5 px-4 py-3 bg-cream rounded-xl">
           <p className="font-bold text-charcoal">{bean.beanType}</p>
-          {bean.beanTypeAr && <p className="text-sm text-brown/70 mt-0.5" dir="rtl">{bean.beanTypeAr}</p>}
-          <p className="text-xs text-brown/50 mt-1">{bean.country}{bean.region ? ` / ${bean.region}` : ""}</p>
+          {bean.beanTypeAr && <p className="text-sm text-brown mt-0.5" dir="rtl">{bean.beanTypeAr}</p>}
+          <p className="text-xs text-brown mt-1">{bean.country}{bean.region ? ` / ${bean.region}` : ""}</p>
         </div>
 
         {error && (
@@ -397,7 +397,7 @@ function AdjustmentModal({
               onChange={(e) => setActualQty(e.target.value)}
               required
               autoFocus
-              className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm font-mono transition-colors"
+              className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm font-mono transition-colors"
             />
           </div>
 
@@ -405,7 +405,7 @@ function AdjustmentModal({
           {deltaValid && (
             <div className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold border-2 ${
               Math.abs(delta) < 0.001
-                ? "bg-gray-50 border-border text-brown/60"
+                ? "bg-gray-50 border-border text-brown"
                 : delta > 0
                   ? "bg-green-50 border-green-200 text-green-700"
                   : "bg-red-50 border-red-200 text-red-600"
@@ -428,7 +428,7 @@ function AdjustmentModal({
               rows={2}
               placeholder="سبب التسوية (اختياري)"
               dir="rtl"
-              className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm resize-none transition-colors text-right"
+              className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm resize-none transition-colors text-right"
             />
           </div>
 
@@ -720,7 +720,7 @@ export default function InventoryPage() {
           {activeTab === "finished" && (
             <p className="text-brown text-sm font-medium">
               متاح للشحن: {totalAvailableFG.toFixed(1)} kg
-              <span className="text-brown/50"> — {t("totalReservedFG")}: {totalReservedFG.toFixed(1)} kg</span>
+              <span className="text-brown"> — {t("totalReservedFG")}: {totalReservedFG.toFixed(1)} kg</span>
               <span className="text-green-600 font-bold"> — {t("totalFreeFG")}: {totalFreeFG.toFixed(1)} kg</span>
             </p>
           )}
@@ -733,7 +733,7 @@ export default function InventoryPage() {
         {activeTab === "raw" && canReceive && (
           <button
             onClick={() => setAddOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange/90 shadow-md shadow-orange/20 active:scale-[0.98] transition-all duration-200 font-bold text-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange/90 active:scale-[0.98] transition-all duration-200 font-bold text-sm"
           >
             <Plus size={18} /> {t("addStock")}
           </button>
@@ -752,7 +752,7 @@ export default function InventoryPage() {
             onClick={() => setActiveTab(id)}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all duration-200 ${
               activeTab === id
-                ? "bg-orange text-white shadow-sm shadow-orange/30"
+                ? "bg-orange text-white "
                 : "text-brown hover:text-charcoal hover:bg-white/60"
             }`}
           >
@@ -770,11 +770,11 @@ export default function InventoryPage() {
           {/* Search + inactive toggle */}
           <div className="flex gap-3">
             <div className="relative flex-1">
-              <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 type="text" placeholder={t("searchBeans")} value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
               />
             </div>
             <button
@@ -819,11 +819,11 @@ export default function InventoryPage() {
                       <td className="px-4 py-3">
                         {disp(bean.country, bean.countryAr)}
                         {(bean.region || bean.regionAr) && (
-                          <span className="text-brown/50"> / {disp(bean.region, bean.regionAr)}</span>
+                          <span className="text-brown"> / {disp(bean.region, bean.regionAr)}</span>
                         )}
                       </td>
                       <td className="px-4 py-3">{disp(bean.process, bean.processAr) || "—"}</td>
-                      <td className="px-4 py-3 text-brown/70">{bean.altitude || "—"}</td>
+                      <td className="px-4 py-3 text-brown">{bean.altitude || "—"}</td>
                       <td className="px-4 py-3 text-end">
                         <span className={`font-bold tabular-nums ${bean.quantityKg < 20 ? "text-red-600" : "text-green-600"}`}>
                           {bean.quantityKg.toFixed(1)}
@@ -836,7 +836,7 @@ export default function InventoryPage() {
                             <button
                               title={t("performCount")}
                               onClick={() => setAdjustTarget(bean)}
-                              className="p-1.5 rounded-lg text-brown/50 hover:text-orange hover:bg-orange/10 transition-colors"
+                              className="p-1.5 rounded-lg text-brown hover:text-orange hover:bg-orange/10 transition-colors"
                             >
                               <Scale size={14} />
                             </button>
@@ -845,7 +845,7 @@ export default function InventoryPage() {
                             <button
                               title={t("edit")}
                               onClick={() => setEditTarget(bean)}
-                              className="p-1.5 rounded-lg text-brown/50 hover:text-orange hover:bg-orange/10 transition-colors"
+                              className="p-1.5 rounded-lg text-brown hover:text-orange hover:bg-orange/10 transition-colors"
                             >
                               <Pencil size={14} />
                             </button>
@@ -856,7 +856,7 @@ export default function InventoryPage() {
                               onClick={() => handleToggleActive(bean)}
                               className={`p-1.5 rounded-lg transition-colors ${
                                 bean.isActive
-                                  ? "text-brown/50 hover:text-amber-500 hover:bg-amber-50"
+                                  ? "text-brown hover:text-amber-600 hover:bg-amber-50"
                                   : "text-green-600 hover:bg-green-50"
                               }`}
                             >
@@ -867,7 +867,7 @@ export default function InventoryPage() {
                             <button
                               title={t("delete")}
                               onClick={() => setDeleteTarget(bean)}
-                              className="p-1.5 rounded-lg text-brown/50 hover:text-red-500 hover:bg-red-50 transition-colors"
+                              className="p-1.5 rounded-lg text-brown hover:text-red-500 hover:bg-red-50 transition-colors"
                             >
                               <Trash2 size={14} />
                             </button>
@@ -880,7 +880,7 @@ export default function InventoryPage() {
               </table>
             </div>
             {filteredBeans.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-gray-500">
                 <Package size={40} className="mx-auto mb-2" />
                 <p>{t("noBeansFound")}</p>
               </div>
@@ -895,11 +895,11 @@ export default function InventoryPage() {
       {activeTab === "finished" && (
         <div className="space-y-4">
           <div className="relative">
-            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               type="text" placeholder="بحث في اللوتات…" value={lotsSearch}
               onChange={(e) => setLotsSearch(e.target.value)}
-              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
             />
           </div>
 
@@ -937,14 +937,14 @@ export default function InventoryPage() {
                           }`}>
                             {lot.availableQty.toFixed(1)}
                           </span>
-                          <span className="text-brown/40 text-xs ml-1">({(availRatio * 100).toFixed(0)}%)</span>
+                          <span className="text-brown text-xs ml-1">({(availRatio * 100).toFixed(0)}%)</span>
                         </td>
                         <td className="px-4 py-3 text-end font-mono tabular-nums text-brown">
                           {(lot.reservedQty ?? 0).toFixed(1)}
                         </td>
                         <td className="px-4 py-3 text-end">
                           <span className={`font-bold tabular-nums font-mono ${
-                            freeQty > 0 ? "text-green-600" : "text-brown/40"
+                            freeQty > 0 ? "text-green-600" : "text-brown"
                           }`}>
                             {freeQty.toFixed(1)}
                           </span>
@@ -963,7 +963,7 @@ export default function InventoryPage() {
               </table>
             </div>
             {filteredLots.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-gray-500">
                 <Boxes size={40} className="mx-auto mb-2" />
                 <p>{t("noFinishedGoods")}</p>
               </div>
@@ -978,11 +978,11 @@ export default function InventoryPage() {
       {activeTab === "ledger" && (
         <div className="space-y-4">
           <div className="relative">
-            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               type="text" placeholder="بحث في الحركات…" value={ledgerSearch}
               onChange={(e) => setLedgerSearch(e.target.value)}
-              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
             />
           </div>
 
@@ -1019,11 +1019,11 @@ export default function InventoryPage() {
                           <p className="font-medium text-charcoal">
                             {disp(m.entityLabel, m.entityLabelAr) || "—"}
                           </p>
-                          <p className="text-[11px] text-brown/50 mt-0.5">
+                          <p className="text-[11px] text-brown mt-0.5">
                             {m.category === "RAW_MATERIAL" ? t("catRawMaterial") : t("catFinishedGoods")}
                           </p>
                         </td>
-                        <td className="px-4 py-3 text-end font-mono text-brown/70 tabular-nums">
+                        <td className="px-4 py-3 text-end font-mono text-brown tabular-nums">
                           {m.previousQuantity.toFixed(3)}
                         </td>
                         <td className="px-4 py-3 text-end font-mono text-charcoal font-semibold tabular-nums">
@@ -1031,7 +1031,7 @@ export default function InventoryPage() {
                         </td>
                         <td className="px-4 py-3 text-end">
                           <span className={`font-bold tabular-nums font-mono ${
-                            isZero ? "text-brown/40" : isGain ? "text-green-600" : isLoss ? "text-red-500" : ""
+                            isZero ? "text-brown" : isGain ? "text-green-600" : isLoss ? "text-red-500" : ""
                           }`}>
                             {isZero ? "—" : `${isGain ? "+" : ""}${m.quantityChanged.toFixed(3)}`}
                           </span>
@@ -1039,10 +1039,10 @@ export default function InventoryPage() {
                         <td className="px-4 py-3">
                           <p className="text-brown">{SRC_LABELS_AR[m.sourceDocType] ?? m.sourceDocType}</p>
                           {m.userName && (
-                            <p className="text-[11px] text-brown/50 mt-0.5">{m.userName}</p>
+                            <p className="text-[11px] text-brown mt-0.5">{m.userName}</p>
                           )}
                           {m.notes && (
-                            <p className="text-[11px] text-brown/60 mt-0.5 italic">{m.notes}</p>
+                            <p className="text-[11px] text-brown mt-0.5 italic">{m.notes}</p>
                           )}
                         </td>
                       </tr>
@@ -1052,7 +1052,7 @@ export default function InventoryPage() {
               </table>
             </div>
             {filteredMovements.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-gray-500">
                 <History size={40} className="mx-auto mb-2" />
                 <p>{t("noLedgerMovements")}</p>
               </div>

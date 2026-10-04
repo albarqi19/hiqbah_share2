@@ -515,7 +515,7 @@ export default function ProductionPage() {
             />
           )}
           {filteredPending.length === 0 ? (
-            <div className="text-center py-8 bg-white rounded-2xl border border-border text-brown/40">
+            <div className="text-center py-8 bg-white rounded-2xl border border-border text-brown">
               <Factory size={32} className="mx-auto mb-2 opacity-50" /><p className="font-semibold">{t("noPendingItems")}</p>
             </div>
           ) : (
@@ -542,7 +542,7 @@ export default function ProductionPage() {
                 // explanation. Surfaced here so the reason for the outstanding work is visible.
                 const rejectedCount = item.roastingBatches.filter((b) => !b.isBlend && b.status === "Rejected").length;
                 return (
-                  <div key={item.id} data-testid={`roast-item-${item.order.orderNumber}`} className="bg-white rounded-2xl border border-border p-4 hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+                  <div key={item.id} data-testid={`roast-item-${item.order.orderNumber}`} className="bg-white rounded-2xl border border-border p-4 hover:border-hq-control transition-all duration-300">
                     <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                       <div className="min-w-0 flex-1">
                         <p className="font-bold text-charcoal">#{item.order.orderNumber} — {item.order.customer.name}</p>
@@ -582,7 +582,7 @@ export default function ProductionPage() {
                               placeholder={t("overrideProfile")}
                               defaultValue={profileOverrides[item.id] ?? item.order.customer.roastPreferences?.find((p: CustomerPref) => p.greenBeanId === item.greenBeanId)?.profileName ?? ""}
                               autoFocus
-                              className="text-xs px-2 py-1 border border-orange rounded-lg focus:ring-2 focus:ring-orange/20 outline-none w-40"
+                              className="text-xs px-2 py-1 border border-orange rounded-lg focus:ring-2 focus:ring-orange outline-none w-40"
                               onBlur={(e) => {
                                 const val = e.target.value.trim();
                                 setProfileOverrides((prev) => ({ ...prev, [item.id]: val }));
@@ -622,7 +622,7 @@ export default function ProductionPage() {
                               )}
                               <button
                                 onClick={() => setEditingProfileId(item.id)}
-                                className="p-0.5 rounded text-brown/30 hover:text-orange transition-colors"
+                                className="p-0.5 rounded text-brown hover:text-orange transition-colors"
                                 title={t("overrideProfile")}
                               >
                                 <Pencil size={11} />
@@ -633,7 +633,7 @@ export default function ProductionPage() {
                       </div>
                       {canStartBatch && (
                         <button onClick={() => startProduction(item)}
-                          className="w-full xl:w-auto flex items-center justify-center flex-shrink-0 px-4 py-2 bg-orange text-white rounded-xl text-sm font-bold hover:bg-orange-dark shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200">
+                          className="w-full xl:w-auto flex items-center justify-center flex-shrink-0 px-4 py-2 bg-orange text-white rounded-xl text-sm font-bold hover:bg-orange-dark active:scale-[0.98] transition-all duration-200">
                           {produced > 0 ? t("continueProd") : t("startProduction")}
                         </button>
                       )}
@@ -654,7 +654,7 @@ export default function ProductionPage() {
                           kilograms stay on the card — labelled as the roasting figure, not
                           mixed in with the three numbers above. */}
                       {inUnits && remaining > 0 && (
-                        <p className="text-[11px] text-brown/50 mt-1">
+                        <p className="text-[11px] text-brown mt-1">
                           ≈ {formatKg(Math.max(0, remaining))}kg {t("toRoastAside")}
                         </p>
                       )}
@@ -694,22 +694,22 @@ export default function ProductionPage() {
           {batches.length > 0 && (
             <div className="flex gap-2 justify-end">
               <button onClick={() => exportBatchesPDF(toExportRows(batches))}
-                className="flex items-center gap-1.5 px-3 py-2 bg-[#6B7280] text-white rounded-xl text-xs font-bold hover:bg-[#4B5563] shadow-sm active:scale-[0.98] transition-all">
+                className="flex items-center gap-1.5 px-3 py-2 bg-white border border-hq-control text-charcoal rounded-md text-xs font-bold hover:bg-hq-neutral transition-colors">
                 <FileText size={14} /> PDF
               </button>
               <button onClick={() => exportBatchesExcel(toExportRows(batches))}
-                className="flex items-center gap-1.5 px-3 py-2 bg-[#7C3AED] text-white rounded-xl text-xs font-bold hover:bg-[#6D28D9] shadow-sm active:scale-[0.98] transition-all">
+                className="flex items-center gap-1.5 px-3 py-2 bg-white border border-hq-control text-charcoal rounded-md text-xs font-bold hover:bg-hq-neutral transition-colors">
                 <FileSpreadsheet size={14} /> Excel
               </button>
             </div>
           )}
           {batches.length === 0 ? (
-            <div className="text-center py-8 bg-white rounded-2xl border border-border text-brown/40">
+            <div className="text-center py-8 bg-white rounded-2xl border border-border text-brown">
               <Box size={32} className="mx-auto mb-2 opacity-50" /><p className="font-semibold">{t("noData")}</p>
             </div>
           ) : (
             batches.map((batch) => (
-              <div key={batch.id} className="bg-white rounded-2xl border border-border p-4 hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+              <div key={batch.id} className="bg-white rounded-2xl border border-border p-4 hover:border-hq-control transition-all duration-300">
                 <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -717,7 +717,7 @@ export default function ProductionPage() {
                       {canEditDate && (
                         <button
                           onClick={() => setEditDateBatch(batch)}
-                          className="p-1 rounded-lg text-brown/40 hover:text-orange hover:bg-orange/10 transition-colors"
+                          className="p-1 rounded-lg text-brown hover:text-orange hover:bg-orange/10 transition-colors"
                           title={t("editDateBtn")}
                         >
                           <CalendarDays size={13} />
@@ -740,7 +740,7 @@ export default function ProductionPage() {
                     <p className="text-sm text-brown font-medium">
                       #{(batch.orderItem?.order.orderNumber ?? t("stockBatchLabel"))} — {(batch.orderItem?.order.customer.name ?? t("stockBatchLabel"))} — {batch.greenBean?.beanType || (batch.orderItem?.beanTypeName ?? "")}
                     </p>
-                    <p className="text-xs text-brown/50 mt-0.5">
+                    <p className="text-xs text-brown mt-0.5">
                       {formatKg(batch.roastedBeanQuantity)}kg {t("roastedLabel")} | {formatKg(batch.greenBeanQuantity)}kg {t("greenLabel")} | {formatDate(batch.date)}
                       {batch.roastProfile && ` | ${batch.roastProfile}`}
                     </p>
@@ -748,7 +748,7 @@ export default function ProductionPage() {
                   <div className="flex gap-2 flex-shrink-0">
                     {canCancelBatch && (
                       <button onClick={() => setCancelBatch(batch)}
-                        className="p-2 rounded-xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
+                        className="p-2 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
                         <Trash2 size={16} />
                       </button>
                     )}
@@ -765,7 +765,7 @@ export default function ProductionPage() {
                 )}
                 {batch.childBatches.length > 0 && (
                   <div className="mt-2 pt-2 border-t border-border">
-                    <p className="text-xs text-brown/50">{t("sourceBatches")}: {batch.childBatches.map((c) => c.batchNumber).join(", ")}</p>
+                    <p className="text-xs text-brown">{t("sourceBatches")}: {batch.childBatches.map((c) => c.batchNumber).join(", ")}</p>
                   </div>
                 )}
                 {batch.blendOutputs.length > 0 && (
@@ -804,7 +804,7 @@ export default function ProductionPage() {
                   {". "}
                   {t("overprodWarnConfirm")}
                 </p>
-                <p className="text-xs text-brown/60 mt-2">
+                <p className="text-xs text-brown mt-2">
                   {t("requiredQtyLabel")}: {selectedItem.quantityKg}kg — {t("totalProducedLabel")}: {+(
                     selectedItem.roastingBatches.filter((b) => !b.isBlend && b.status !== "Rejected").reduce((s, b) => s + b.roastedBeanQuantity, 0) +
                     roastForm.roastedBeanQuantity
@@ -834,7 +834,7 @@ export default function ProductionPage() {
                   onChange={(e) => setSurplusReason(e.target.value)}
                   rows={2}
                   placeholder={t("surplusReasonPlaceholder")}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors resize-none"
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors resize-none"
                 />
               </label>
               <div className="flex gap-3">
@@ -872,7 +872,7 @@ export default function ProductionPage() {
             ) : (
               <p className="text-sm text-brown font-medium mb-4">#{selectedItem!.order.orderNumber} — {selectedItem!.beanTypeName}</p>
             )}
-            <p className="text-xs text-brown/50 mb-4">{t("snAutoGenerated")}</p>
+            <p className="text-xs text-brown mb-4">{t("snAutoGenerated")}</p>
             <form onSubmit={handleRoastSubmit} className="space-y-3">
               {/* The page-level error banner sits behind this modal's backdrop, so a failed
                   submit from here has to report itself inside the dialog. */}
@@ -885,19 +885,19 @@ export default function ProductionPage() {
                 <div>
                   <label className="block text-sm font-bold text-charcoal mb-1">{t("productLabel")}</label>
                   <select value={roastForm.productId} onChange={(e) => setRoastForm({ ...roastForm, productId: e.target.value })}
-                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required>
+                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required>
                     <option value="">{t("selectProduct")}</option>
                     {products.map((p) => (
                       <option key={p.id} value={p.id}>{lang === "ar" ? (p.productNameAr ?? p.productNameEn) : p.productNameEn}</option>
                     ))}
                   </select>
-                  <p className="mt-1 text-xs text-brown/60">{t("roastToStockProductHint")}</p>
+                  <p className="mt-1 text-xs text-brown">{t("roastToStockProductHint")}</p>
                 </div>
               )}
               <div>
                 <label className="block text-sm font-bold text-charcoal mb-1">{t("greenBeanSource")}</label>
                 <select value={roastForm.greenBeanId} onChange={(e) => setRoastForm({ ...roastForm, greenBeanId: e.target.value })}
-                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required>
+                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required>
                   <option value="">{t("selectBeanStock")}</option>
                   {beans.map((b) => (
                     <option key={b.id} value={b.id}>{b.beanType} ({b.serialNumber}) — {formatKg(b.quantityKg)}kg</option>
@@ -913,7 +913,7 @@ export default function ProductionPage() {
                     value={poChoice}
                     onChange={(e) => setPoChoice(e.target.value)}
                     required
-                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                   >
                     <option value="">Select which production order this roast is for…</option>
                     {livePosFor(selectedItem).map((p) => (
@@ -923,7 +923,7 @@ export default function ProductionPage() {
                 </div>
               )}
               {!stockMode && remainingFinishedKg > 0 && (
-                <p className="text-sm text-brown/70">
+                <p className="text-sm text-brown">
                   {/* FINISHED kilograms still owed. Shown as context beside the green field,
                       never written into it: converting this to a green weight needs the
                       coffee's roast loss, which this screen does not hold. */}
@@ -935,13 +935,13 @@ export default function ProductionPage() {
                   <label className="block text-sm font-bold text-charcoal mb-1">{t("greenBeanQty")}</label>
                   <input type="number" step="0.01" value={roastForm.greenBeanQuantity}
                     onChange={(e) => setRoastForm({ ...roastForm, greenBeanQuantity: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required />
+                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-charcoal mb-1">{t("roastedQty")}</label>
                   <input type="number" step="0.01" value={roastForm.roastedBeanQuantity}
                     onChange={(e) => setRoastForm({ ...roastForm, roastedBeanQuantity: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required />
+                    className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required />
                 </div>
               </div>
               {(() => {
@@ -999,12 +999,12 @@ export default function ProductionPage() {
                         <label className="block text-sm font-bold text-charcoal mb-1">{t("roastProfileLabel")}</label>
                         <input type="text" value={roastForm.roastProfile}
                           onChange={(e) => setRoastForm({ ...roastForm, roastProfile: e.target.value })}
-                          className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" placeholder={t("roastProfilePlaceholder")} />
+                          className="w-full px-3 py-2.5 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" placeholder={t("roastProfilePlaceholder")} />
                       </div>
                     </div>
                     <div className="flex gap-3 pt-2">
                       <button type="submit" disabled={submitDisabled}
-                        className={`flex-1 py-3 rounded-xl font-bold shadow-md active:scale-[0.98] transition-all duration-200 ${submitDisabled ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark shadow-orange/20"}`}>
+                        className={`flex-1 py-3 rounded-xl font-bold shadow-md active:scale-[0.98] transition-all duration-200 ${submitDisabled ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark"}`}>
                         {t("recordBatch")}
                       </button>
                       <button type="button" onClick={() => closeRoastForm()} className="flex-1 py-3 border-2 border-border rounded-xl font-bold text-brown hover:bg-cream transition-colors">

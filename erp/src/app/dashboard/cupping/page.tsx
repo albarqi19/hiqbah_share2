@@ -78,9 +78,9 @@ function InviteModal({ session, onClose }: { session: Session; onClose: () => vo
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-extrabold text-charcoal text-lg">Invite Guests</h2>
-            <p className="text-xs text-brown/50 mt-0.5 truncate max-w-[220px]">{session.name}</p>
+            <p className="text-xs text-brown mt-0.5 truncate max-w-[220px]">{session.name}</p>
           </div>
-          <button onClick={onClose} className="text-brown/40 hover:text-charcoal transition-colors">
+          <button onClick={onClose} className="text-brown hover:text-charcoal transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -93,12 +93,12 @@ function InviteModal({ session, onClose }: { session: Session; onClose: () => vo
 
         {origin && (
           <div className="flex justify-center p-4 bg-cream rounded-xl border border-border">
-            <QRCodeSVG value={guestUrl} size={180} bgColor="#FAF6F0" fgColor="#2C1A0E" level="M" />
+            <QRCodeSVG value={guestUrl} size={180} bgColor="#FFFFFF" fgColor="#25312B" level="M" />
           </div>
         )}
 
         <div className="space-y-2">
-          <p className="text-xs font-bold text-brown/50 uppercase tracking-wide">Guest Link</p>
+          <p className="text-xs font-bold text-brown uppercase tracking-wide">Guest Link</p>
           <div className="flex gap-2">
             <div className="flex-1 min-w-0 px-3 py-2.5 bg-cream border border-border rounded-xl">
               <p className="text-xs text-charcoal truncate font-medium">{guestUrl}</p>
@@ -158,13 +158,13 @@ function SessionCard({
                 </span>
               )}
             </div>
-            <p className="text-xs text-brown/50 mt-1">
+            <p className="text-xs text-brown mt-1">
               {new Date(session.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
             </p>
             {isMulti ? (
               <div className="flex flex-wrap gap-1 mt-1.5">
                 {session.sessionBatches.map((sb, i) => (
-                  <span key={sb.id} className="px-1.5 py-0.5 bg-cream border border-border rounded text-[10px] font-mono text-brown/60">
+                  <span key={sb.id} className="px-1.5 py-0.5 bg-cream border border-border rounded text-[10px] font-mono text-brown">
                     {sb.isExternalSample
                       ? `Cup ${i + 1}: ${sb.externalSampleName ?? "External"}`
                       : `Cup ${i + 1}: ${sb.batch?.batchNumber ?? "—"}`}
@@ -173,12 +173,12 @@ function SessionCard({
               </div>
             ) : (
               <>
-                {session.batch && <p className="text-xs text-brown/60 mt-0.5">Batch: <span className="font-medium text-charcoal">{session.batch.batchNumber}</span></p>}
-                {session.greenBean && <p className="text-xs text-brown/60 mt-0.5">Bean: <span className="font-medium text-charcoal">{session.greenBean.beanType} #{session.greenBean.serialNumber}</span></p>}
+                {session.batch && <p className="text-xs text-brown mt-0.5">Batch: <span className="font-medium text-charcoal">{session.batch.batchNumber}</span></p>}
+                {session.greenBean && <p className="text-xs text-brown mt-0.5">Bean: <span className="font-medium text-charcoal">{session.greenBean.beanType} #{session.greenBean.serialNumber}</span></p>}
               </>
             )}
           </div>
-          <div className="flex items-center gap-1.5 text-brown/50 shrink-0">
+          <div className="flex items-center gap-1.5 text-brown shrink-0">
             <Users size={13} />
             <span className="text-xs font-bold">{session._count.scores}</span>
           </div>
@@ -220,7 +220,7 @@ function SessionCard({
                 <button onClick={() => setConfirmDelete(false)} className="px-3 py-2 rounded-xl border border-border text-xs font-bold"><X size={12} /></button>
               </div>
             ) : (
-              <button onClick={() => setConfirmDelete(true)} className="p-2.5 rounded-xl border border-border text-brown/40 hover:text-red-500 hover:border-red-200 transition-colors">
+              <button onClick={() => setConfirmDelete(true)} className="p-2.5 rounded-xl border border-border text-brown hover:text-red-500 hover:border-red-200 transition-colors">
                 <Trash2 size={15} />
               </button>
             )
@@ -331,27 +331,27 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
         {/* Fixed header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-0 shrink-0">
           <h2 className="font-extrabold text-charcoal text-lg">New Cupping Session</h2>
-          <button onClick={onClose} className="text-brown/40 hover:text-charcoal transition-colors"><X size={20} /></button>
+          <button onClick={onClose} className="text-brown hover:text-charcoal transition-colors"><X size={20} /></button>
         </div>
 
         <form onSubmit={handleCreate} className="flex flex-col flex-1 overflow-hidden min-h-0 px-6 pt-4 pb-6 gap-4">
 
           {/* Session name */}
           <div className="shrink-0">
-            <label className="block text-xs font-bold text-brown/70 uppercase tracking-wide mb-1.5">* Session Name</label>
+            <label className="block text-xs font-bold text-brown uppercase tracking-wide mb-1.5">* Session Name</label>
             <input
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Ethiopia Blind Trial — May 2025"
-              className="w-full px-4 py-2.5 rounded-xl border-2 border-border bg-cream text-charcoal text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl border-2 border-border bg-cream text-charcoal text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange transition-colors"
             />
           </div>
 
           {/* Cart — always visible */}
           <div className="shrink-0">
             <div className="flex items-center justify-between mb-1.5">
-              <p className="text-xs font-bold text-brown/50 uppercase tracking-wide">الأكواب المحددة — Selected Cups</p>
+              <p className="text-xs font-bold text-brown uppercase tracking-wide">الأكواب المحددة — Selected Cups</p>
               {totalItems > 0 && (
                 <span className="text-xs font-extrabold text-orange">{totalItems} cup{totalItems !== 1 ? "s" : ""}</span>
               )}
@@ -360,7 +360,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
               totalItems > 0 ? "border-orange/30 bg-orange/5" : "border-dashed border-border bg-cream/40"
             }`}>
               {totalItems === 0 ? (
-                <p className="text-xs text-brown/25 py-1.5 text-center select-none">
+                <p className="text-xs text-brown py-1.5 text-center select-none">
                   No cups selected yet — لم يتم اختيار أكواب بعد
                 </p>
               ) : (
@@ -382,9 +382,9 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
                   })}
                   {externalSamples.map((s, i) => (
                     <span key={`ext-${i}`} className="inline-flex items-center gap-1 pl-2 pr-1 py-1 rounded-lg bg-amber-100 border border-amber-300 text-xs font-bold text-amber-800">
-                      <span className="text-amber-500 text-[10px] font-mono tabular-nums">{selectedIds.size + i + 1}.</span>
+                      <span className="text-amber-600 text-[10px] font-mono tabular-nums">{selectedIds.size + i + 1}.</span>
                       <span className="truncate max-w-[72px]">{s.externalSampleName}</span>
-                      <button type="button" onClick={() => removeExternalSample(i)} className="ml-0.5 text-amber-400 hover:text-red-500 transition-colors leading-none">
+                      <button type="button" onClick={() => removeExternalSample(i)} className="ml-0.5 text-amber-600 hover:text-red-500 transition-colors leading-none">
                         <X size={11} />
                       </button>
                     </span>
@@ -400,7 +400,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
               type="button"
               onClick={() => setInputTab("batches")}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-bold transition-all ${
-                inputTab === "batches" ? "bg-white shadow-sm text-charcoal" : "text-brown/50 hover:text-charcoal"
+                inputTab === "batches" ? "bg-white shadow-sm text-charcoal" : "text-brown hover:text-charcoal"
               }`}
             >
               <ClipboardList size={14} />
@@ -410,7 +410,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
               type="button"
               onClick={() => setInputTab("external")}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-bold transition-all ${
-                inputTab === "external" ? "bg-white shadow-sm text-charcoal" : "text-brown/50 hover:text-charcoal"
+                inputTab === "external" ? "bg-white shadow-sm text-charcoal" : "text-brown hover:text-charcoal"
               }`}
             >
               <PackagePlus size={14} />
@@ -422,9 +422,9 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
           <div className="flex-1 overflow-y-auto min-h-0">
             {inputTab === "batches" ? (
               loadingBatches ? (
-                <p className="text-xs text-brown/40 py-8 text-center">Loading batches…</p>
+                <p className="text-xs text-brown py-8 text-center">Loading batches…</p>
               ) : batches.length === 0 ? (
-                <p className="text-xs text-brown/40 py-8 text-center">No eligible batches found.</p>
+                <p className="text-xs text-brown py-8 text-center">No eligible batches found.</p>
               ) : (
                 <div className="space-y-1.5 pr-0.5">
                   {batches.map((b) => {
@@ -441,10 +441,10 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
                       >
                         {checked
                           ? <CheckSquare size={16} className="text-orange shrink-0" />
-                          : <Square size={16} className="text-brown/30 shrink-0" />}
+                          : <Square size={16} className="text-brown shrink-0" />}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-charcoal truncate">{label}</p>
-                          <p className="text-[10px] font-mono text-brown/50">
+                          <p className="text-[10px] font-mono text-brown">
                             {b.batchNumber} · {b.status}{b.roastProfile ? ` · ${b.roastProfile}` : ""}
                           </p>
                         </div>
@@ -461,7 +461,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
                   onChange={(e) => setExtName(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addExternalSample(); } }}
                   placeholder="Sample Name — اسم العينة *"
-                  className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-cream text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-colors"
+                  className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-cream text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange transition-colors"
                 />
                 <input
                   type="text"
@@ -469,7 +469,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
                   onChange={(e) => setExtSupplier(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addExternalSample(); } }}
                   placeholder="Supplier — المورد (optional)"
-                  className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-cream text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-colors"
+                  className="w-full px-3 py-2.5 rounded-xl border-2 border-border bg-cream text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange transition-colors"
                 />
                 <button
                   type="button"
@@ -480,7 +480,7 @@ function NewSessionModal({ onCreated, onClose }: { onCreated: () => void; onClos
                   + إضافة العينة — Add Sample
                 </button>
                 {externalSamples.length === 0 && (
-                  <p className="text-xs text-brown/30 text-center pt-4 pb-2">
+                  <p className="text-xs text-brown text-center pt-4 pb-2">
                     Enter a name above and press Add.<br />
                     Added samples appear in the cup list above.
                   </p>
@@ -610,13 +610,13 @@ export default function CuppingPage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-16 text-brown/40 text-sm">Loading sessions…</div>
+        <div className="text-center py-16 text-brown text-sm">Loading sessions…</div>
       ) : tab === "active" ? (
         activeSessions.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-border">
             <Coffee size={36} className="text-orange/30 mx-auto mb-3" />
             <p className="font-bold text-charcoal">No active sessions</p>
-            {isAdmin && <p className="text-sm text-brown/50 mt-1">Create a session and invite the team to score.</p>}
+            {isAdmin && <p className="text-sm text-brown mt-1">Create a session and invite the team to score.</p>}
           </div>
         ) : (
           <div className="space-y-3">
@@ -628,9 +628,9 @@ export default function CuppingPage() {
       ) : (
         historySessions.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-border">
-            <History size={36} className="text-brown/20 mx-auto mb-3" />
+            <History size={36} className="text-brown mx-auto mb-3" />
             <p className="font-bold text-charcoal">No completed sessions yet</p>
-            <p className="text-sm text-brown/50 mt-1">Closed sessions with their results will appear here.</p>
+            <p className="text-sm text-brown mt-1">Closed sessions with their results will appear here.</p>
           </div>
         ) : (
           <div className="space-y-3">

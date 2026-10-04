@@ -183,11 +183,11 @@ export default function SettingsPage() {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center gap-4">
         <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
-          <ShieldOff size={28} className="text-red-400" />
+          <ShieldOff size={28} className="text-red-600" />
         </div>
         <div>
           <p className="text-lg font-bold text-charcoal">Access Denied</p>
-          <p className="text-sm text-brown/60 mt-1">This page is restricted to Admins only.</p>
+          <p className="text-sm text-brown mt-1">This page is restricted to Admins only.</p>
         </div>
         <button
           onClick={() => router.push("/dashboard")}
@@ -216,7 +216,7 @@ export default function SettingsPage() {
           <ImagePlus size={18} className="text-orange" />
           الشعار / Logo
         </h2>
-        <p className="text-sm text-brown/60 mb-5">Upload a custom logo (PNG, JPG, SVG — max 2 MB).</p>
+        <p className="text-sm text-brown mb-5">Upload a custom logo (PNG, JPG, SVG — max 2 MB).</p>
 
         <div className="flex items-center gap-5 flex-wrap">
           {/* Preview */}
@@ -224,7 +224,7 @@ export default function SettingsPage() {
             {logoBase64 ? (
               <img src={logoBase64} alt="Logo" className="w-full h-full object-contain p-1" />
             ) : (
-              <span className="text-[36px] leading-none" style={{ fontFamily: "'Scheherazade New','Amiri',serif", color: "#8B9DB5" }}>ح</span>
+              <span className="text-[32px] leading-none font-bold text-hq-primary">ح</span>
             )}
           </div>
 
@@ -248,7 +248,7 @@ export default function SettingsPage() {
               <button
                 onClick={handleRemoveLogo}
                 disabled={logoUploading}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-sm text-charcoal/60 hover:text-red-500 hover:border-red-300 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-sm text-brown hover:text-red-500 hover:border-red-300 transition-colors disabled:opacity-50"
               >
                 <X size={14} />
                 Remove Logo
@@ -273,7 +273,7 @@ export default function SettingsPage() {
           <AlertTriangle size={18} />
           {t("dangerZone")}
         </h2>
-        <p className="text-sm text-charcoal/60 mb-5">{t("resetDesc")}</p>
+        <p className="text-sm text-brown mb-5">{t("resetDesc")}</p>
 
         <div className="flex items-center justify-between gap-4 bg-red-50 border border-red-200 rounded-xl px-5 py-4">
           <div>
@@ -297,9 +297,9 @@ export default function SettingsPage() {
             <AlertTriangle size={18} />
             {t("trainingResetTitle")}
           </h2>
-          <p className="text-sm text-charcoal/60 mb-3">{t("trainingResetSectionDesc")}</p>
+          <p className="text-sm text-brown mb-3">{t("trainingResetSectionDesc")}</p>
 
-          <div className="text-xs text-charcoal/50 mb-4 space-y-0.5">
+          <div className="text-xs text-brown mb-4 space-y-0.5">
             <p>✗ Deletes: orders, customers, batches, QC records, deliveries, inventory, purchase records</p>
             <p>✗ Also deletes: suppliers, products, and SKUs</p>
             <p>✓ Preserves: employees, system settings</p>
@@ -333,7 +333,7 @@ export default function SettingsPage() {
                 </div>
                 <h3 className="font-extrabold text-charcoal text-base">{t("resetConfirmTitle")}</h3>
               </div>
-              <button onClick={closeModal} className="text-charcoal/40 hover:text-charcoal transition-colors">
+              <button onClick={closeModal} className="text-brown hover:text-charcoal transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -359,9 +359,9 @@ export default function SettingsPage() {
                   className={`w-full px-4 py-2.5 rounded-xl border bg-cream text-charcoal text-sm font-mono focus:outline-none focus:ring-2 ${
                     phrase
                       ? phraseMatch
-                        ? "border-green-400 focus:ring-green-300"
-                        : "border-red-300 focus:ring-red-200"
-                      : "border-border focus:ring-orange/40"
+                        ? "border-green-400 focus:ring-green-600"
+                        : "border-red-300 focus:ring-red-600"
+                      : "border-border focus:ring-orange"
                   }`}
                 />
               </div>
@@ -378,7 +378,7 @@ export default function SettingsPage() {
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
                   maxLength={PIN_LENGTH}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange/40 tracking-widest"
+                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange tracking-widest"
                 />
               </div>
 
@@ -435,7 +435,7 @@ export default function SettingsPage() {
                 </div>
                 <h3 className="font-extrabold text-charcoal text-base">{t("trainingResetConfirmTitle")}</h3>
               </div>
-              <button onClick={closeTrainModal} className="text-charcoal/40 hover:text-charcoal transition-colors">
+              <button onClick={closeTrainModal} className="text-brown hover:text-charcoal transition-colors">
                 <X size={20} />
               </button>
             </div>
@@ -472,9 +472,9 @@ export default function SettingsPage() {
                   className={`w-full px-4 py-2.5 rounded-xl border bg-cream text-charcoal text-sm font-mono focus:outline-none focus:ring-2 ${
                     trainPhrase
                       ? trainPhraseMatch
-                        ? "border-green-400 focus:ring-green-300"
-                        : "border-red-300 focus:ring-red-200"
-                      : "border-border focus:ring-amber-400/40"
+                        ? "border-green-400 focus:ring-green-600"
+                        : "border-red-300 focus:ring-red-600"
+                      : "border-border focus:ring-amber-600"
                   }`}
                 />
               </div>
@@ -491,7 +491,7 @@ export default function SettingsPage() {
                   onChange={(e) => setTrainPin(e.target.value.replace(/\D/g, ""))}
                   maxLength={PIN_LENGTH}
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 tracking-widest"
+                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-amber-600 tracking-widest"
                 />
               </div>
 

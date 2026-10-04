@@ -17,7 +17,11 @@ import { pinLookup, pinVerifierInput, requirePinLookupSecret } from "@/lib/pin-l
 // PIN: keeping a raw-PIN comparison around would be an invitation to reintroduce the offline
 // verifier this design exists to retire.
 
+// Where an employee lands when no landing page is saved for them.
+const HOME_ROUTE = "/dashboard/today";
+
 const ROUTE_MODULE_MAP: Record<string, string> = {
+  "/dashboard/today": "dashboard",
   "/dashboard": "dashboard",
   "/dashboard/inventory": "inventory",
   "/dashboard/orders": "orders",
@@ -33,7 +37,10 @@ const ROUTE_MODULE_MAP: Record<string, string> = {
 
 function resolveRoute(defaultRoute: string, permissions: ReturnType<typeof parsePermissions>): string {
   const mod = ROUTE_MODULE_MAP[defaultRoute];
-  if (!mod || mod === "dashboard") return "/dashboard";
+  if (!mod) return "/dashboard";
+  // Home and the dashboard share the dashboard module and its access rule, so a saved
+  // choice between the two is honoured as it stands.
+  if (mod === "dashboard") return defaultRoute;
   if (hasModuleAccess(permissions, mod)) return defaultRoute;
   for (const m of ALL_MODULES) {
     if (m !== "dashboard" && hasModuleAccess(permissions, m)) return `/dashboard/${m}`;
@@ -154,7 +161,7 @@ export async function POST(request: Request) {
     preferredLanguage: (employee.preferredLanguage as "ar" | "en") ?? "ar",
   });
 
-  const redirectTo = resolveRoute(employee.defaultRoute || "/dashboard", permissions);
+  const redirectTo = resolveRoute(employee.defaultRoute || HOME_ROUTE, permissions);
 
   const response = NextResponse.json({
     user: { id: employee.id, name: employee.name, role: employee.role, permissions },

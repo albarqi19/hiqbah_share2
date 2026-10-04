@@ -216,7 +216,7 @@ export default function HistoryPage() {
 
       <div className="bg-white rounded-2xl border border-border p-4">
         <div className="flex items-center gap-2 mb-3">
-          <Download size={16} className="text-gray-400" />
+          <Download size={16} className="text-gray-500" />
           <span className="text-sm font-medium text-gray-600">Export Data (CSV)</span>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -228,7 +228,7 @@ export default function HistoryPage() {
             { type: "inventory", labelKey: "inventory", icon: FileSpreadsheet },
           ].map(({ type, labelKey, icon: Icon }) => (
             <button key={type} onClick={() => handleExport(type)} disabled={exporting}
-              className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark disabled:opacity-50 shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold">
+              className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark disabled:opacity-50 active:scale-[0.98] transition-all duration-200 font-bold">
               <Icon size={14} />{t(labelKey as any)}
             </button>
           ))}
@@ -237,12 +237,12 @@ export default function HistoryPage() {
 
       <div className="bg-white rounded-2xl border border-border p-4">
         <div className="flex items-center gap-2 mb-3">
-          <Filter size={16} className="text-gray-400" />
+          <Filter size={16} className="text-gray-500" />
           <span className="text-sm font-medium text-gray-600">{t("search")}</span>
         </div>
         <div className="flex gap-3 flex-wrap">
           <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 border-2 border-border rounded-xl text-sm bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors">
+            className="px-3 py-2 border-2 border-border rounded-xl text-sm bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors">
             <option value="all">{t("allTypes")}</option>
             <option value="Order">{t("typeOrder")}</option>
             <option value="Production">{t("typeProduction")}</option>
@@ -251,10 +251,10 @@ export default function HistoryPage() {
           </select>
           <div className="flex items-center gap-2">
             <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
-              className="px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
-            <span className="text-gray-400">{t("to")}</span>
+              className="px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
+            <span className="text-gray-500">{t("to")}</span>
             <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)}
-              className="px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+              className="px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
           </div>
           {(typeFilter !== "all" || dateFrom || dateTo) && (
             <button onClick={() => { setTypeFilter("all"); setDateFrom(""); setDateTo(""); }}
@@ -273,11 +273,11 @@ export default function HistoryPage() {
               <p className="font-medium text-sm">{item.description}</p>
               <p className="text-xs text-gray-500 mt-0.5">{item.details}</p>
             </div>
-            <div className="text-xs text-gray-400 whitespace-nowrap">{formatDate(item.date)}</div>
+            <div className="text-xs text-gray-500 whitespace-nowrap">{formatDate(item.date)}</div>
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400 bg-white rounded-2xl border">
+          <div className="text-center py-12 text-gray-500 bg-white rounded-2xl border">
             <History size={40} className="mx-auto mb-2" /><p>{t("noHistoryFound")}</p>
           </div>
         )}

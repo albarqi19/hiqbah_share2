@@ -1,47 +1,122 @@
 @import "tailwindcss";
 
-:root {
-  /* Primary Palette */
-  --slate: #6B7280;
-  --slate-light: #9CA3AF;
-  --slate-dark: #4B5563;
-  --orange: #7C3AED;
-  --orange-light: #F3E8FF;
-  --orange-dark: #6D28D9;
-  --cream: #F9FAFB;
-  --cream-dark: #F3F4F6;
+/* Cairo, served from /public/fonts/cairo (SIL Open Font License 1.1, see OFL.txt there).
+   Self-hosted rather than loaded from Google Fonts: the roastery screens then render in
+   the right typeface even when the floor network blocks or loses the font CDN, and no
+   request leaves for a third party on every page load. One variable file per script
+   subset, so each weight from 200 to 1000 comes from the same three files. */
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("/fonts/cairo/cairo-arabic.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("/fonts/cairo/cairo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("/fonts/cairo/cairo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
-  /* Secondary Palette */
-  --charcoal: #1F2937;
-  --brown: #6B7280;
-  --brown-light: #9CA3AF;
+/* ─────────────────────────────────────────────────────────────────────────
+   Hiqbah interface tokens
+
+   One palette for the whole ERP, taken from the Hiqbah interface guidelines
+   (Figma file jyAGcllCPBYVsRQH80jRoN). Everything below this block is an alias
+   of it: the older names (--orange, --charcoal, --brown, --cream, the --oo-*
+   Order Operations set) are kept so existing screens keep compiling, but each
+   one now resolves to a Hiqbah value. Change a colour here, not in a page.
+
+   Contrast against white, as measured for the pairs the screens actually use:
+   primary 7.09, muted 4.82, warning 5.05, danger 6.11, control border 3.56.
+   Muted text is 4.53 on the page background and only 4.32 on --hiqbah-neutral,
+   so muted text never sits on the neutral surface; the sidebar uses ink.
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  --hiqbah-bg: #F7F8F6;
+  --hiqbah-surface: #FFFFFF;
+  --hiqbah-ink: #25312B;
+  --hiqbah-muted: #68756D;
+  --hiqbah-line: #E1E6E0;
+  --hiqbah-neutral: #F1F3EF;
+  --hiqbah-neutral-strong: #E6EAE4;
+  --hiqbah-border-control: #7E8B82;
+
+  --hiqbah-primary: #405F4D;
+  --hiqbah-primary-strong: #33503F;
+  --hiqbah-primary-soft: #EBF1EA;
+
+  --hiqbah-warning: #95651E;
+  --hiqbah-warning-soft: #FBF3E5;
+  --hiqbah-danger: #A34435;
+  --hiqbah-danger-strong: #8A392C;
+  --hiqbah-danger-soft: #F9EEEB;
+  --hiqbah-info: #4F6F86;
+  --hiqbah-info-soft: #EDF1F4;
+
+  --hiqbah-chart-1: #405F4D;
+  --hiqbah-chart-2: #8A673A;
+  --hiqbah-chart-3: #4F6F86;
+  --hiqbah-chart-4: #755A83;
+  --hiqbah-chart-5: #6C7141;
+
+  --hiqbah-focus: #405F4D;
+  --hiqbah-shadow-overlay: 0 8px 24px rgb(37 49 43 / 12%);
+  --hiqbah-motion-fast: 180ms;
+  --hiqbah-motion-standard: 220ms;
+
+  --hiqbah-sidebar-width: 240px;
+  --hiqbah-topbar-height: 64px;
+
+  /* ── Legacy names, now aliases ── */
+  --slate: var(--hiqbah-muted);
+  --slate-light: #858F88;
+  --slate-dark: #4A5850;
+  --orange: var(--hiqbah-primary);
+  --orange-light: var(--hiqbah-primary-soft);
+  --orange-dark: var(--hiqbah-primary-strong);
+  --cream: var(--hiqbah-bg);
+  --cream-dark: var(--hiqbah-neutral);
+
+  --charcoal: var(--hiqbah-ink);
+  --brown: var(--hiqbah-muted);
+  --brown-light: #858F88;
   --white: #FFFFFF;
 
-  /* Semantic */
-  --background: #F9FAFB;
-  --foreground: #1F2937;
-  --card: #FFFFFF;
-  --card-hover: #F9FAFB;
-  --border: #E5E7EB;
-  --border-light: #F3F4F6;
-  --muted: #F3F4F6;
-  --muted-foreground: #6B7280;
+  --background: var(--hiqbah-bg);
+  --foreground: var(--hiqbah-ink);
+  --card: var(--hiqbah-surface);
+  --card-hover: var(--hiqbah-bg);
+  --border: var(--hiqbah-line);
+  --border-light: var(--hiqbah-neutral);
+  --muted: var(--hiqbah-neutral);
+  --muted-foreground: var(--hiqbah-muted);
 
-  /* Status */
-  --success: #22c55e;
-  --success-bg: #dcfce7;
-  --warning: #f59e0b;
-  --warning-bg: #fef3c7;
-  --danger: #ef4444;
-  --danger-bg: #fecaca;
-  --info: #64748B;
-  --info-bg: #F1F5F9;
+  --success: var(--hiqbah-primary);
+  --success-bg: var(--hiqbah-primary-soft);
+  --warning: var(--hiqbah-warning);
+  --warning-bg: var(--hiqbah-warning-soft);
+  --danger: var(--hiqbah-danger);
+  --danger-bg: var(--hiqbah-danger-soft);
+  --info: var(--hiqbah-info);
+  --info-bg: var(--hiqbah-info-soft);
 
-  /* Sidebar */
-  --sidebar: #1F2937;
-  --sidebar-hover: #374151;
-  --sidebar-active: #7C3AED;
-  --sidebar-text: rgba(255, 255, 255, 0.7);
+  --sidebar: var(--hiqbah-neutral);
+  --sidebar-hover: var(--hiqbah-neutral-strong);
+  --sidebar-active: var(--hiqbah-primary);
+  --sidebar-text: var(--hiqbah-ink);
   --sidebar-text-active: #FFFFFF;
 }
 
@@ -78,18 +153,318 @@
   --color-sidebar-active: var(--sidebar-active);
   --color-sidebar-text: var(--sidebar-text);
   --color-sidebar-text-active: var(--sidebar-text-active);
+
+  /* Hiqbah names for new code. Prefer these over the legacy aliases. */
+  --color-hq-bg: var(--hiqbah-bg);
+  --color-hq-surface: var(--hiqbah-surface);
+  --color-hq-ink: var(--hiqbah-ink);
+  --color-hq-muted: var(--hiqbah-muted);
+  --color-hq-line: var(--hiqbah-line);
+  --color-hq-neutral: var(--hiqbah-neutral);
+  --color-hq-neutral-strong: var(--hiqbah-neutral-strong);
+  --color-hq-control: var(--hiqbah-border-control);
+  --color-hq-primary: var(--hiqbah-primary);
+  --color-hq-primary-strong: var(--hiqbah-primary-strong);
+  --color-hq-primary-soft: var(--hiqbah-primary-soft);
+  --color-hq-warning: var(--hiqbah-warning);
+  --color-hq-warning-soft: var(--hiqbah-warning-soft);
+  --color-hq-danger: var(--hiqbah-danger);
+  --color-hq-danger-strong: var(--hiqbah-danger-strong);
+  --color-hq-danger-soft: var(--hiqbah-danger-soft);
+  --color-hq-info: var(--hiqbah-info);
+  --color-hq-info-soft: var(--hiqbah-info-soft);
+  --color-hq-chart-1: var(--hiqbah-chart-1);
+  --color-hq-chart-2: var(--hiqbah-chart-2);
+  --color-hq-chart-3: var(--hiqbah-chart-3);
+  --color-hq-chart-4: var(--hiqbah-chart-4);
+  --color-hq-chart-5: var(--hiqbah-chart-5);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Tailwind theme, re-pointed at Hiqbah
+
+   Screens across the ERP also use Tailwind's own palette directly (bg-red-50,
+   text-green-700, border-amber-200 …) — about 800 places. Rather than leave
+   those on Tailwind's defaults, each scale a screen actually uses is redefined
+   around its Hiqbah role, so a page that says "green" gets the Hiqbah positive
+   colour and "red" gets the Hiqbah danger colour:
+
+     green, emerald, purple, violet, indigo → primary (purple was the old accent)
+     red, rose                               → danger
+     amber, yellow, orange                   → warning
+     blue, sky                               → info
+     gray, zinc, slate, neutral, stone       → Hiqbah neutrals
+
+   Step 600 is the Hiqbah value itself. Steps 500–950 pass 4.5:1 as text on
+   white; steps 50–200 are surfaces; 300–400 are for borders and icons only.
+
+   Radii follow the guidelines (6 small, 8 containers, 12 dialogs): rounded-xl
+   and rounded-2xl, used for cards and modals across the app, are pulled down to
+   8 and 12. Shadows are flat by default; the larger steps become the single
+   overlay shadow, so dialogs and menus still separate from the page.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans: "Cairo", "Noto Sans Arabic", system-ui, -apple-system, sans-serif;
+
+  --font-weight-extrabold: 700;
+  --font-weight-black: 700;
+
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 0.75rem;
+
+  --shadow-xs: none;
+  --shadow-sm: 0 1px 2px rgb(37 49 43 / 5%);
+  --shadow-md: 0 1px 3px rgb(37 49 43 / 8%);
+  --shadow-lg: 0 8px 24px rgb(37 49 43 / 12%);
+  --shadow-xl: 0 8px 24px rgb(37 49 43 / 12%);
+  --shadow-2xl: 0 8px 24px rgb(37 49 43 / 12%);
+
+  --color-green-50: #F3F7F2;
+  --color-green-100: #EBF1EA;
+  --color-green-200: #D3E0D2;
+  --color-green-300: #AFC6AE;
+  --color-green-400: #7F9F84;
+  --color-green-500: #577A62;
+  --color-green-600: #405F4D;
+  --color-green-700: #33503F;
+  --color-green-800: #284033;
+  --color-green-900: #1E3127;
+  --color-green-950: #111C16;
+
+  --color-emerald-50: #F3F7F2;
+  --color-emerald-100: #EBF1EA;
+  --color-emerald-200: #D3E0D2;
+  --color-emerald-300: #AFC6AE;
+  --color-emerald-400: #7F9F84;
+  --color-emerald-500: #577A62;
+  --color-emerald-600: #405F4D;
+  --color-emerald-700: #33503F;
+  --color-emerald-800: #284033;
+  --color-emerald-900: #1E3127;
+  --color-emerald-950: #111C16;
+
+  --color-purple-50: #F3F7F2;
+  --color-purple-100: #EBF1EA;
+  --color-purple-200: #D3E0D2;
+  --color-purple-300: #AFC6AE;
+  --color-purple-400: #7F9F84;
+  --color-purple-500: #577A62;
+  --color-purple-600: #405F4D;
+  --color-purple-700: #33503F;
+  --color-purple-800: #284033;
+  --color-purple-900: #1E3127;
+  --color-purple-950: #111C16;
+
+  --color-violet-50: #F3F7F2;
+  --color-violet-100: #EBF1EA;
+  --color-violet-200: #D3E0D2;
+  --color-violet-300: #AFC6AE;
+  --color-violet-400: #7F9F84;
+  --color-violet-500: #577A62;
+  --color-violet-600: #405F4D;
+  --color-violet-700: #33503F;
+  --color-violet-800: #284033;
+  --color-violet-900: #1E3127;
+  --color-violet-950: #111C16;
+
+  --color-indigo-50: #F3F7F2;
+  --color-indigo-100: #EBF1EA;
+  --color-indigo-200: #D3E0D2;
+  --color-indigo-300: #AFC6AE;
+  --color-indigo-400: #7F9F84;
+  --color-indigo-500: #577A62;
+  --color-indigo-600: #405F4D;
+  --color-indigo-700: #33503F;
+  --color-indigo-800: #284033;
+  --color-indigo-900: #1E3127;
+  --color-indigo-950: #111C16;
+
+  --color-red-50: #FBF3F1;
+  --color-red-100: #F9EEEB;
+  --color-red-200: #F0D3CC;
+  --color-red-300: #E2ADA2;
+  --color-red-400: #CC7E6F;
+  --color-red-500: #B65A49;
+  --color-red-600: #A34435;
+  --color-red-700: #8A392C;
+  --color-red-800: #6F2E24;
+  --color-red-900: #57251D;
+  --color-red-950: #31140F;
+
+  --color-rose-50: #FBF3F1;
+  --color-rose-100: #F9EEEB;
+  --color-rose-200: #F0D3CC;
+  --color-rose-300: #E2ADA2;
+  --color-rose-400: #CC7E6F;
+  --color-rose-500: #B65A49;
+  --color-rose-600: #A34435;
+  --color-rose-700: #8A392C;
+  --color-rose-800: #6F2E24;
+  --color-rose-900: #57251D;
+  --color-rose-950: #31140F;
+
+  --color-amber-50: #FDF8EF;
+  --color-amber-100: #FBF3E5;
+  --color-amber-200: #F3E0BF;
+  --color-amber-300: #E6C48C;
+  --color-amber-400: #C49248;
+  --color-amber-500: #9A6A22;
+  --color-amber-600: #95651E;
+  --color-amber-700: #7A521A;
+  --color-amber-800: #614117;
+  --color-amber-900: #4B3313;
+  --color-amber-950: #2B1D0A;
+
+  --color-yellow-50: #FDF8EF;
+  --color-yellow-100: #FBF3E5;
+  --color-yellow-200: #F3E0BF;
+  --color-yellow-300: #E6C48C;
+  --color-yellow-400: #C49248;
+  --color-yellow-500: #9A6A22;
+  --color-yellow-600: #95651E;
+  --color-yellow-700: #7A521A;
+  --color-yellow-800: #614117;
+  --color-yellow-900: #4B3313;
+  --color-yellow-950: #2B1D0A;
+
+  --color-orange-50: #FDF8EF;
+  --color-orange-100: #FBF3E5;
+  --color-orange-200: #F3E0BF;
+  --color-orange-300: #E6C48C;
+  --color-orange-400: #C49248;
+  --color-orange-500: #9A6A22;
+  --color-orange-600: #95651E;
+  --color-orange-700: #7A521A;
+  --color-orange-800: #614117;
+  --color-orange-900: #4B3313;
+  --color-orange-950: #2B1D0A;
+
+  --color-blue-50: #F2F5F8;
+  --color-blue-100: #E6EDF2;
+  --color-blue-200: #CBD8E2;
+  --color-blue-300: #A5BCCD;
+  --color-blue-400: #7896AE;
+  --color-blue-500: #577790;
+  --color-blue-600: #4F6F86;
+  --color-blue-700: #415C70;
+  --color-blue-800: #354B5B;
+  --color-blue-900: #2A3B48;
+  --color-blue-950: #18232B;
+
+  --color-sky-50: #F2F5F8;
+  --color-sky-100: #E6EDF2;
+  --color-sky-200: #CBD8E2;
+  --color-sky-300: #A5BCCD;
+  --color-sky-400: #7896AE;
+  --color-sky-500: #577790;
+  --color-sky-600: #4F6F86;
+  --color-sky-700: #415C70;
+  --color-sky-800: #354B5B;
+  --color-sky-900: #2A3B48;
+  --color-sky-950: #18232B;
+
+  --color-gray-50: #F7F8F6;
+  --color-gray-100: #F1F3EF;
+  --color-gray-200: #E1E6E0;
+  --color-gray-300: #C9D0C8;
+  --color-gray-400: #858F88;
+  --color-gray-500: #68756D;
+  --color-gray-600: #56635B;
+  --color-gray-700: #435048;
+  --color-gray-800: #33403A;
+  --color-gray-900: #25312B;
+  --color-gray-950: #151D19;
+
+  --color-zinc-50: #F7F8F6;
+  --color-zinc-100: #F1F3EF;
+  --color-zinc-200: #E1E6E0;
+  --color-zinc-300: #C9D0C8;
+  --color-zinc-400: #858F88;
+  --color-zinc-500: #68756D;
+  --color-zinc-600: #56635B;
+  --color-zinc-700: #435048;
+  --color-zinc-800: #33403A;
+  --color-zinc-900: #25312B;
+  --color-zinc-950: #151D19;
+
+  --color-slate-50: #F7F8F6;
+  --color-slate-100: #F1F3EF;
+  --color-slate-200: #E1E6E0;
+  --color-slate-300: #C9D0C8;
+  --color-slate-400: #858F88;
+  --color-slate-500: #68756D;
+  --color-slate-600: #56635B;
+  --color-slate-700: #435048;
+  --color-slate-800: #33403A;
+  --color-slate-900: #25312B;
+  --color-slate-950: #151D19;
+
+  --color-neutral-50: #F7F8F6;
+  --color-neutral-100: #F1F3EF;
+  --color-neutral-200: #E1E6E0;
+  --color-neutral-300: #C9D0C8;
+  --color-neutral-400: #858F88;
+  --color-neutral-500: #68756D;
+  --color-neutral-600: #56635B;
+  --color-neutral-700: #435048;
+  --color-neutral-800: #33403A;
+  --color-neutral-900: #25312B;
+  --color-neutral-950: #151D19;
+
+  --color-stone-50: #F7F8F6;
+  --color-stone-100: #F1F3EF;
+  --color-stone-200: #E1E6E0;
+  --color-stone-300: #C9D0C8;
+  --color-stone-400: #858F88;
+  --color-stone-500: #68756D;
+  --color-stone-600: #56635B;
+  --color-stone-700: #435048;
+  --color-stone-800: #33403A;
+  --color-stone-900: #25312B;
+  --color-stone-950: #151D19;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Tajawal", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Tajawal", system-ui, sans-serif;
-  font-weight: 800;
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+/* Figures in tables line up by column; identifiers (order numbers, SKUs, lot
+   numbers, e-mail) keep their own left-to-right order inside Arabic sentences. */
+table,
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.identifier {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* One visible focus indicator for every control, keyboard only. Screens that
+   draw their own ring with focus:ring-* keep it; this covers everything else. */
+:focus-visible {
+  outline: 2px solid var(--hiqbah-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .status-badge {
@@ -101,14 +476,14 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-.status-completed { background: var(--success-bg); color: #166534; }
-.status-pending { background: var(--warning-bg); color: #92400e; }
-.status-in-production { background: var(--info-bg); color: #475569; }
-.status-delivered { background: var(--success-bg); color: #166534; }
-.status-partial { background: var(--warning-bg); color: #92400e; }
-.status-not-yet { background: var(--muted); color: var(--muted-foreground); }
-.status-paid { background: var(--success-bg); color: #166534; }
-.status-not-paid { background: var(--danger-bg); color: #991b1b; }
+.status-completed { background: var(--hiqbah-primary-soft); color: var(--hiqbah-primary); }
+.status-pending { background: var(--hiqbah-warning-soft); color: var(--hiqbah-warning); }
+.status-in-production { background: var(--hiqbah-info-soft); color: var(--hiqbah-info); }
+.status-delivered { background: var(--hiqbah-primary-soft); color: var(--hiqbah-primary); }
+.status-partial { background: var(--hiqbah-warning-soft); color: var(--hiqbah-warning); }
+.status-not-yet { background: var(--hiqbah-neutral); color: var(--hiqbah-ink); }
+.status-paid { background: var(--hiqbah-primary-soft); color: var(--hiqbah-primary); }
+.status-not-paid { background: var(--hiqbah-danger-soft); color: var(--hiqbah-danger); }
 
 @media print {
   .no-print { display: none !important; }
@@ -116,63 +491,57 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Order Operations (S0) — scoped design tokens
-   ADDITIVE ONLY. Mirrors the approved Figma "ERP Design System & Order
-   Operations" file (zinc-gray neutrals + restrained indigo accent).
-   These --oo-* tokens are consumed ONLY by Order Operations components
-   (src/components/OrderLifecyclePanel.tsx). They do not replace or alias
-   the existing brand tokens (--orange, --slate, --status-*, etc.) used
-   elsewhere in the ERP — those are untouched.
+   Order Operations tokens (--oo-*)
+
+   The Order Operations panel (src/components/OrderLifecyclePanel.tsx) and the
+   stacked tablet tables read these names. They used to carry a separate
+   zinc-and-indigo palette; they now resolve to Hiqbah so the order screens look
+   like the rest of the ERP. Each status keeps its own foreground, so no two
+   order states share a colour pair:
+
+     waiting   warning           ready      olive (chart-5)
+     preparing info              success    primary
+     hold      darker warning    blocked    danger
+     rejected  darker danger     cancelled  neutral ink
    ───────────────────────────────────────────────────────────────────────── */
 :root {
-  --oo-text-primary: #18181b;
-  --oo-text-secondary: #52525b;
-  --oo-text-muted: #a1a1aa;
+  --oo-text-primary: var(--hiqbah-ink);
+  --oo-text-secondary: #56635B;
+  --oo-text-muted: var(--hiqbah-muted);
 
-  --oo-bg-default: #ffffff;
-  --oo-bg-subtle: #fafafa;
-  --oo-bg-elevated: #ffffff;
+  --oo-bg-default: var(--hiqbah-surface);
+  --oo-bg-subtle: var(--hiqbah-bg);
+  --oo-bg-elevated: var(--hiqbah-surface);
 
-  --oo-border-default: #e4e4e7;
-  --oo-border-strong: #d4d4d8;
+  --oo-border-default: var(--hiqbah-line);
+  --oo-border-strong: var(--hiqbah-border-control);
 
-  --oo-action-primary: #4f46e5;
-  --oo-action-primary-hover: #4338ca;
+  --oo-action-primary: var(--hiqbah-primary);
+  --oo-action-primary-hover: var(--hiqbah-primary-strong);
 
-  /* Waiting Approval / Waiting Preparation Review */
-  --oo-status-waiting: #d97706;
-  --oo-status-waiting-bg: #fffbeb;
+  --oo-status-waiting: var(--hiqbah-warning);
+  --oo-status-waiting-bg: var(--hiqbah-warning-soft);
 
-  /* Preparing */
-  --oo-status-preparing: #2563eb;
-  --oo-status-preparing-bg: #eff6ff;
+  --oo-status-preparing: var(--hiqbah-info);
+  --oo-status-preparing-bg: var(--hiqbah-info-soft);
 
-  /* Ready for Shipping (teal — kept distinct from Completed's green) */
-  --oo-status-ready: #0d9488;
-  --oo-status-ready-bg: #f0fdfa;
+  --oo-status-ready: #5F6438;
+  --oo-status-ready-bg: #F3F4EA;
 
-  /* Completed */
-  --oo-status-success: #16a34a;
-  --oo-status-success-bg: #f0fdf4;
+  --oo-status-success: var(--hiqbah-primary);
+  --oo-status-success-bg: var(--hiqbah-primary-soft);
 
-  /* On Hold */
-  --oo-status-hold: #b45309;
-  --oo-status-hold-bg: #fef3c7;
+  --oo-status-hold: #7A521A;
+  --oo-status-hold-bg: var(--hiqbah-warning-soft);
 
-  /* Blocked (preparation decision, not an order status) */
-  --oo-status-blocked: #dc2626;
-  --oo-status-blocked-bg: #fef2f2;
+  --oo-status-blocked: var(--hiqbah-danger);
+  --oo-status-blocked-bg: var(--hiqbah-danger-soft);
 
-  /* Rejected — destructive red, one step darker than Blocked so an order-level
-     approval failure never reads as an item-level block. Shares the red-50 tint
-     with Blocked deliberately; the two are separated by foreground, icon and label. */
-  --oo-status-rejected: #b91c1c;
-  --oo-status-rejected-bg: #fef2f2;
+  --oo-status-rejected: var(--hiqbah-danger-strong);
+  --oo-status-rejected-bg: var(--hiqbah-danger-soft);
 
-  /* Cancelled — neutral dark gray, deliberately NOT red so it never reads
-     the same as Rejected/Blocked. */
-  --oo-status-cancelled: #3f3f46;
-  --oo-status-cancelled-bg: #f4f4f5;
+  --oo-status-cancelled: #435048;
+  --oo-status-cancelled-bg: var(--hiqbah-neutral);
 }
 
 @theme inline {

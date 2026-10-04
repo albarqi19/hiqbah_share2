@@ -620,7 +620,7 @@ export default function QCPage() {
           </p>
         </div>
         {canCreate && tab === "backlog" && (
-          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold">
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark active:scale-[0.98] transition-all duration-200 font-bold">
             <Plus size={18} /> {t("newQcRecord")}
           </button>
         )}
@@ -628,15 +628,15 @@ export default function QCPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl border p-4 text-center hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+        <div className="bg-white rounded-2xl border p-4 text-center hover:border-hq-control transition-all duration-300">
           <p className="text-3xl font-bold text-brown">{records.length}</p>
           <p className="text-xs text-brown">{t("totalRecords")}</p>
         </div>
-        <div className="bg-green-50 rounded-2xl border border-green-200 p-4 text-center hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+        <div className="bg-green-50 rounded-2xl border border-green-200 p-4 text-center hover:border-hq-control transition-all duration-300">
           <p className="text-3xl font-bold text-green-600">{onProfileCount}</p>
           <p className="text-xs text-green-700">{t("acceptedLabel")}</p>
         </div>
-        <div className="bg-red-50 rounded-2xl border border-red-200 p-4 text-center hover:shadow-lg hover:shadow-charcoal/5 transition-all duration-300">
+        <div className="bg-red-50 rounded-2xl border border-red-200 p-4 text-center hover:border-hq-control transition-all duration-300">
           <p className="text-3xl font-bold text-red-600">{offProfileCount}</p>
           <p className="text-xs text-red-700">{t("rejectedLabel")}</p>
         </div>
@@ -722,7 +722,7 @@ export default function QCPage() {
             </div>
           )}
           {filteredBacklog.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown/40">
+            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown">
               <ClipboardCheck size={40} className="mx-auto mb-3 opacity-50" />
               <p className="font-semibold text-lg">{t("noBatchesAwaitingQc")}</p>
               <p className="text-sm mt-1">{t("batchesAfterRoasting")}</p>
@@ -755,7 +755,7 @@ export default function QCPage() {
                           {canEditDate && (
                             <button
                               onClick={() => setEditDateBatch(batch)}
-                              className="p-1 rounded-lg text-brown/40 hover:text-orange hover:bg-orange/10 transition-colors"
+                              className="p-1 rounded-lg text-brown hover:text-orange hover:bg-orange/10 transition-colors"
                               title={t("editDateBtn")}
                             >
                               <CalendarDays size={12} />
@@ -779,14 +779,14 @@ export default function QCPage() {
                         <p className="text-xs text-brown mt-0.5">
                           {batch.greenBean?.beanType || (batch.orderItem?.beanTypeName ?? "")} — #{(batch.orderItem?.order.orderNumber ?? t("stockBatchLabel"))} ({(batch.orderItem?.order.customer.name ?? t("stockBatchLabel"))})
                         </p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-gray-500 mt-0.5">
                           {batch.roastedBeanQuantity}kg {t("roastedLabel")}{batch.roastProfile ? ` · ${batch.roastProfile}` : ""}
                         </p>
                       </div>
                       <div className="flex items-center gap-1.5 flex-shrink-0">
                         {canCancelBatch && (
                           <button onClick={() => setCancelBatch(batch)}
-                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
+                            className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-600 transition-colors" title="Cancel batch">
                             <Trash2 size={13} />
                           </button>
                         )}
@@ -800,7 +800,7 @@ export default function QCPage() {
                     {/* Tester summary bar */}
                     <div className="flex items-center gap-3 mt-3 pt-3 border-t border-amber-200/60">
                       <div className="flex items-center gap-1.5">
-                        <Users size={13} className="text-brown/60" />
+                        <Users size={13} className="text-brown" />
                         <span className="text-xs font-semibold text-brown">
                           {total} {total !== 1 ? t("testers") : t("tester")}
                         </span>
@@ -828,7 +828,7 @@ export default function QCPage() {
                         )}
                         {canCreate && !alreadySubmitted && (
                           <button onClick={() => startQcForBatch(batch)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-orange text-white rounded-lg text-xs hover:bg-orange-dark shadow-md shadow-orange/20 active:scale-[0.98] transition-all font-bold">
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-orange text-white rounded-lg text-xs hover:bg-orange-dark active:scale-[0.98] transition-all font-bold">
                             <ClipboardCheck size={12} /> {t("addMyRecord")}
                           </button>
                         )}
@@ -880,14 +880,14 @@ export default function QCPage() {
                                         </span>
                                       )}
                                     </span>
-                                    {r.color && <span className="ltr:ml-2 rtl:mr-2 text-[10px] text-brown/50">{t("colorLabel")} {r.color}</span>}
-                                    {r.remarks && <span className="ltr:ml-2 rtl:mr-2 text-[10px] text-brown/50 truncate max-w-[120px] inline-block">{r.remarks}</span>}
+                                    {r.color && <span className="ltr:ml-2 rtl:mr-2 text-[10px] text-brown">{t("colorLabel")} {r.color}</span>}
+                                    {r.remarks && <span className="ltr:ml-2 rtl:mr-2 text-[10px] text-brown truncate max-w-[120px] inline-block">{r.remarks}</span>}
                                   </div>
                                   <div className="flex items-center gap-2">
                                     {corrCount > 0 && (
                                       <button
                                         onClick={() => toggleCorrectionHistory(r.id)}
-                                        className="text-[10px] font-bold text-brown/50 hover:text-brown px-1.5 py-0.5 rounded hover:bg-cream transition-colors"
+                                        className="text-[10px] font-bold text-brown hover:text-brown px-1.5 py-0.5 rounded hover:bg-cream transition-colors"
                                       >
                                         {isCorrExpanded ? "Hide history" : `History (${corrCount})`}
                                       </button>
@@ -909,12 +909,12 @@ export default function QCPage() {
                                 {isCorrExpanded && (
                                   <div className="bg-amber-50/60 border-t border-amber-100 px-3 py-2">
                                     {isLoadingCorr && (
-                                      <p className="text-[10px] text-brown/50 flex items-center gap-1">
+                                      <p className="text-[10px] text-brown flex items-center gap-1">
                                         <Loader2 size={10} className="animate-spin" /> Loading history…
                                       </p>
                                     )}
                                     {!isLoadingCorr && cachedCorrs && cachedCorrs.length === 0 && (
-                                      <p className="text-[10px] text-brown/50">No corrections recorded.</p>
+                                      <p className="text-[10px] text-brown">No corrections recorded.</p>
                                     )}
                                     {!isLoadingCorr && cachedCorrs && cachedCorrs.length > 0 && (
                                       <div className="space-y-2">
@@ -922,16 +922,16 @@ export default function QCPage() {
                                           <div key={ev.id} className="text-[10px] border border-amber-200 rounded-lg overflow-hidden">
                                             <div className="bg-amber-100/70 px-2 py-1 flex items-center justify-between gap-2 flex-wrap">
                                               <span className="font-bold text-charcoal">{ev.changedByName}</span>
-                                              <span className="text-brown/60">{new Date(ev.changedAt).toLocaleString()}</span>
-                                              <span className="text-brown/80 italic truncate max-w-[200px]">"{ev.correctionReason}"</span>
+                                              <span className="text-brown">{new Date(ev.changedAt).toLocaleString()}</span>
+                                              <span className="text-brown italic truncate max-w-[200px]">"{ev.correctionReason}"</span>
                                             </div>
                                             {ev.fieldChanges.length > 0 ? (
                                               <table className="w-full text-[10px]">
                                                 <thead>
                                                   <tr className="bg-white/50">
-                                                    <th className="text-start px-2 py-1 font-semibold text-brown/70">Field</th>
-                                                    <th className="text-start px-2 py-1 font-semibold text-brown/70">From</th>
-                                                    <th className="text-start px-2 py-1 font-semibold text-brown/70">To</th>
+                                                    <th className="text-start px-2 py-1 font-semibold text-brown">Field</th>
+                                                    <th className="text-start px-2 py-1 font-semibold text-brown">From</th>
+                                                    <th className="text-start px-2 py-1 font-semibold text-brown">To</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-amber-100">
@@ -945,7 +945,7 @@ export default function QCPage() {
                                                 </tbody>
                                               </table>
                                             ) : (
-                                              <p className="px-2 py-1 text-brown/50 italic">No field changes — acknowledged correction.</p>
+                                              <p className="px-2 py-1 text-brown italic">No field changes — acknowledged correction.</p>
                                             )}
                                           </div>
                                         ))}
@@ -963,7 +963,7 @@ export default function QCPage() {
                       );
                     })()}
                     {isExpanded && total === 0 && (
-                      <div className="mt-3 pt-3 border-t border-amber-200/60 text-center text-xs text-brown/50 py-2">
+                      <div className="mt-3 pt-3 border-t border-amber-200/60 text-center text-xs text-brown py-2">
                         {t("noTesterRecords")}
                       </div>
                     )}
@@ -975,9 +975,9 @@ export default function QCPage() {
 
           {/* QC Records search + table */}
           <div className="relative">
-            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input type="text" placeholder={t("searchQcRecords")} value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full ltr:pl-10 rtl:pr-10 px-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+              className="w-full ltr:pl-10 rtl:pr-10 px-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
           </div>
 
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
@@ -1021,7 +1021,7 @@ export default function QCPage() {
               </table>
             </div>
             {filtered.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-gray-500">
                 <ClipboardCheck size={40} className="mx-auto mb-2" /><p>{t("noQcRecordsFound")}</p>
               </div>
             )}
@@ -1033,7 +1033,7 @@ export default function QCPage() {
       {tab === "history" && (
         <div className="space-y-2">
           {historyBatches.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown/40">
+            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown">
               <ClipboardCheck size={40} className="mx-auto mb-3 opacity-50" />
               <p className="font-semibold text-lg">{t("noQcHistoryYet")}</p>
               <p className="text-sm mt-1">{t("finalizedBatchesHere")}</p>
@@ -1066,7 +1066,7 @@ export default function QCPage() {
                           </span>
                         )}
                         {batch.qcRecords.length > 0 && (
-                          <span className="text-[10px] text-brown/50 font-medium">
+                          <span className="text-[10px] text-brown font-medium">
                             {t("panel")}: {acceptCount}✓ {rejectCount}✗
                           </span>
                         )}
@@ -1139,7 +1139,7 @@ export default function QCPage() {
             <h2 className="text-lg font-extrabold text-charcoal mb-1">
               {editingRecordId ? "Correct QC Record" : t("submitQcRecord")}
             </h2>
-            <p className="text-xs text-brown/60 mb-4">{t("qcFormSubtitle")}</p>
+            <p className="text-xs text-brown mb-4">{t("qcFormSubtitle")}</p>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-sm font-medium text-charcoal mb-1">{t("roastingBatchLabel")}</label>
@@ -1152,7 +1152,7 @@ export default function QCPage() {
                     const batch = backlogBatches.find((b) => b.id === e.target.value);
                     if (batch) setForm({ ...form, batchId: batch.id, coffeeOrigin: batch.greenBean?.beanType || (batch.orderItem?.beanTypeName ?? ""), processing: batch.greenBean?.process || "", serialNumber: batch.batchNumber });
                   }}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required>
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required>
                     <option value="">{t("selectBatch")}</option>
                     {backlogBatches.map((b) => (
                       <option key={b.id} value={b.id}>{b.batchNumber} — {(b.orderItem?.beanTypeName ?? "")} (#{(b.orderItem?.order.orderNumber ?? t("stockBatchLabel"))})</option>
@@ -1164,12 +1164,12 @@ export default function QCPage() {
                 <div>
                   <label className="block text-sm font-medium text-charcoal mb-1">{t("coffeeOrigin")}</label>
                   <input type="text" value={form.coffeeOrigin} onChange={(e) => setForm({ ...form, coffeeOrigin: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required />
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-charcoal mb-1">{t("process")}</label>
                   <select value={form.processing} onChange={(e) => setForm({ ...form, processing: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors">
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors">
                     <option value="">—</option>
                     <option>Natural</option><option>Washed</option><option>Honey</option>
                     <option>Anaerobic</option><option>Innoculated</option><option>Co-Fermented</option>
@@ -1180,7 +1180,7 @@ export default function QCPage() {
               <div>
                 <label className="block text-sm font-medium text-charcoal mb-1">{t("serialNumberShort")} ({t("roastingBatchLabel")})</label>
                 <input type="text" value={form.serialNumber} onChange={(e) => setForm({ ...form, serialNumber: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required />
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required />
               </div>
               {/* Agtron Color Inputs */}
               {(() => {
@@ -1210,23 +1210,23 @@ export default function QCPage() {
                         <label className="block text-sm font-medium text-charcoal mb-1">{t("colorWholeLabel")}</label>
                         <input type="number" step="0.1" min="0" max="100"
                           value={form.colorWhole} onChange={(e) => setForm({ ...form, colorWhole: e.target.value })}
-                          className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" placeholder="e.g. 68" />
+                          className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" placeholder="e.g. 68" />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-charcoal mb-1">{t("colorGroundLabel")}</label>
                         <input type="number" step="0.1" min="0" max="100"
                           value={form.colorGround} onChange={(e) => setForm({ ...form, colorGround: e.target.value })}
-                          className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" placeholder="e.g. 74" />
+                          className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" placeholder="e.g. 74" />
                       </div>
                     </div>
                     {delta != null && (
                       <div className="flex items-center gap-2 px-3 py-2 bg-cream rounded-xl text-sm font-semibold text-charcoal">
-                        <span className="text-brown/60">{t("colorDeltaLabel")}:</span>
+                        <span className="text-brown">{t("colorDeltaLabel")}:</span>
                         <span className="font-mono font-bold text-orange">{delta.toFixed(1)}</span>
                         {deltaPass === true && <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">{t("passLabel")}</span>}
                         {deltaPass === false && <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-full">{t("failLabel")}</span>}
                         {pref && pref.targetDeltaMin != null && pref.targetDeltaMax != null && (
-                          <span className="text-xs text-brown/50">{t("targetHint")}: {pref.targetDeltaMin}–{pref.targetDeltaMax}</span>
+                          <span className="text-xs text-brown">{t("targetHint")}: {pref.targetDeltaMin}–{pref.targetDeltaMax}</span>
                         )}
                       </div>
                     )}
@@ -1239,7 +1239,7 @@ export default function QCPage() {
                               <span className="font-medium text-charcoal">{t("colorWholeLabel")}</span>
                               <div className="text-end">
                                 <p className="font-bold font-mono">{whole.toFixed(1)}</p>
-                                <p className="text-[10px] text-brown/50">{t("targetHint")}: {pref.targetColorWhole} ±{pref.targetToleranceWhole}</p>
+                                <p className="text-[10px] text-brown">{t("targetHint")}: {pref.targetColorWhole} ±{pref.targetToleranceWhole}</p>
                                 <span className={`text-[10px] font-bold ${wholePass ? "text-green-600" : "text-red-600"}`}>{wholePass ? t("passLabel") : t("failLabel")}</span>
                               </div>
                             </div>
@@ -1249,7 +1249,7 @@ export default function QCPage() {
                               <span className="font-medium text-charcoal">{t("colorGroundLabel")}</span>
                               <div className="text-end">
                                 <p className="font-bold font-mono">{ground.toFixed(1)}</p>
-                                <p className="text-[10px] text-brown/50">{t("targetHint")}: {pref.targetColorGround} ±{pref.targetToleranceGround}</p>
+                                <p className="text-[10px] text-brown">{t("targetHint")}: {pref.targetColorGround} ±{pref.targetToleranceGround}</p>
                                 <span className={`text-[10px] font-bold ${groundPass ? "text-green-600" : "text-red-600"}`}>{groundPass ? t("passLabel") : t("failLabel")}</span>
                               </div>
                             </div>
@@ -1264,11 +1264,11 @@ export default function QCPage() {
                 <label className="block text-sm font-medium text-charcoal mb-2">{t("verdict")} *</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button type="button" onClick={() => setForm({ ...form, decision: "Accept", underDeveloped: false, overDeveloped: false })}
-                    className={`flex items-center justify-center gap-2 py-3 rounded-lg border-2 font-semibold text-sm transition-all ${form.decision === "Accept" ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 bg-white text-gray-400 hover:border-green-300"}`}>
+                    className={`flex items-center justify-center gap-2 py-3 rounded-lg border-2 font-semibold text-sm transition-all ${form.decision === "Accept" ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 bg-white text-gray-500 hover:border-green-300"}`}>
                     <CheckCircle2 size={20} /> {t("acceptedLabel")}
                   </button>
                   <button type="button" onClick={() => setForm({ ...form, decision: "Reject" })}
-                    className={`flex items-center justify-center gap-2 py-3 rounded-lg border-2 font-semibold text-sm transition-all ${form.decision === "Reject" ? "border-red-500 bg-red-50 text-red-700" : "border-gray-200 bg-white text-gray-400 hover:border-red-300"}`}>
+                    className={`flex items-center justify-center gap-2 py-3 rounded-lg border-2 font-semibold text-sm transition-all ${form.decision === "Reject" ? "border-red-500 bg-red-50 text-red-700" : "border-gray-200 bg-white text-gray-500 hover:border-red-300"}`}>
                     <XCircle size={20} /> {t("rejectedLabel")}
                   </button>
                 </div>
@@ -1278,7 +1278,7 @@ export default function QCPage() {
                   <label className="block text-sm font-medium text-charcoal">{t("rejectionReason")}</label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="roastAssessment" checked={form.underDeveloped}
-                      onChange={() => setForm({ ...form, underDeveloped: true, overDeveloped: false })} className="w-4 h-4 text-amber-500" />
+                      onChange={() => setForm({ ...form, underDeveloped: true, overDeveloped: false })} className="w-4 h-4 text-amber-600" />
                     <span className="text-sm font-medium text-amber-700">{t("underDeveloped")}</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -1291,7 +1291,7 @@ export default function QCPage() {
               <div>
                 <label className="block text-sm font-medium text-charcoal mb-1">{t("remarks")}</label>
                 <textarea value={form.remarks} onChange={(e) => setForm({ ...form, remarks: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" rows={3}
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" rows={3}
                   placeholder={t("cuppingNotesPlaceholder")} />
               </div>
               {editingRecordId && (
@@ -1302,7 +1302,7 @@ export default function QCPage() {
                   <textarea
                     value={form.correctionReason}
                     onChange={(e) => setForm({ ...form, correctionReason: e.target.value })}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                     rows={2}
                     placeholder="Why is this record being corrected?"
                     required
@@ -1311,7 +1311,7 @@ export default function QCPage() {
               )}
               <div className="flex gap-3 pt-2">
                 <button type="submit" disabled={submitting}
-                  className="flex-1 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold disabled:opacity-50 flex items-center justify-center gap-2">
+                  className="flex-1 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark active:scale-[0.98] transition-all duration-200 font-bold disabled:opacity-50 flex items-center justify-center gap-2">
                   {submitting ? <><Loader2 size={15} className="animate-spin" /> {t("saving")}</> : t("saveRecord")}
                 </button>
                 <button type="button" onClick={closeForm} className="flex-1 py-2 border rounded-lg hover:bg-gray-50">
@@ -1335,11 +1335,11 @@ export default function QCPage() {
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => !finalizing && setFinalizeBatch(null)}>
             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-lg font-extrabold text-charcoal mb-1">{t("finalizeQc")}</h2>
-              <p className="text-xs text-brown/60 mb-4 font-mono">{fb.batchNumber}</p>
+              <p className="text-xs text-brown mb-4 font-mono">{fb.batchNumber}</p>
 
               {fbTotal === 1 && (
                 <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-4">
-                  <AlertTriangle size={14} className="text-amber-500 flex-shrink-0" />
+                  <AlertTriangle size={14} className="text-amber-600 flex-shrink-0" />
                   <p className="text-xs text-amber-700 font-medium">{t("oneTesterWarning")}</p>
                 </div>
               )}
@@ -1378,7 +1378,7 @@ export default function QCPage() {
                     onChange={(e) => setFinalizeReason(e.target.value)}
                     rows={2}
                     placeholder={reasonRequired ? "State reason for passing despite rejected records…" : "Optional notes…"}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm resize-none"
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm resize-none"
                   />
                 </div>
               )}
@@ -1412,7 +1412,7 @@ export default function QCPage() {
               <Link2 size={20} className="text-orange" />
               <h2 className="text-lg font-extrabold text-charcoal">{t("externalTesterLink")}</h2>
             </div>
-            <p className="text-sm text-brown/70 mb-3">{t("guestLinkHint")}</p>
+            <p className="text-sm text-brown mb-3">{t("guestLinkHint")}</p>
             <div className="bg-cream rounded-xl p-3 break-all text-xs font-mono text-charcoal border border-border mb-4">
               {inviteLink}
             </div>
@@ -1496,7 +1496,7 @@ export default function QCPage() {
               </div>
               <div>
                 <h2 className="font-extrabold text-charcoal">{t("bulkWarningTitle")}</h2>
-                <p className="text-xs text-brown/60">{selectedIds.size} {t("bulkFinalizeCount")}</p>
+                <p className="text-xs text-brown">{selectedIds.size} {t("bulkFinalizeCount")}</p>
               </div>
             </div>
             <p className="text-sm text-brown mb-6">{t("bulkWarningMsg")}</p>
@@ -1523,7 +1523,7 @@ export default function QCPage() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
             <h2 className="font-extrabold text-charcoal mb-1">{t("bulkFinalizeTitle")}</h2>
-            <p className="text-xs text-brown/60 mb-5">{selectedIds.size} {t("bulkFinalizeCount")}</p>
+            <p className="text-xs text-brown mb-5">{selectedIds.size} {t("bulkFinalizeCount")}</p>
             <p className="text-sm font-semibold text-charcoal mb-3">{t("bulkOutcomeLabel")}</p>
             <div className="flex gap-3 mb-6">
               <button
@@ -1554,7 +1554,7 @@ export default function QCPage() {
                     onChange={(e) => setBulkFinalizeReason(e.target.value)}
                     rows={2}
                     placeholder={hasAnyReject ? "State reason for passing despite rejected records…" : "Optional notes…"}
-                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm resize-none"
+                    className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm resize-none"
                   />
                 </div>
               );

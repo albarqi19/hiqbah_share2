@@ -75,10 +75,10 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
   if (notFound) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-lg">
-          <XCircle size={48} className="text-red-400 mx-auto mb-3" />
+        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center border border-border">
+          <XCircle size={48} className="text-red-600 mx-auto mb-3" />
           <h1 className="text-xl font-extrabold text-charcoal mb-2">Link Not Found</h1>
-          <p className="text-brown/70 text-sm">This QC link is invalid or has expired.</p>
+          <p className="text-brown text-sm">This QC link is invalid or has expired.</p>
         </div>
       </div>
     );
@@ -87,10 +87,10 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
   if (!batch?.isOpen) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-lg">
+        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center border border-border">
           <CheckCircle2 size={48} className="text-green-500 mx-auto mb-3" />
           <h1 className="text-xl font-extrabold text-charcoal mb-2">QC Closed</h1>
-          <p className="text-brown/70 text-sm">This batch has already been finalized.</p>
+          <p className="text-brown text-sm">This batch has already been finalized.</p>
           <p className="text-sm font-bold text-charcoal mt-2">{batch?.batchNumber}</p>
         </div>
       </div>
@@ -100,17 +100,17 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
   if (submitted) {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-lg">
+        <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center border border-border">
           <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${decision === "Accept" ? "bg-green-100" : "bg-red-100"}`}>
             {decision === "Accept"
               ? <CheckCircle2 size={36} className="text-green-600" />
               : <XCircle size={36} className="text-red-600" />}
           </div>
           <h1 className="text-xl font-extrabold text-charcoal mb-1">Thank you, {testerName}!</h1>
-          <p className="text-brown/70 text-sm mb-3">Your QC record has been submitted.</p>
+          <p className="text-brown text-sm mb-3">Your QC record has been submitted.</p>
           <div className="bg-cream rounded-xl p-3 text-left text-sm">
             <p className="font-medium text-charcoal">{batch?.batchNumber}</p>
-            <p className="text-brown/60">{batch?.origin} — {batch?.processing}</p>
+            <p className="text-brown">{batch?.origin} — {batch?.processing}</p>
             <p className={`font-bold mt-1 ${decision === "Accept" ? "text-green-600" : "text-red-600"}`}>
               {decision}
             </p>
@@ -122,7 +122,7 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md">
+      <div className="bg-white rounded-2xl border border-border w-full max-w-md">
         {/* Header */}
         <div className="bg-charcoal rounded-t-2xl p-5 text-white">
           <div className="flex items-center gap-3 mb-1">
@@ -156,7 +156,7 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
                 type="button"
                 onClick={() => { setDecision("Accept"); setUnderDeveloped(false); setOverDeveloped(false); }}
                 className={`flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 font-bold text-sm transition-all ${
-                  decision === "Accept" ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-400 hover:border-green-300"
+                  decision === "Accept" ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-500 hover:border-green-300"
                 }`}
               >
                 <CheckCircle2 size={20} /> Accept
@@ -165,7 +165,7 @@ export default function GuestQCPage({ params }: { params: Promise<{ batchId: str
                 type="button"
                 onClick={() => setDecision("Reject")}
                 className={`flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 font-bold text-sm transition-all ${
-                  decision === "Reject" ? "border-red-500 bg-red-50 text-red-700" : "border-gray-200 text-gray-400 hover:border-red-300"
+                  decision === "Reject" ? "border-red-500 bg-red-50 text-red-700" : "border-gray-200 text-gray-500 hover:border-red-300"
                 }`}
               >
                 <XCircle size={20} /> Reject

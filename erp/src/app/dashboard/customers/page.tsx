@@ -41,7 +41,7 @@ type Customer = {
 
 type GreenBeanFull = { id: string; beanType: string; serialNumber: string; quantityKg: number };
 
-const INPUT_CLS = "w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors";
+const INPUT_CLS = "w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors";
 
 export default function CustomersPage() {
   const { t } = useI18n();
@@ -267,7 +267,7 @@ export default function CustomersPage() {
         {canManage && (
           <button
             onClick={openAddCustomer}
-            className="flex items-center gap-2 px-4 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange-dark shadow-md shadow-orange/20 active:scale-[0.98] transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2.5 bg-orange text-white rounded-xl font-bold text-sm hover:bg-orange-dark active:scale-[0.98] transition-all duration-200"
           >
             <Plus size={16} /> {t("addCustomer")}
           </button>
@@ -292,12 +292,12 @@ export default function CustomersPage() {
               placeholder={t("searchCustomers")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+              className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
             />
           </div>
 
           {filteredCustomers.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown/40">
+            <div className="text-center py-12 bg-white rounded-2xl border border-border text-brown">
               <Users2 size={36} className="mx-auto mb-3 opacity-40" />
               <p className="font-semibold">{t("noCustomers")}</p>
             </div>
@@ -307,13 +307,13 @@ export default function CustomersPage() {
                 <button
                   key={c.id}
                   onClick={() => { setSelected(c); setTab("info"); }}
-                  className={`w-full text-start bg-white rounded-2xl border p-4 hover:shadow-md transition-all duration-200 ${selected?.id === c.id ? "border-orange shadow-md shadow-orange/15" : "border-border hover:border-orange/30"}`}
+                  className={`w-full text-start bg-white rounded-2xl border p-4 hover:shadow-md transition-all duration-200 ${selected?.id === c.id ? "border-orange " : "border-border hover:border-orange/30"}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-charcoal truncate">{c.name}</p>
-                      {c.nameAr && <p className="text-sm text-brown/60 truncate">{c.nameAr}</p>}
-                      <div className="flex items-center gap-3 mt-1 text-xs text-brown/60">
+                      {c.nameAr && <p className="text-sm text-brown truncate">{c.nameAr}</p>}
+                      <div className="flex items-center gap-3 mt-1 text-xs text-brown">
                         {c.phone && <span className="flex items-center gap-1"><Phone size={11} />{c.phone}</span>}
                         <span>{c._count.orders} {t("customerOrdersLabel")}</span>
                         {c._count.roastPreferences > 0 && (
@@ -324,7 +324,7 @@ export default function CustomersPage() {
                         )}
                       </div>
                     </div>
-                    <ChevronRight size={16} className="text-brown/30 flex-shrink-0 ltr:ml-2 rtl:mr-2 rtl:rotate-180" />
+                    <ChevronRight size={16} className="text-brown flex-shrink-0 ltr:ml-2 rtl:mr-2 rtl:rotate-180" />
                   </div>
                 </button>
               ))}
@@ -339,9 +339,9 @@ export default function CustomersPage() {
             <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-cream/50">
               <div>
                 <p className="font-extrabold text-charcoal">{selected.name}</p>
-                {selected.nameAr && <p className="text-xs text-brown/60">{selected.nameAr}</p>}
+                {selected.nameAr && <p className="text-xs text-brown">{selected.nameAr}</p>}
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 rounded-lg text-brown/40 hover:text-charcoal hover:bg-cream transition-colors">
+              <button onClick={() => setSelected(null)} className="p-1.5 rounded-lg text-brown hover:text-charcoal hover:bg-cream transition-colors">
                 <X size={18} />
               </button>
             </div>
@@ -369,9 +369,9 @@ export default function CustomersPage() {
                     { icon: Package, label: t("customerOrdersLabel"), val: String(selected._count.orders) },
                   ].map(({ icon: Icon, label, val }) => (
                     <div key={label} className="flex items-start gap-3">
-                      <Icon size={16} className="text-brown/40 mt-0.5 flex-shrink-0" />
+                      <Icon size={16} className="text-brown mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-xs text-brown/50 font-medium">{label}</p>
+                        <p className="text-xs text-brown font-medium">{label}</p>
                         <p className="text-sm text-charcoal font-semibold">{val || "—"}</p>
                       </div>
                     </div>
@@ -387,7 +387,7 @@ export default function CustomersPage() {
                       </button>
                       <button
                         onClick={() => handleDeleteCustomer(selected)}
-                        className="p-2 rounded-xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                        className="p-2 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-600 transition-colors"
                         title={t("delete")}
                       >
                         <Trash2 size={16} />
@@ -400,7 +400,7 @@ export default function CustomersPage() {
               {tab === "profiles" && (
                 <div className="space-y-3">
                   {selected.roastPreferences.length === 0 ? (
-                    <div className="text-center py-6 text-brown/40">
+                    <div className="text-center py-6 text-brown">
                       <Star size={28} className="mx-auto mb-2 opacity-30" />
                       <p className="text-sm font-semibold">{t("noProfiles")}</p>
                     </div>
@@ -412,19 +412,19 @@ export default function CustomersPage() {
                             <div className="flex items-center gap-1.5 mb-0.5">
                               <Star size={12} className="text-amber-600 flex-shrink-0" fill="currentColor" />
                               <p className="text-xs text-amber-700 font-bold truncate">{pref.greenBean.beanType}</p>
-                              <span className="text-xs text-amber-500 font-mono">({pref.greenBean.serialNumber})</span>
+                              <span className="text-xs text-amber-600 font-mono">({pref.greenBean.serialNumber})</span>
                             </div>
                             <div className="flex items-center gap-1.5 flex-wrap">
                               <p className="text-sm font-bold text-charcoal">{pref.profileName}</p>
                               <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
                                 pref.usageType === "ESPRESSO" ? "bg-orange/15 text-orange-700" :
-                                pref.usageType === "FILTER"   ? "bg-blue-100 text-blue-700" :
+                                pref.usageType === "FILTER" ? "bg-blue-100 text-blue-700" :
                                 "bg-purple-100 text-purple-700"
                               }`}>
                                 {pref.usageType === "ESPRESSO" ? t("usageEspresso") : pref.usageType === "FILTER" ? t("usageFilter") : t("usageBoth")}
                               </span>
                             </div>
-                            {pref.notes && <p className="text-xs text-brown/60 mt-0.5">{pref.notes}</p>}
+                            {pref.notes && <p className="text-xs text-brown mt-0.5">{pref.notes}</p>}
                             {(pref.targetColorWhole != null || pref.targetColorGround != null) && (
                               <div className="mt-1.5 grid grid-cols-2 gap-x-3 gap-y-0.5 text-[10px] font-mono text-amber-800/70">
                                 {pref.targetColorWhole != null && (
@@ -444,7 +444,7 @@ export default function CustomersPage() {
                               <button onClick={() => openEditProfile(pref)} className="p-1.5 rounded-lg text-amber-600 hover:bg-amber-100 transition-colors">
                                 <Pencil size={13} />
                               </button>
-                              <button onClick={() => handleDeleteProfile(pref)} className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 transition-colors">
+                              <button onClick={() => handleDeleteProfile(pref)} className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors">
                                 <Trash2 size={13} />
                               </button>
                             </div>
@@ -501,7 +501,7 @@ export default function CustomersPage() {
               </div>
               <div className="flex gap-3 pt-1">
                 <button type="submit" disabled={savingCustomer}
-                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark shadow-md shadow-orange/20 active:scale-[0.98] transition-all disabled:opacity-60">
+                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark active:scale-[0.98] transition-all disabled:opacity-60">
                   {savingCustomer ? t("saving") : t("save")}
                 </button>
                 <button type="button" onClick={() => setShowCustomerForm(false)}
@@ -539,7 +539,7 @@ export default function CustomersPage() {
               {editingPref && (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
                   <p className="text-xs text-amber-700 font-bold">{editingPref.greenBean.beanType}</p>
-                  <p className="text-xs text-amber-500 font-mono">{editingPref.greenBean.serialNumber}</p>
+                  <p className="text-xs text-amber-600 font-mono">{editingPref.greenBean.serialNumber}</p>
                 </div>
               )}
               <div>
@@ -568,7 +568,7 @@ export default function CustomersPage() {
 
               {/* Roast Standards */}
               <div className="border-t border-border pt-3">
-                <p className="text-xs font-extrabold text-charcoal/60 uppercase tracking-widest mb-2">{t("roastStandards")}</p>
+                <p className="text-xs font-extrabold text-brown uppercase tracking-widest mb-2">{t("roastStandards")}</p>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-charcoal mb-1">{t("colorWholeLabel")}</label>
@@ -617,7 +617,7 @@ export default function CustomersPage() {
 
               <div className="flex gap-3 pt-1">
                 <button type="submit" disabled={savingProfile}
-                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark shadow-md shadow-orange/20 active:scale-[0.98] transition-all disabled:opacity-60">
+                  className="flex-1 py-2.5 bg-orange text-white rounded-xl font-bold hover:bg-orange-dark active:scale-[0.98] transition-all disabled:opacity-60">
                   {savingProfile ? t("saving") : t("save")}
                 </button>
                 <button type="button" onClick={() => setShowProfileForm(false)}

@@ -132,11 +132,11 @@ export default function EditDateModal({ batch, onClose, onSuccess }: Props) {
                 <h2 className="text-base font-extrabold text-charcoal">{t("editBatchDate")}</h2>
               </div>
               <button onClick={onClose} className="p-1 rounded-lg hover:bg-cream transition-colors">
-                <X size={16} className="text-brown/60" />
+                <X size={16} className="text-brown" />
               </button>
             </div>
 
-            <p className="text-xs text-brown/60 font-mono mb-4">
+            <p className="text-xs text-brown font-mono mb-4">
               {batch.batchNumber}
               {batch.parentBatch && (
                 <span className="ltr:ml-2 rtl:mr-2 text-purple-600">
@@ -163,7 +163,7 @@ export default function EditDateModal({ batch, onClose, onSuccess }: Props) {
                   max={todayStr}
                   onChange={(e) => setNewDate(e.target.value)}
                   required
-                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                 />
               </div>
               <div>
@@ -176,10 +176,10 @@ export default function EditDateModal({ batch, onClose, onSuccess }: Props) {
                   onChange={(e) => setReason(e.target.value)}
                   rows={2}
                   placeholder={lang === "ar" ? "لماذا يتم تغيير التاريخ/الرقم التسلسلي؟" : "Why is this batch date/serial being changed?"}
-                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors resize-none"
+                  className="w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors resize-none"
                 />
               </div>
-              <p className="text-[11px] text-brown/50 leading-relaxed">
+              <p className="text-[11px] text-brown leading-relaxed">
                 {lang === "ar"
                   ? "سيتم إعادة توليد الرقم التسلسلي تلقائياً بناءً على التاريخ الجديد."
                   : "The S/N will be regenerated automatically based on the new date."}
@@ -219,7 +219,7 @@ export default function EditDateModal({ batch, onClose, onSuccess }: Props) {
               <p>{t("blendCascadePrompt")}</p>
             </div>
 
-            <p className="text-xs text-brown/60 mb-4">
+            <p className="text-xs text-brown mb-4">
               {lang === "ar" ? "الرقم التسلسلي الجديد:" : "New S/N:"}{" "}
               <span className="font-mono font-bold text-charcoal">{firstResult.batchNumber}</span>
             </p>

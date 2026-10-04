@@ -61,7 +61,7 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
   if (step === "loading") {
     return (
       <Shell>
-        <div className="text-center py-16 text-brown/40 text-sm">Loading…</div>
+        <div className="text-center py-16 text-brown text-sm">Loading…</div>
       </Shell>
     );
   }
@@ -72,7 +72,7 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
         <div className="text-center py-16">
           <Coffee size={36} className="text-orange/30 mx-auto mb-3" />
           <p className="font-bold text-charcoal">Session not found</p>
-          <p className="text-sm text-brown/50 mt-1">Please check your link and try again.</p>
+          <p className="text-sm text-brown mt-1">Please check your link and try again.</p>
         </div>
       </Shell>
     );
@@ -86,10 +86,10 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
           <p className="text-xl font-extrabold text-charcoal">
             This cupping session has been closed.
           </p>
-          <p className="text-lg font-bold text-charcoal/70">
+          <p className="text-lg font-bold text-charcoal">
             عذراً، تم إغلاق جلسة التذوق هذه.
           </p>
-          <p className="text-sm text-brown/50 mt-2">Thank you for your interest!</p>
+          <p className="text-sm text-brown mt-2">Thank you for your interest!</p>
         </div>
       </Shell>
     );
@@ -102,11 +102,11 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
           <CheckCircle size={48} className="text-green-500 mx-auto" />
           <p className="text-xl font-extrabold text-charcoal">Score Submitted!</p>
           <p className="text-5xl font-black text-green-600">{finalScore.toFixed(2)}</p>
-          <p className="text-sm text-brown/50 mt-1">
+          <p className="text-sm text-brown mt-1">
             Thank you, <strong className="text-charcoal">{name}</strong>!
             Your score has been recorded.
           </p>
-          <p className="text-xs text-brown/40 mt-4">
+          <p className="text-xs text-brown mt-4">
             شكراً لك! تم تسجيل تقييمك.
           </p>
         </div>
@@ -121,14 +121,14 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
           <div className="text-center">
             <FlaskConical size={40} className="text-orange mx-auto mb-3" />
             <h2 className="text-xl font-extrabold text-charcoal">{session?.name}</h2>
-            <p className="text-sm text-brown/60 mt-1">SCA Cupping Session</p>
+            <p className="text-sm text-brown mt-1">SCA Cupping Session</p>
           </div>
 
           <form onSubmit={handleNameSubmit} className="space-y-4">
             <div className="bg-white rounded-2xl border border-border p-5 space-y-3">
               <label className="block text-sm font-extrabold text-charcoal uppercase tracking-wide">
                 Enter your name to start
-                <span className="block text-xs text-brown/50 normal-case tracking-normal mt-0.5 font-normal">
+                <span className="block text-xs text-brown normal-case tracking-normal mt-0.5 font-normal">
                   أدخل اسمك للبدء
                 </span>
               </label>
@@ -137,7 +137,7 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name / اسمك"
-                className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-base focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-colors"
+                className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-base focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange transition-colors"
               />
               {nameError && <p className="text-xs text-red-500 font-medium">{nameError}</p>}
             </div>
@@ -158,9 +158,9 @@ export default function GuestCuppingPage({ params }: { params: Promise<{ id: str
     <Shell>
       <div className="space-y-4">
         <div>
-          <p className="text-xs text-brown/50 font-medium">Cupping as</p>
+          <p className="text-xs text-brown font-medium">Cupping as</p>
           <p className="font-extrabold text-charcoal">{name}</p>
-          <p className="text-xs text-brown/40">{session?.name}</p>
+          <p className="text-xs text-brown">{session?.name}</p>
         </div>
         {submitError && (
           <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-600 font-medium">
@@ -188,7 +188,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <p className="text-xs font-extrabold text-charcoal leading-none">HIQBAH COFFEE</p>
-            <p className="text-[10px] text-brown/50 leading-none mt-0.5">SCA Cupping</p>
+            <p className="text-[10px] text-brown leading-none mt-0.5">SCA Cupping</p>
           </div>
         </div>
         {children}

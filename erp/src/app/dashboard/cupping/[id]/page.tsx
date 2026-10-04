@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import CuppingForm, { type CuppingFormData } from "@/app/dashboard/cupping/CuppingForm";
 import { useUser } from "@/app/dashboard/user-context";
+import { HQ } from "@/lib/hiqbah-colors";
 
 type Score = {
   id: string;
@@ -75,9 +76,9 @@ function ScoreTable({ scores }: { scores: Score[] }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-border">
-            <th className="text-left py-2 pr-4 text-xs font-bold text-brown/50 uppercase tracking-wide">Cupper</th>
-            <th className="text-right py-2 px-2 text-xs font-bold text-brown/50 uppercase tracking-wide">Score</th>
-            <th className="text-right py-2 pl-2 text-xs font-bold text-brown/50 uppercase tracking-wide hidden sm:table-cell">Descriptors</th>
+            <th className="text-left py-2 pr-4 text-xs font-bold text-brown uppercase tracking-wide">Cupper</th>
+            <th className="text-right py-2 px-2 text-xs font-bold text-brown uppercase tracking-wide">Score</th>
+            <th className="text-right py-2 pl-2 text-xs font-bold text-brown uppercase tracking-wide hidden sm:table-cell">Descriptors</th>
           </tr>
         </thead>
         <tbody>
@@ -90,7 +91,7 @@ function ScoreTable({ scores }: { scores: Score[] }) {
                 <span className="font-extrabold tabular-nums text-charcoal">{s.finalScore.toFixed(2)}</span>
               </td>
               <td className="py-3 pl-2 text-right hidden sm:table-cell">
-                <span className="text-xs text-brown/50">
+                <span className="text-xs text-brown">
                   {s.flavorDescriptors.slice(0, 3).join(", ")}
                   {s.flavorDescriptors.length > 3 && ` +${s.flavorDescriptors.length - 3}`}
                 </span>
@@ -118,7 +119,7 @@ function CupIdentityBadge({ sb }: { sb: SessionBatch }) {
       <div className="space-y-0.5">
         <p className="text-sm font-extrabold text-charcoal">{sb.externalSampleName ?? "External Sample"}</p>
         {sb.externalSupplierName && (
-          <p className="text-xs text-brown/60">{sb.externalSupplierName} · <span className="text-amber-600 font-bold">عينة مورد</span></p>
+          <p className="text-xs text-brown">{sb.externalSupplierName} · <span className="text-amber-600 font-bold">عينة مورد</span></p>
         )}
         {!sb.externalSupplierName && (
           <p className="text-xs text-amber-600 font-bold">عينة مورد</p>
@@ -131,7 +132,7 @@ function CupIdentityBadge({ sb }: { sb: SessionBatch }) {
   return (
     <div className="space-y-0.5">
       <p className="text-sm font-extrabold text-charcoal">{beanType}</p>
-      <p className="text-xs text-brown/60">Batch {batchNumber}</p>
+      <p className="text-xs text-brown">Batch {batchNumber}</p>
     </div>
   );
 }
@@ -159,13 +160,13 @@ function AggregateResults({ scores }: { scores: Score[] }) {
         </h3>
         <ResponsiveContainer width="100%" height={280}>
           <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
-            <PolarGrid stroke="#e5e7eb" />
-            <PolarAngleAxis dataKey="attribute" tick={{ fontSize: 11, fill: "#6B7280", fontWeight: 600 }} />
-            <PolarRadiusAxis angle={90} domain={[6, 10]} tickCount={5} tick={{ fontSize: 9, fill: "#9ca3af" }} />
-            <Radar name="Average" dataKey="average" stroke="#7C3AED" fill="#7C3AED" fillOpacity={0.25} strokeWidth={2} />
+            <PolarGrid stroke={HQ.line} />
+            <PolarAngleAxis dataKey="attribute" tick={{ fontSize: 11, fill: HQ.muted, fontWeight: 600 }} />
+            <PolarRadiusAxis angle={90} domain={[6, 10]} tickCount={5} tick={{ fontSize: 10, fill: HQ.muted }} />
+            <Radar name="Average" dataKey="average" stroke={HQ.primary} fill={HQ.primary} fillOpacity={0.2} strokeWidth={2} />
             <Tooltip
               formatter={(v) => [typeof v === "number" ? v.toFixed(2) : v, "Avg Score"]}
-              contentStyle={{ borderRadius: 12, border: "1px solid #e5e7eb", fontSize: 12 }}
+              contentStyle={{ borderRadius: 8, border: `1px solid ${HQ.line}`, fontSize: 12 }}
             />
           </RadarChart>
         </ResponsiveContainer>
@@ -215,7 +216,7 @@ function AggregateResults({ scores }: { scores: Score[] }) {
             return (
               <div key={a.key} className="space-y-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-brown/70 font-medium">{a.label}</span>
+                  <span className="text-brown font-medium">{a.label}</span>
                   <span className="font-extrabold text-charcoal tabular-nums">{val.toFixed(2)}</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-gray-100">
@@ -231,7 +232,7 @@ function AggregateResults({ scores }: { scores: Score[] }) {
             return (
               <div key={k} className="space-y-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-brown/70 font-medium">{label}</span>
+                  <span className="text-brown font-medium">{label}</span>
                   <span className="font-extrabold text-charcoal tabular-nums">{val.toFixed(2)}</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-gray-100">
@@ -275,19 +276,19 @@ function ResultsView({ session }: { session: Session }) {
                   {i + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-bold text-brown/40 uppercase tracking-widest mb-0.5">
+                  <p className="text-[10px] font-bold text-brown uppercase tracking-widest mb-0.5">
                     Cup {i + 1} · كوب {i + 1}
                   </p>
                   <CupIdentityBadge sb={sb} />
                 </div>
                 {cupAvg !== null && (
                   <div className="text-right shrink-0">
-                    <p className="text-[10px] text-brown/40 font-bold uppercase tracking-wide">Avg</p>
+                    <p className="text-[10px] text-brown font-bold uppercase tracking-wide">Avg</p>
                     <p className="text-2xl font-black text-orange tabular-nums">{cupAvg.toFixed(2)}</p>
                   </div>
                 )}
                 {cupAvg === null && (
-                  <p className="text-xs text-brown/30 font-medium shrink-0">No scores</p>
+                  <p className="text-xs text-brown font-medium shrink-0">No scores</p>
                 )}
               </div>
               {/* Cup scores */}
@@ -356,7 +357,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
 
   if (loading) {
     return (
-      <div className="max-w-xl mx-auto pt-16 text-center text-brown/40 text-sm">
+      <div className="max-w-xl mx-auto pt-16 text-center text-brown text-sm">
         Loading session…
       </div>
     );
@@ -392,7 +393,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
           if (activeBatchId) { setActiveBatchId(null); return; }
           router.push("/dashboard/cupping");
         }}
-        className="flex items-center gap-1.5 text-sm font-bold text-brown/60 hover:text-charcoal transition-colors mb-3"
+        className="flex items-center gap-1.5 text-sm font-bold text-brown hover:text-charcoal transition-colors mb-3"
       >
         <ChevronLeft size={16} />
         {activeBatchId ? "All Cups" : "All Sessions"}
@@ -403,7 +404,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
             <FlaskConical className="text-orange shrink-0" size={26} />
             {session.name}
           </h1>
-          <div className="flex items-center gap-3 mt-1 text-xs text-brown/50 flex-wrap">
+          <div className="flex items-center gap-3 mt-1 text-xs text-brown flex-wrap">
             <span>{new Date(session.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
             {session.batch && <span>Batch: {session.batch.batchNumber}</span>}
             {session.greenBean && <span>{session.greenBean.beanType} #{session.greenBean.serialNumber}</span>}
@@ -431,7 +432,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
         {sessionHeader}
         {session.scores.length === 0 ? (
           <div className="bg-white rounded-2xl border border-border p-8 text-center">
-            <p className="text-brown/50 text-sm">No scores were submitted for this session.</p>
+            <p className="text-brown text-sm">No scores were submitted for this session.</p>
           </div>
         ) : (
           <ResultsView session={session} />
@@ -451,11 +452,11 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
           <p className="text-xl font-extrabold text-charcoal">Score Submitted</p>
           <p className="text-5xl font-black text-green-600">{myScore.finalScore.toFixed(2)}</p>
           {myScore.flavorDescriptors.length > 0 && (
-            <p className="text-sm text-brown/60">
+            <p className="text-sm text-brown">
               Descriptors: <strong className="text-charcoal">{myScore.flavorDescriptors.join(", ")}</strong>
             </p>
           )}
-          <div className="flex items-center justify-center gap-2 pt-2 text-sm text-brown/50">
+          <div className="flex items-center justify-center gap-2 pt-2 text-sm text-brown">
             <Clock size={14} />
             <span>Waiting for the session to be closed and scores revealed</span>
           </div>
@@ -490,7 +491,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
           <div className="text-center space-y-2">
             <CheckCircle size={40} className="text-green-500 mx-auto" />
             <p className="text-xl font-extrabold text-charcoal">All Cups Scored!</p>
-            <p className="text-sm text-brown/50">Waiting for the session to be closed and scores revealed.</p>
+            <p className="text-sm text-brown">Waiting for the session to be closed and scores revealed.</p>
           </div>
           <div className="space-y-2 pt-2">
             {session.sessionBatches.map((sb, i) => {
@@ -566,11 +567,11 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
                 <p className={`font-extrabold ${done ? "text-green-700" : "text-charcoal"}`}>
                   كوب {i + 1} — Cup {i + 1}
                 </p>
-                <p className="text-xs text-brown/50 mt-0.5">
+                <p className="text-xs text-brown mt-0.5">
                   {done ? `✓ Scored — ${cupScore?.finalScore.toFixed(2) ?? ""}` : "Tap to score this cup"}
                 </p>
               </div>
-              {!done && <ChevronRight size={18} className="text-brown/30 shrink-0" />}
+              {!done && <ChevronRight size={18} className="text-brown shrink-0" />}
             </button>
           );
         })}

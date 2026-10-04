@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Coffee, ChevronDown, ChevronUp } from "lucide-react";
+import { HQ } from "@/lib/hiqbah-colors";
 
 // ─── SCA Constants ────────────────────────────────────────────────────────────
 
@@ -41,12 +42,14 @@ const FLAVOR_TAGS = [
 ];
 
 const SCORE_LABELS: { min: number; label: string; color: string }[] = [
-  { min: 90, label: "Outstanding",  color: "#16a34a" },
-  { min: 85, label: "Excellent",    color: "#22c55e" },
-  { min: 80, label: "Very Good",    color: "#84cc16" },
-  { min: 75, label: "Good",         color: "#eab308" },
-  { min: 70, label: "Fair",         color: "#f97316" },
-  { min: 0,  label: "Below Spec",   color: "#ef4444" },
+  // A single green-to-red ramp from the Hiqbah palette. Every step passes 4.5:1 on
+  // white, because the score figure itself is drawn in this colour.
+  { min: 90, label: "Outstanding",  color: HQ.primaryStrong },
+  { min: 85, label: "Excellent",    color: HQ.primary },
+  { min: 80, label: "Very Good",    color: HQ.chart5 },
+  { min: 75, label: "Good",         color: HQ.chart2 },
+  { min: 70, label: "Fair",         color: HQ.warning },
+  { min: 0,  label: "Below Spec",   color: HQ.danger },
 ];
 
 function scoreLabel(s: number) {
@@ -66,7 +69,7 @@ function ScoreSlider({
       <div className="flex items-center justify-between">
         <div>
           <span className="text-sm font-bold text-charcoal">{label}</span>
-          <span className="text-xs text-brown/50 ltr:ml-1.5 rtl:mr-1.5">{labelAr}</span>
+          <span className="text-xs text-brown ltr:ml-1.5 rtl:mr-1.5">{labelAr}</span>
         </div>
         <span className="text-lg font-extrabold tabular-nums" style={{ color: scoreLabel(value + 60).color }}>
           {value.toFixed(2)}
@@ -75,7 +78,7 @@ function ScoreSlider({
       <div className="relative h-2 rounded-full bg-gray-100" dir="ltr">
         <div
           className="absolute inset-y-0 left-0 rounded-full transition-all duration-75"
-          style={{ width: `${pct}%`, backgroundColor: "#7C3AED" }}
+          style={{ width: `${pct}%`, backgroundColor: HQ.primary }}
         />
         <input
           type="range" min={6} max={10} step={0.25}
@@ -86,10 +89,10 @@ function ScoreSlider({
         {/* Thumb */}
         <div
           className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 shadow-md pointer-events-none transition-all duration-75"
-          style={{ left: `calc(${pct}% - 8px)`, borderColor: "#7C3AED" }}
+          style={{ left: `calc(${pct}% - 8px)`, borderColor: HQ.primary }}
         />
       </div>
-      <div className="flex justify-between text-[10px] text-brown/40 font-medium select-none" dir="ltr">
+      <div className="flex justify-between text-[10px] text-brown font-medium select-none" dir="ltr">
         <span>6.00</span><span>7.00</span><span>8.00</span><span>9.00</span><span>10.00</span>
       </div>
     </div>
@@ -106,7 +109,7 @@ function CupRow({
     <div className="flex items-center gap-3">
       <div className="flex-1 min-w-0">
         <span className="text-sm font-bold text-charcoal">{label}</span>
-        <span className="text-xs text-brown/50 ltr:ml-1.5 rtl:mr-1.5">{labelAr}</span>
+        <span className="text-xs text-brown ltr:ml-1.5 rtl:mr-1.5">{labelAr}</span>
       </div>
       <div className="flex gap-2">
         {cups.map((checked, i) => (
@@ -116,7 +119,7 @@ function CupRow({
             className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center transition-all duration-150 text-xs font-bold ${
               checked
                 ? "bg-orange border-orange text-white shadow-sm"
-                : "bg-gray-50 border-gray-200 text-gray-300 hover:border-orange/40"
+                : "bg-gray-50 border-gray-200 text-gray-500 hover:border-orange/40"
             }`}
           >
             <Coffee size={13} strokeWidth={checked ? 2.5 : 1.5} />
@@ -222,7 +225,7 @@ export default function CuppingForm({ onSubmit, submitting = false, submitLabel 
           {finalScore.toFixed(2)}
         </p>
         <p className="text-sm font-bold mt-2" style={{ color: qualityColor }}>{qualityLabel}</p>
-        <div className="flex justify-center gap-4 mt-3 text-xs text-charcoal/50 font-medium">
+        <div className="flex justify-center gap-4 mt-3 text-xs text-brown font-medium">
           <span>Subtotal: <strong className="text-charcoal">{subtotal.toFixed(2)}</strong></span>
           {defectPenalty > 0 && (
             <span className="text-red-500">Defects: <strong>-{defectPenalty}</strong></span>
@@ -252,7 +255,7 @@ export default function CuppingForm({ onSubmit, submitting = false, submitLabel 
           <h3 className="text-sm font-extrabold text-charcoal uppercase tracking-wide">
             Cup Scores (5 cups × 2 pts)
           </h3>
-          <span className="text-xs text-brown/50">Tap to mark a failed cup</span>
+          <span className="text-xs text-brown">Tap to mark a failed cup</span>
         </div>
         {CUP_ATTRS.map((attr) => (
           <CupRow
@@ -331,12 +334,12 @@ export default function CuppingForm({ onSubmit, submitting = false, submitLabel 
           ))}
           <button type="button"
             onClick={() => setShowAllTags((p) => !p)}
-            className="px-3 py-1.5 rounded-full text-xs font-bold border border-dashed border-border text-brown/50 hover:text-orange hover:border-orange/40 flex items-center gap-1 transition-all">
+            className="px-3 py-1.5 rounded-full text-xs font-bold border border-dashed border-border text-brown hover:text-orange hover:border-orange/40 flex items-center gap-1 transition-all">
             {showAllTags ? <><ChevronUp size={11} /> Less</> : <><ChevronDown size={11} /> +{FLAVOR_TAGS.length - 18} more</>}
           </button>
         </div>
         {tags.length > 0 && (
-          <p className="text-xs text-brown/50">
+          <p className="text-xs text-brown">
             Selected: <strong className="text-charcoal">{tags.join(", ")}</strong>
           </p>
         )}
@@ -352,7 +355,7 @@ export default function CuppingForm({ onSubmit, submitting = false, submitLabel 
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
           placeholder="Describe what you taste, smell, and feel in the cup..."
-          className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 resize-none transition-colors"
+          className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-sm focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange resize-none transition-colors"
         />
       </section>
 
@@ -362,20 +365,20 @@ export default function CuppingForm({ onSubmit, submitting = false, submitLabel 
         <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
           {SLIDER_ATTRS.map((a) => (
             <div key={a.key} className="flex justify-between">
-              <span className="text-brown/70">{a.label}</span>
+              <span className="text-brown">{a.label}</span>
               <span className="font-bold text-charcoal tabular-nums">{sliders[a.key].toFixed(2)}</span>
             </div>
           ))}
           {CUP_ATTRS.map((a) => (
             <div key={a.key} className="flex justify-between">
-              <span className="text-brown/70">{a.label}</span>
+              <span className="text-brown">{a.label}</span>
               <span className="font-bold text-charcoal tabular-nums">{cupScores[a.key]}.00</span>
             </div>
           ))}
         </div>
         <div className="border-t border-border pt-3 space-y-1">
           <div className="flex justify-between text-sm">
-            <span className="text-brown/70">Subtotal</span>
+            <span className="text-brown">Subtotal</span>
             <span className="font-bold">{subtotal.toFixed(2)}</span>
           </div>
           {defectPenalty > 0 && (

@@ -127,7 +127,7 @@ export default function ProfilePage() {
               type="text"
               value={user.name}
               disabled
-              className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal/50 text-sm cursor-not-allowed"
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-cream text-brown text-sm cursor-not-allowed"
             />
           </div>
 
@@ -137,13 +137,13 @@ export default function ProfilePage() {
               {t("phoneNumber")}
             </label>
             <div className="relative">
-              <Phone size={16} className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 text-brown/50" />
+              <Phone size={16} className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 text-brown" />
               <input
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder={t("phonePlaceholder")}
-                className="w-full ltr:pl-9 rtl:pr-9 pr-4 pl-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange/40"
+                className="w-full ltr:pl-9 rtl:pr-9 pr-4 pl-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange"
               />
             </div>
           </div>
@@ -211,12 +211,12 @@ export default function ProfilePage() {
                 onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, ""))}
                 maxLength={PIN_LENGTH}
                 required
-                className="w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange/40 tracking-widest"
+                className="w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange tracking-widest"
               />
               <button
                 type="button"
                 onClick={() => setShowCurrent(!showCurrent)}
-                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown/50 hover:text-brown"
+                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown hover:text-brown"
               >
                 {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -237,12 +237,12 @@ export default function ProfilePage() {
                 maxLength={PIN_LENGTH}
                 minLength={PIN_LENGTH}
                 required
-                className="w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange/40 tracking-widest"
+                className="w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border border-border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange tracking-widest"
               />
               <button
                 type="button"
                 onClick={() => setShowNew(!showNew)}
-                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown/50 hover:text-brown"
+                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown hover:text-brown"
               >
                 {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -262,14 +262,14 @@ export default function ProfilePage() {
                 onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ""))}
                 maxLength={PIN_LENGTH}
                 required
-                className={`w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange/40 tracking-widest ${
+                className={`w-full ltr:pr-10 rtl:pl-10 px-4 py-2.5 rounded-xl border bg-cream text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-orange tracking-widest ${
                   confirmPin && confirmPin !== newPin ? "border-red-400" : "border-border"
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown/50 hover:text-brown"
+                className="absolute top-1/2 -translate-y-1/2 ltr:right-3 rtl:left-3 text-brown hover:text-brown"
               >
                 {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>

@@ -91,16 +91,16 @@ export default function LabelsPage() {
           <p className="text-brown text-sm font-medium">{products.length} coffee products — {selected.size} selected</p>
         </div>
         {canPrint && selected.size > 0 && (
-          <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold">
+          <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark active:scale-[0.98] transition-all duration-200 font-bold">
             <Printer size={18} /> Print Selected ({selected.size})
           </button>
         )}
       </div>
 
       <div className="relative no-print">
-        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         <input type="text" placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+          className="w-full pl-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 no-print">
@@ -116,7 +116,7 @@ export default function LabelsPage() {
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="col-span-full text-center py-12 text-gray-400">
+          <div className="col-span-full text-center py-12 text-gray-500">
             <Tag size={40} className="mx-auto mb-2" /><p>No products found</p>
           </div>
         )}

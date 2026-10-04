@@ -42,9 +42,9 @@ type CandidateBatch = {
 
 const Figure = ({ label, value, hint }: { label: string; value: string; hint?: string }) => (
   <div className="bg-white rounded-xl border border-border px-4 py-3">
-    <p className="text-[11px] font-bold uppercase tracking-wide text-brown/60">{label}</p>
+    <p className="text-[11px] font-bold uppercase tracking-wide text-brown">{label}</p>
     <p className="text-lg font-extrabold text-charcoal tabular-nums mt-0.5">{value}</p>
-    {hint && <p className="text-[11px] text-brown/60 mt-0.5">{hint}</p>}
+    {hint && <p className="text-[11px] text-brown mt-0.5">{hint}</p>}
   </div>
 );
 
@@ -165,7 +165,7 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
             {order.productSku.skuCode} — {order.productSku.name} · {order.productSku.product.productNameEn}
           </p>
           {order.sourceOrderItem && (
-            <p className="text-sm text-brown/70 mt-0.5">
+            <p className="text-sm text-brown mt-0.5">
               {t("poDemandSource")}:{" "}
               <Link href="/dashboard/workstation/preparation" className="text-orange font-semibold hover:underline">
                 #{order.sourceOrderItem.order.orderNumber}
@@ -173,7 +173,7 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
               — {order.sourceOrderItem.order.customer?.name} ({order.sourceOrderItem.order.status})
             </p>
           )}
-          <p className="text-xs text-brown/60 mt-0.5">{t("poCreatedAt")}: {formatDate(order.createdAt)}</p>
+          <p className="text-xs text-brown mt-0.5">{t("poCreatedAt")}: {formatDate(order.createdAt)}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -196,7 +196,7 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
             </button>
           )}
           {order.allowedActions.length === 0 && (
-            <p className="text-xs text-brown/60 max-w-[220px]">{t("poNoActions")}</p>
+            <p className="text-xs text-brown max-w-[220px]">{t("poNoActions")}</p>
           )}
         </div>
       </div>
@@ -210,12 +210,12 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
 
       {showCancel && (
         <div className="bg-white rounded-2xl border border-border p-4 space-y-3">
-          <p className="text-xs text-brown/70">{t("poCancelKeepsStock")}</p>
+          <p className="text-xs text-brown">{t("poCancelKeepsStock")}</p>
           <input
             value={cancelReason}
             onChange={(e) => setCancelReason(e.target.value)}
             placeholder={t("poCancelReason")}
-            className="w-full px-3 py-2 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors text-sm"
+            className="w-full px-3 py-2 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors text-sm"
           />
           <button
             onClick={() => act("cancel", cancelReason)}
@@ -239,7 +239,7 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
         <Figure label={t("poActualGreen")} value={`${p.greenConsumedKg} kg`} />
         <Figure label={t("poActualRoasted")} value={`${p.roastedOutputKg} kg`} />
         <div className="bg-white rounded-xl border border-border px-4 py-3 col-span-2">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-brown/60 mb-2">{t("poProgressLabel")}</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-brown mb-2">{t("poProgressLabel")}</p>
           <ProgressBar produced={p.producedUnits} target={order.targetUnits} />
         </div>
       </div>
@@ -270,7 +270,7 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
                   <tr key={b.id} className="border-t border-border">
                     <td className="px-4 py-3">
                       <p className="font-semibold">{b.batchNumber}</p>
-                      <p className="text-xs text-brown/70">{b.greenBean?.beanType ?? "—"} · {formatDate(b.date)}</p>
+                      <p className="text-xs text-brown">{b.greenBean?.beanType ?? "—"} · {formatDate(b.date)}</p>
                     </td>
                     <td className="px-4 py-3 text-xs">{b.status}</td>
                     <td className="px-4 py-3 text-end tabular-nums">{b.greenBeanQuantity} kg</td>
@@ -301,13 +301,13 @@ export default function ProductionOrderDetailPage({ params }: { params: Promise<
         <div className="bg-white rounded-2xl border border-border p-4">
           <h3 className="font-semibold text-charcoal text-sm mb-3">{t("poLinkBatch")}</h3>
           {candidates.length === 0 ? (
-            <p className="text-xs text-brown/60">{t("poNoLinkable")}</p>
+            <p className="text-xs text-brown">{t("poNoLinkable")}</p>
           ) : (
             <div className="flex flex-wrap gap-2 items-center">
               <select
                 value={pickBatch}
                 onChange={(e) => setPickBatch(e.target.value)}
-                className="px-3 py-2 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none text-sm min-w-[240px]"
+                className="px-3 py-2 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none text-sm min-w-[240px]"
               >
                 <option value="">—</option>
                 {candidates.map((b) => (

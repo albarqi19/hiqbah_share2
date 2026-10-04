@@ -5,15 +5,19 @@ import { useRouter, usePathname } from "next/navigation";
 import {
   LayoutDashboard, Package, ShoppingCart, Factory, ClipboardCheck, Box,
   Truck, History, TrendingUp, Tag, Users, LogOut, Menu, X, ChevronRight,
-  Settings, UserCircle, FlaskConical, Users2, ShoppingBag, Wallet, PackageCheck,
-  ClipboardList, ShieldAlert,
+  Settings, FlaskConical, Users2, ShoppingBag, Wallet, PackageCheck,
+  ClipboardList, ShieldAlert, Home,
 } from "lucide-react";
 import { ROLE_LABELS, hasModuleAccess } from "@/lib/auth-shared";
 import { LanguageProvider, useI18n } from "@/lib/i18n/context";
 import type { TranslationKey } from "@/lib/i18n/translations";
+import { fmtLongDate } from "@/lib/format";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { UserContext, useLogo, type User } from "./user-context";
 
 const NAV_ITEMS: { key: TranslationKey; icon: React.ElementType; href: string; module?: string }[] = [
+  // Home reads the same analytics feed as the dashboard, so it carries the same module.
+  { key: "navHome",    icon: Home,            href: "/dashboard/today", module: "dashboard" },
   { key: "dashboard",  icon: LayoutDashboard, href: "/dashboard" },
   { key: "inventory",  icon: Package,         href: "/dashboard/inventory" },
   { key: "purchases",  icon: ShoppingBag,     href: "/dashboard/purchases", module: "inventory" },
@@ -34,6 +38,13 @@ const NAV_ITEMS: { key: TranslationKey; icon: React.ElementType; href: string; m
   { key: "accounting", icon: Wallet,          href: "/dashboard/accounting" },
   { key: "settings",   icon: Settings,        href: "/dashboard/settings" },
 ];
+
+function isActive(pathname: string, href: string) {
+  // Compared on whole path segments, not raw prefixes: a bare startsWith makes
+  // "/dashboard/production" light up on "/dashboard/production-orders" too, so two
+  // entries would look selected at once.
+  return pathname === href || (href !== "/dashboard" && pathname.startsWith(href + "/"));
+}
 
 function SidebarNav({
   user,
@@ -60,92 +71,78 @@ function SidebarNav({
 
   return (
     <aside
-      className={`fixed lg:static top-0 h-[100dvh] z-[50] w-[260px] bg-sidebar text-white transform transition-transform duration-300 ease-in-out flex flex-col ltr:left-0 rtl:right-0 overflow-y-auto ${
+      id="app-sidebar"
+      className={`fixed lg:static top-0 h-[100dvh] z-[50] w-[240px] flex-shrink-0 bg-hq-neutral border-e border-hq-line text-hq-ink transform transition-transform duration-200 ease-out flex flex-col ltr:left-0 rtl:right-0 overflow-y-auto ${
         sidebarOpen ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full"
       }`}
       style={{ WebkitOverflowScrolling: "touch" }}
     >
-      {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          {/* Logo */}
-          <div className="w-11 h-11 bg-white/10 rounded-xl flex flex-col items-center justify-center shadow-lg flex-shrink-0 overflow-hidden">
-            {logoBase64 ? (
-              <img src={logoBase64} alt="Logo" className="w-full h-full object-contain p-1" />
-            ) : (
-              <>
-                <span className="text-[22px] text-white/90 leading-none" style={{ fontFamily: "'Scheherazade New', 'Amiri', serif" }}>ح</span>
-                <span className="block w-4 h-[3px] rounded-full mt-0.5" style={{ backgroundColor: "#7C3AED" }} />
-              </>
-            )}
-          </div>
-          <div>
-            <h2 className="font-extrabold text-sm tracking-widest text-white">HIQBAH</h2>
-            <p className="text-[10px] text-white/50 font-light mt-0.5">مقهى و محمصة حقبة</p>
+      {/* Workspace */}
+      <div className="flex items-center justify-between gap-2 px-4 h-16 border-b border-hq-line flex-shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <BrandMark logo={logoBase64} />
+          <div className="min-w-0">
+            <p className="text-sm leading-6 font-semibold tracking-wide">HIQBAH</p>
+            <p className="text-xs leading-5 truncate">مقهى و محمصة حقبة</p>
           </div>
         </div>
-        <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/50 hover:text-white">
-          <X size={20} />
-        </button>
-      </div>
-
-      {/* User card — click to go to profile */}
-      <div className="px-5 py-4 border-b border-white/10">
         <button
-          onClick={() => { router.push("/dashboard/profile"); setSidebarOpen(false); }}
-          className="flex items-center gap-3 w-full text-start hover:opacity-80 transition-opacity"
+          type="button"
+          onClick={() => setSidebarOpen(false)}
+          aria-label={t("closeMenu")}
+          className="lg:hidden w-9 h-9 rounded-md flex items-center justify-center hover:bg-hq-neutral-strong"
         >
-          <div className="w-9 h-9 rounded-full bg-orange/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-orange text-sm font-bold">{user.name.charAt(0)}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">{user.name}</p>
-            <p className="text-[11px] text-orange">{ROLE_LABELS[user.role] || user.role}</p>
-          </div>
-          <UserCircle size={16} className="text-white/30 flex-shrink-0" />
+          <X size={20} aria-hidden="true" />
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+      {/* Signed-in user — opens the profile */}
+      <div className="px-4 py-3 border-b border-hq-line">
+        <button
+          type="button"
+          onClick={() => { router.push("/dashboard/profile"); setSidebarOpen(false); }}
+          className="flex items-center gap-2 w-full text-start rounded-md p-1 -m-1 hover:bg-hq-neutral-strong transition-colors"
+        >
+          <span className="w-9 h-9 rounded-full bg-hq-primary-soft flex items-center justify-center flex-shrink-0">
+            <span className="text-hq-primary text-sm font-semibold">{user.name.charAt(0)}</span>
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="block text-sm leading-6 font-semibold truncate">{user.name}</span>
+            <span className="block text-xs leading-5 truncate">{ROLE_LABELS[user.role] || user.role}</span>
+          </span>
+        </button>
+      </div>
+
+      {/* Navigation. One <nav>, each module once, link name = the module name. */}
+      <nav aria-label={t("mainNavigation")} className="flex-1 overflow-y-auto px-4 py-3 space-y-0.5">
         {filteredNav.map((item) => {
-          // Compared on whole path segments, not raw prefixes: a bare startsWith makes
-          // "/dashboard/production" light up on "/dashboard/production-orders" too, so two
-          // entries would look selected at once.
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/dashboard" && pathname.startsWith(item.href + "/"));
+          const active = isActive(pathname, item.href);
           return (
             <a
               key={item.key}
               href={item.href}
+              aria-current={active ? "page" : undefined}
               onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200 ${
-                isActive
-                  ? "bg-orange text-white shadow-md shadow-orange/25"
-                  : "text-sidebar-text hover:bg-sidebar-hover hover:text-white"
+              className={`flex items-center gap-2 px-3 h-10 rounded-md text-sm font-semibold transition-colors duration-150 ${
+                active ? "bg-hq-primary text-white" : "text-hq-ink hover:bg-hq-neutral-strong"
               }`}
             >
-              <item.icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
-              {t(item.key)}
-              {isActive && (
-                <ChevronRight
-                  size={14}
-                  className="ltr:ml-auto rtl:mr-auto opacity-70 rtl:rotate-180"
-                />
-              )}
+              <item.icon size={20} strokeWidth={active ? 2.25 : 1.75} aria-hidden="true" className="flex-shrink-0" />
+              <span className="flex-1 truncate">{t(item.key)}</span>
+              {active && <ChevronRight size={16} aria-hidden="true" className="opacity-80 rtl:rotate-180 flex-shrink-0" />}
             </a>
           );
         })}
       </nav>
 
       {/* Sign out */}
-      <div className="px-3 py-3 border-t border-white/10">
+      <div className="px-4 py-3 border-t border-hq-line">
         <button
+          type="button"
           onClick={onLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-[13px] font-medium text-sidebar-text hover:bg-red-500/15 hover:text-red-400 transition-all duration-200"
+          className="flex items-center gap-2 px-3 h-10 rounded-md w-full text-sm font-semibold text-hq-ink hover:bg-hq-danger-soft hover:text-hq-danger transition-colors duration-150"
         >
-          <LogOut size={18} strokeWidth={1.5} />
+          <LogOut size={20} strokeWidth={1.75} aria-hidden="true" />
           {t("signOut")}
         </button>
       </div>
@@ -186,13 +183,23 @@ function DashboardShell({ user, children }: { user: User; children: React.ReactN
       // Settings carries the same admin-only double guard as its navigation entry.
       (requiredModule !== "settings" || user.role === "admin"));
 
+  const section = NAV_ITEMS.filter((item) => isActive(pathname, item.href))
+    .sort((a, b) => b.href.length - a.href.length)[0];
+
   async function handleLogout() {
     await fetch("/api/auth/me", { method: "DELETE" });
     router.push("/login");
   }
 
   return (
-    <div className="h-screen overflow-hidden flex bg-cream">
+    <div className="h-screen overflow-hidden flex bg-hq-bg">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:start-3 focus:z-[100] focus:px-3 focus:py-2 focus:rounded-md focus:bg-hq-primary-soft focus:text-hq-primary focus:text-sm focus:font-semibold focus:border-2 focus:border-hq-primary"
+      >
+        {t("skipToContent")}
+      </a>
+
       {sidebarOpen && (
         <div
           className="fixed inset-x-0 top-0 h-[100dvh] bg-black/40 z-40 lg:hidden"
@@ -207,40 +214,39 @@ function DashboardShell({ user, children }: { user: User; children: React.ReactN
         onLogout={handleLogout}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white/80 backdrop-blur-md border-b border-border px-5 py-3.5 flex items-center gap-4 z-30 flex-shrink-0">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        <header className="h-16 bg-white border-b border-hq-line px-5 lg:px-8 flex items-center gap-4 z-30 flex-shrink-0">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden text-charcoal hover:text-orange transition-colors relative z-[60]"
-            style={{ cursor: "pointer" }}
+            aria-label={t("openMenu")}
+            aria-controls="app-sidebar"
+            aria-expanded={sidebarOpen}
+            className="lg:hidden w-9 h-9 -ms-2 rounded-md flex items-center justify-center text-hq-ink hover:bg-hq-neutral relative z-[60]"
           >
-            <Menu size={22} />
+            <Menu size={22} aria-hidden="true" />
           </button>
-          <div className="flex-1" />
-          <div className="text-sm text-brown font-medium">
-            {new Date().toLocaleDateString(lang === "ar" ? "ar-SA" : "en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </div>
+          <p className="flex-1 min-w-0 text-base leading-[26px] font-bold text-hq-ink truncate">
+            {section ? t(section.key) : ""}
+          </p>
+          <p className="text-xs leading-5 text-hq-muted hidden sm:block">
+            {fmtLongDate(new Date(), lang)}
+          </p>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-5 lg:p-7">
+        <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto p-5 lg:p-8 focus:outline-none">
           {routeAllowed ? (
             children
           ) : (
-            <div className="max-w-md mx-auto mt-16 bg-white rounded-2xl border border-border p-8 text-center">
-              <div className="w-12 h-12 rounded-xl bg-oo-status-blocked-bg flex items-center justify-center mx-auto mb-4">
-                <ShieldAlert size={22} className="text-oo-status-blocked" />
+            <div className="max-w-md mx-auto mt-16 bg-white rounded-lg border border-hq-line p-8 text-center">
+              <div className="w-12 h-12 rounded-lg bg-hq-danger-soft flex items-center justify-center mx-auto mb-4">
+                <ShieldAlert size={22} className="text-hq-danger" aria-hidden="true" />
               </div>
-              <h1 className="text-lg font-extrabold text-charcoal">{t("accessDeniedTitle")}</h1>
-              <p className="text-sm text-brown mt-1.5">{t("accessDeniedBody")}</p>
+              <h1 className="text-base leading-[26px] font-bold text-hq-ink">{t("accessDeniedTitle")}</h1>
+              <p className="text-sm leading-6 text-hq-muted mt-1.5">{t("accessDeniedBody")}</p>
               <a
                 href="/dashboard"
-                className="inline-block mt-5 px-4 py-2 bg-orange text-white rounded-lg text-sm font-bold hover:bg-orange-dark transition-colors"
+                className="inline-flex items-center h-9 mt-5 px-4 bg-hq-primary text-white rounded-md text-sm font-semibold hover:bg-hq-primary-strong transition-colors"
               >
                 {t("dashboard")}
               </a>
@@ -272,11 +278,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [router]);
 
   if (loading) {
+    // The language is not known until /me answers, so this one line is bilingual.
     return (
-      <div className="min-h-screen flex items-center justify-center bg-cream">
+      <div className="min-h-screen flex items-center justify-center bg-hq-bg" role="status">
         <div className="text-center">
-          <div className="w-14 h-14 border-4 border-orange border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-charcoal font-semibold text-lg">Loading...</p>
+          <div className="w-10 h-10 border-[3px] border-hq-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" aria-hidden="true" />
+          <p className="text-sm text-hq-ink font-semibold">جارٍ التحميل… · Loading…</p>
         </div>
       </div>
     );

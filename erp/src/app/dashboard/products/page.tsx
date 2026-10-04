@@ -293,7 +293,7 @@ function ProductTable({
 
   if (products.length === 0)
     return (
-      <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border">
+      <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border">
         <Package size={40} className="mx-auto mb-2" />
         <p>{t("noProductsYet")}</p>
       </div>
@@ -382,7 +382,7 @@ function CoffeeTable({ coffees, products }: { coffees: Coffee[]; products: Produ
 
   if (coffees.length === 0)
     return (
-      <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border">
+      <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border">
         <Coffee size={40} className="mx-auto mb-2" />
         <p>{t("noCoffeesYet")}</p>
       </div>
@@ -455,7 +455,7 @@ function MaterialTable({
 
   if (materials.length === 0)
     return (
-      <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border">
+      <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border">
         <Boxes size={40} className="mx-auto mb-2" />
         <p>{t("noMaterialsYet")}</p>
       </div>

@@ -18,7 +18,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <p className="text-xs font-extrabold text-charcoal leading-none">HIQBAH COFFEE</p>
-            <p className="text-[10px] text-brown/50 leading-none mt-0.5">SCA Blind Cupping</p>
+            <p className="text-[10px] text-brown leading-none mt-0.5">SCA Blind Cupping</p>
           </div>
         </div>
         {children}
@@ -98,7 +98,7 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
   if (step === "loading") {
     return (
       <Shell>
-        <div className="text-center py-16 text-brown/40 text-sm">Loading…</div>
+        <div className="text-center py-16 text-brown text-sm">Loading…</div>
       </Shell>
     );
   }
@@ -109,7 +109,7 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
         <div className="text-center py-16">
           <Coffee size={36} className="text-orange/30 mx-auto mb-3" />
           <p className="font-bold text-charcoal">Session not found</p>
-          <p className="text-sm text-brown/50 mt-1">Please check your link and try again.</p>
+          <p className="text-sm text-brown mt-1">Please check your link and try again.</p>
         </div>
       </Shell>
     );
@@ -121,8 +121,8 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
         <div className="text-center py-12 space-y-3 px-4">
           <div className="text-5xl mb-2">☕</div>
           <p className="text-xl font-extrabold text-charcoal">This cupping session has been closed.</p>
-          <p className="text-lg font-bold text-charcoal/60">عذراً، تم إغلاق جلسة التذوق هذه.</p>
-          <p className="text-sm text-brown/50 mt-2">Thank you for your interest!</p>
+          <p className="text-lg font-bold text-brown">عذراً، تم إغلاق جلسة التذوق هذه.</p>
+          <p className="text-sm text-brown mt-2">Thank you for your interest!</p>
         </div>
       </Shell>
     );
@@ -135,10 +135,10 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
           <CheckCircle size={56} className="text-green-500 mx-auto" />
           <p className="text-2xl font-extrabold text-charcoal">All Cups Scored!</p>
           <p className="text-5xl font-black text-green-600">{lastScore.toFixed(2)}</p>
-          <p className="text-sm text-brown/60 mt-1">
+          <p className="text-sm text-brown mt-1">
             Thank you, <strong className="text-charcoal">{name}</strong>! All {session?.sessionBatches.length} cups recorded.
           </p>
-          <p className="text-xs text-brown/40 mt-4">شكراً لك! تم تسجيل جميع تقييماتك.</p>
+          <p className="text-xs text-brown mt-4">شكراً لك! تم تسجيل جميع تقييماتك.</p>
         </div>
       </Shell>
     );
@@ -153,10 +153,10 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
               <FlaskConical size={28} className="text-orange" />
             </div>
             <h2 className="text-xl font-extrabold text-charcoal">{session?.name}</h2>
-            <p className="text-sm text-brown/60 mt-1">
+            <p className="text-sm text-brown mt-1">
               Blind SCA Cupping · {session?.sessionBatches.length} cups
             </p>
-            <p className="text-xs text-brown/40 mt-1">
+            <p className="text-xs text-brown mt-1">
               تقييم عمياء · {session?.sessionBatches.length} أكواب
             </p>
           </div>
@@ -170,14 +170,14 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
             <div className="bg-white rounded-2xl border border-border p-5 space-y-3">
               <label className="block text-sm font-extrabold text-charcoal uppercase tracking-wide">
                 Enter your name to start
-                <span className="block text-xs text-brown/50 normal-case tracking-normal mt-0.5 font-normal">أدخل اسمك للبدء</span>
+                <span className="block text-xs text-brown normal-case tracking-normal mt-0.5 font-normal">أدخل اسمك للبدء</span>
               </label>
               <input
                 autoFocus
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name / اسمك"
-                className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-base focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-colors"
+                className="w-full px-4 py-3 rounded-xl border-2 border-border bg-cream text-charcoal text-base focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange transition-colors"
               />
               {nameError && <p className="text-xs text-red-500 font-medium">{nameError}</p>}
             </div>
@@ -200,9 +200,9 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
       <Shell>
         <div className="space-y-5">
           <div>
-            <p className="text-xs font-bold text-brown/50 uppercase tracking-widest">Cupping as</p>
+            <p className="text-xs font-bold text-brown uppercase tracking-widest">Cupping as</p>
             <p className="text-lg font-extrabold text-charcoal">{name}</p>
-            <p className="text-xs text-brown/40">{session?.name}</p>
+            <p className="text-xs text-brown">{session?.name}</p>
           </div>
 
           {remaining.length > 0 ? (
@@ -233,11 +233,11 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
                         <p className={`font-extrabold ${done ? "text-green-700" : "text-charcoal"}`}>
                           كوب {i + 1} — Cup {i + 1}
                         </p>
-                        <p className="text-xs text-brown/50 mt-0.5">
+                        <p className="text-xs text-brown mt-0.5">
                           {done ? "✓ Scored" : "Tap to score this cup"}
                         </p>
                       </div>
-                      {!done && <ChevronRight size={18} className="text-brown/30 shrink-0" />}
+                      {!done && <ChevronRight size={18} className="text-brown shrink-0" />}
                     </button>
                   );
                 })}
@@ -247,7 +247,7 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
             <div className="text-center py-8 space-y-3">
               <CheckCircle size={48} className="text-green-500 mx-auto" />
               <p className="text-xl font-extrabold text-charcoal">All cups scored!</p>
-              <p className="text-sm text-brown/60">Thank you, {name}!</p>
+              <p className="text-sm text-brown">Thank you, {name}!</p>
             </div>
           )}
         </div>
@@ -265,15 +265,15 @@ export default function GuestSessionPage({ params }: { params: Promise<{ token: 
         <div className="flex items-center gap-3">
           <button
             onClick={() => { setActiveCupId(null); setStep("cup-list"); }}
-            className="flex items-center gap-1.5 text-sm font-bold text-brown/60 hover:text-charcoal transition-colors"
+            className="flex items-center gap-1.5 text-sm font-bold text-brown hover:text-charcoal transition-colors"
           >
             <ArrowLeft size={16} />
             Back
           </button>
           <div>
-            <p className="text-xs text-brown/50 font-medium">Scoring as {name}</p>
+            <p className="text-xs text-brown font-medium">Scoring as {name}</p>
             <p className="font-extrabold text-charcoal">كوب {activeCupIndex + 1} — Cup {activeCupIndex + 1}</p>
-            <p className="text-xs text-brown/40">{session?.name}</p>
+            <p className="text-xs text-brown">{session?.name}</p>
           </div>
         </div>
 

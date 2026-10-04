@@ -361,7 +361,7 @@ export default function OrdersPage() {
           <p className="text-brown text-sm font-medium">{orders.length} {t("totalOrdersCount")}</p>
         </div>
         {canCreate && (
-          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold">
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange-dark active:scale-[0.98] transition-all duration-200 font-bold">
             <Plus size={18} /> {t("newOrder")}
           </button>
         )}
@@ -369,12 +369,12 @@ export default function OrdersPage() {
 
       <div className="flex gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[200px]">
-          <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input type="text" placeholder={t("searchOrders")} value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:ring-2 focus:ring-orange/30 focus:border-orange outline-none transition-colors" />
+            className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:ring-2 focus:ring-orange focus:border-orange outline-none transition-colors" />
         </div>
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2.5 border-2 border-border rounded-xl bg-white focus:ring-2 focus:ring-orange/30 focus:border-orange outline-none transition-colors">
+          className="px-4 py-2.5 border-2 border-border rounded-xl bg-white focus:ring-2 focus:ring-orange focus:border-orange outline-none transition-colors">
           <option value="all">{t("allStatuses")}</option>
           <option value="Pending">{t("pending")}</option>
           <option value="In Production">{t("statusInProd")}</option>
@@ -391,7 +391,7 @@ export default function OrdersPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t("customer")}</label>
                 <div className="flex gap-2">
                   <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })}
-                    className="flex-1 px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" required>
+                    className="flex-1 px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" required>
                     <option value="">{t("selectCustomer")}</option>
                     {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
@@ -406,21 +406,21 @@ export default function OrdersPage() {
                     <p className="text-xs font-semibold text-brown">{t("newCustomerLabel")}</p>
                     <input type="text" placeholder={t("nameEnglish") + " *"} value={newCustomer.name}
                       onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
-                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                     <input type="text" placeholder={t("nameArabic")} dir="rtl" value={newCustomer.nameAr}
                       onChange={(e) => setNewCustomer({ ...newCustomer, nameAr: e.target.value })}
-                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                     <input type="tel" placeholder={t("phone")} value={newCustomer.phone}
                       onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
-                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                     <input type="email" placeholder={t("emailLabel")} value={newCustomer.email}
                       onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
-                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                     <input type="text" placeholder={t("address")} value={newCustomer.address}
                       onChange={(e) => setNewCustomer({ ...newCustomer, address: e.target.value })}
-                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                      className="w-full px-3 py-1.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                     <button type="button" onClick={createCustomer} disabled={!newCustomer.name.trim()}
-                      className="w-full py-1.5 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark disabled:opacity-50 shadow-md shadow-orange/20 hover:shadow-orange/35 active:scale-[0.98] transition-all duration-200 font-bold">
+                      className="w-full py-1.5 bg-orange text-white rounded-lg text-sm hover:bg-orange-dark disabled:opacity-50 active:scale-[0.98] transition-all duration-200 font-bold">
                       {t("addCustomer")}
                     </button>
                   </div>
@@ -429,7 +429,7 @@ export default function OrdersPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t("quotationNumber")}</label>
                 <input type="text" value={form.quotationNumber} onChange={(e) => setForm({ ...form, quotationNumber: e.target.value })}
-                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                  className="w-full px-3 py-2 border-2 border-border rounded-xl focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
               </div>
               {(() => {
                 // Section 8: one search box, then a quantity. No bean picker, no product
@@ -458,7 +458,7 @@ export default function OrdersPage() {
                                     updateItem(idx, "productSkuId", chosen ? chosen.id : "");
                                   }}
                                   placeholder={t("searchProductLabel")}
-                                  className="w-full px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                                  className="w-full px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                                 />
                                 <datalist id={`sku-list-${idx}`}>
                                   {catalog
@@ -477,14 +477,14 @@ export default function OrdersPage() {
                                 placeholder={t("quantityUnitsLabel")}
                                 value={item.quantityUnits || ""}
                                 onChange={(e) => updateItem(idx, "quantityUnits", parseInt(e.target.value, 10) || 0)}
-                                className="w-24 px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+                                className="w-24 px-3 py-2 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
                                 required
                               />
                               {form.items.length > 1 && (
                                 <button
                                   type="button"
                                   onClick={() => setForm({ ...form, items: form.items.filter((_, i) => i !== idx) })}
-                                  className="px-2 py-2 text-brown/60 hover:text-red-600"
+                                  className="px-2 py-2 text-brown hover:text-red-600"
                                   aria-label="Remove line"
                                 >
                                   <X size={16} />
@@ -493,13 +493,13 @@ export default function OrdersPage() {
                             </div>
 
                             {sku ? (
-                              <p className="mt-1.5 text-xs text-brown/70 font-medium">
+                              <p className="mt-1.5 text-xs text-brown font-medium">
                                 {sku.skuCode} · {sku.packSize} · {sku.price.toFixed(2)} · {t("availableLabel")}:{" "}
                                 <span className="font-bold text-charcoal">{sku.availableUnits}</span>
                                 {!sku.hasBom && <span className="text-red-600 font-bold"> · {t("noBomWarning")}</span>}
                               </p>
                             ) : (
-                              <p className="mt-1.5 text-xs text-brown/50 font-medium">{t("noProductSelected")}</p>
+                              <p className="mt-1.5 text-xs text-brown font-medium">{t("noProductSelected")}</p>
                             )}
 
                             {/* Section 5: what the shelf covers, and what has to be produced. */}
@@ -542,7 +542,7 @@ export default function OrdersPage() {
                       <button
                         type="submit"
                         disabled={blocked}
-                        className={`flex-1 py-2 rounded-lg font-bold shadow-md active:scale-[0.98] transition-all duration-200 ${blocked ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark shadow-orange/20 hover:shadow-orange/35"}`}
+                        className={`flex-1 py-2 rounded-lg font-bold shadow-md active:scale-[0.98] transition-all duration-200 ${blocked ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark"}`}
                       >
                         {t("createOrder")}
                       </button>
@@ -574,10 +574,10 @@ export default function OrdersPage() {
                   <p className="text-xs text-brown">
                     {order.quotationNumber || t("noQuotation")} | {formatDate(order.createdAt)} | {order.items.length} {t("itemsTotal")} | {order.items.reduce((s, i) => s + i.quantityKg, 0)} kg {t("total")}
                   </p>
-                  <p className="text-xs text-brown/70 flex items-center gap-3 mt-1 flex-wrap">
+                  <p className="text-xs text-brown flex items-center gap-3 mt-1 flex-wrap">
                     <OwnerDisplay owner={order.owner} />
                     <span className="flex items-center gap-1">
-                      <Clock size={12} className="text-brown/50" />
+                      <Clock size={12} className="text-brown" />
                       {t("lastActivityLabel")}: {lastActivityOf(order) ? formatDate(lastActivityOf(order)!.createdAt) : "—"}
                     </span>
                   </p>
@@ -626,11 +626,11 @@ export default function OrdersPage() {
                   <div className="xl:col-span-2 space-y-3">
                     <div className="bg-white rounded-xl border border-border p-3.5 flex flex-wrap items-center gap-6">
                       <div>
-                        <p className="text-[11px] font-bold text-brown/50 uppercase tracking-wide mb-1">{t("orderStatusLabel")}</p>
+                        <p className="text-[11px] font-bold text-brown uppercase tracking-wide mb-1">{t("orderStatusLabel")}</p>
                         <OrderStatusBadge status={order.status} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-bold text-brown/50 uppercase tracking-wide mb-1">{t("orderOwnerLabel")}</p>
+                        <p className="text-[11px] font-bold text-brown uppercase tracking-wide mb-1">{t("orderOwnerLabel")}</p>
                         <OwnerDisplay owner={order.owner} />
                       </div>
                     </div>
@@ -676,12 +676,12 @@ export default function OrdersPage() {
                                 const bean = beans.find((b) => b.id === e.target.value);
                                 updateEditItem(idx, "greenBeanId", e.target.value);
                                 if (bean) updateEditItem(idx, "beanTypeName", bean.beanType);
-                              }} className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors">
+                              }} className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors">
                                 <option value="">{t("selectBean")}</option>
                                 {beans.map((b) => <option key={b.id} value={b.id}>{b.beanType} ({b.quantityKg}kg)</option>)}
                               </select>
                               <input type="number" placeholder="kg" value={item.quantityKg || ""} onChange={(e) => updateEditItem(idx, "quantityKg", parseFloat(e.target.value) || 0)}
-                                className="w-24 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors" />
+                                className="w-24 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors" />
                               {editForm.items.length > 1 && (
                                 <button type="button" onClick={() => setEditForm({ ...editForm, items: editForm.items.filter((_, i) => i !== idx) })}
                                   className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
@@ -691,13 +691,13 @@ export default function OrdersPage() {
                               <select value={item.productId} onChange={(e) => {
                                 updateEditItem(idx, "productId", e.target.value);
                                 updateEditItem(idx, "productSkuId", "");
-                              }} className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors">
+                              }} className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors">
                                 <option value="">No product</option>
                                 {products.map((p) => <option key={p.id} value={p.id}>{p.productNameEn}</option>)}
                               </select>
                               {item.productId && (
                                 <select value={item.productSkuId} onChange={(e) => updateEditItem(idx, "productSkuId", e.target.value)}
-                                  className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors">
+                                  className="flex-1 px-3 py-1.5 border-2 border-border rounded-lg text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors">
                                   <option value="">No SKU</option>
                                   {(products.find((p) => p.id === item.productId)?.productSkus ?? []).map((s) => (
                                     <option key={s.id} value={s.id}>{s.skuCode} ({s.weightGrams}g)</option>
@@ -717,7 +717,7 @@ export default function OrdersPage() {
                         <button onClick={() => setEditingId(null)}
                           className="px-4 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">{t("cancel")}</button>
                         <button onClick={handleEditSave} disabled={hasEditStockError}
-                          className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg font-bold shadow-md ${hasEditStockError ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark shadow-orange/20"}`}>
+                          className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-lg font-bold shadow-md ${hasEditStockError ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none" : "bg-orange text-white hover:bg-orange-dark"}`}>
                           <Save size={14} /> {t("saveChanges")}
                         </button>
                       </div>
@@ -762,7 +762,7 @@ export default function OrdersPage() {
                               <div className="flex flex-col items-end gap-0.5">
                                 <span className="font-bold text-amber-700">+{surplus}kg</span>
                                 <span className="text-[10px] text-amber-600 font-semibold">{t("surplusToInventory")}</span>
-                                <span className="text-[10px] text-brown/50">{t("totalProducedLabel")}: {completionTotal.toFixed(2)}kg — {t("requiredQtyLabel")}: {item.quantityKg}kg</span>
+                                <span className="text-[10px] text-brown">{t("totalProducedLabel")}: {completionTotal.toFixed(2)}kg — {t("requiredQtyLabel")}: {item.quantityKg}kg</span>
                               </div>
                             ) : (
                               item.remainingQty
@@ -790,7 +790,7 @@ export default function OrdersPage() {
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400 bg-white rounded-2xl border">
+          <div className="text-center py-12 text-gray-500 bg-white rounded-2xl border">
             <ShoppingCart size={40} className="mx-auto mb-2" />
             <p>{t("noOrdersFound")}</p>
           </div>

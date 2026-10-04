@@ -39,7 +39,7 @@ type FormState = {
 };
 
 const INPUT_CLS =
-  "w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors bg-white";
+  "w-full px-3 py-2.5 border-2 border-border rounded-xl text-sm focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors bg-white";
 
 function emptyForm(): FormState {
   return {
@@ -76,9 +76,9 @@ function StatCard({
         <Icon size={20} strokeWidth={1.8} className="text-white" />
       </div>
       <div className="min-w-0">
-        <p className="text-xs font-bold text-brown/60 uppercase tracking-wide truncate">{label}</p>
+        <p className="text-xs font-bold text-brown uppercase tracking-wide truncate">{label}</p>
         <p className="text-xl font-extrabold text-charcoal leading-tight">{value}</p>
-        {sub && <p className="text-xs text-brown/50 mt-0.5">{sub}</p>}
+        {sub && <p className="text-xs text-brown mt-0.5">{sub}</p>}
       </div>
     </div>
   );
@@ -197,9 +197,9 @@ function AddPurchaseModal({
         <div className="flex items-center justify-between mb-5">
           <div>
             <h2 className="text-lg font-extrabold text-charcoal">{t("addPurchase")}</h2>
-            <p className="text-xs text-brown/60 mt-0.5">{t("greenBeanPurchase")}</p>
+            <p className="text-xs text-brown mt-0.5">{t("greenBeanPurchase")}</p>
           </div>
-          <button onClick={onClose} className="text-brown/40 hover:text-charcoal transition-colors">
+          <button onClick={onClose} className="text-brown hover:text-charcoal transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -228,7 +228,7 @@ function AddPurchaseModal({
                 ))}
                 <option value="__new__">＋ {t("addNewSupplier")}</option>
               </select>
-              <ChevronDown size={14} className="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-brown/40 pointer-events-none" />
+              <ChevronDown size={14} className="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-brown pointer-events-none" />
             </div>
           </div>
 
@@ -281,7 +281,7 @@ function AddPurchaseModal({
                   </option>
                 ))}
               </select>
-              <ChevronDown size={14} className="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-brown/40 pointer-events-none" />
+              <ChevronDown size={14} className="absolute ltr:right-3 rtl:left-3 top-1/2 -translate-y-1/2 text-brown pointer-events-none" />
             </div>
           </div>
 
@@ -320,7 +320,7 @@ function AddPurchaseModal({
           {/* Live total preview */}
           {previewTotal > 0 && (
             <div className="flex items-center justify-between px-4 py-3 bg-cream rounded-xl border border-border">
-              <span className="text-xs font-bold text-brown/60 uppercase tracking-wide">
+              <span className="text-xs font-bold text-brown uppercase tracking-wide">
                 {t("totalCost")}
               </span>
               <span className="text-lg font-extrabold text-charcoal">
@@ -487,7 +487,7 @@ export default function PurchasesPage() {
         {canCreate && (
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange/90 shadow-md shadow-orange/20 active:scale-[0.98] transition-all duration-200 font-bold text-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-orange text-white rounded-lg hover:bg-orange/90 active:scale-[0.98] transition-all duration-200 font-bold text-sm"
           >
             <Plus size={18} />
             {t("addPurchase")}
@@ -524,26 +524,26 @@ export default function PurchasesPage() {
       <div className="relative">
         <Search
           size={18}
-          className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-400"
+          className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-gray-500"
         />
         <input
           type="text"
           placeholder={t("searchPurchases")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition-colors"
+          className="w-full ltr:pl-10 rtl:pr-10 pr-4 py-2.5 border-2 border-border rounded-xl bg-white focus:border-orange focus:ring-2 focus:ring-orange outline-none transition-colors"
         />
       </div>
 
       {/* Table */}
       <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         {loading ? (
-          <div className="flex items-center justify-center py-16 text-brown/50">
+          <div className="flex items-center justify-center py-16 text-brown">
             <div className="w-7 h-7 border-3 border-orange border-t-transparent rounded-full animate-spin mr-3" />
             {t("loading")}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-gray-500">
             <ShoppingBag size={40} className="mx-auto mb-3 opacity-30" />
             <p className="font-medium">{search ? t("noData") : t("noPurchases")}</p>
           </div>
@@ -572,13 +572,13 @@ export default function PurchasesPage() {
                     <td className="px-4 py-3">
                       <p className="font-semibold text-charcoal">{p.supplier.name}</p>
                       {p.supplier.contact && (
-                        <p className="text-xs text-brown/50">{p.supplier.contact}</p>
+                        <p className="text-xs text-brown">{p.supplier.contact}</p>
                       )}
                     </td>
                     <td className="px-4 py-3 font-medium">{beanLabel(p.itemId)}</td>
                     <td className="px-4 py-3 text-end">
                       <span className="font-bold text-charcoal">{p.quantity}</span>
-                      <span className="text-brown/50 text-xs"> كغ</span>
+                      <span className="text-brown text-xs"> كغ</span>
                     </td>
                     <td className="px-4 py-3 text-end text-brown">
                       {p.costPerUnit.toFixed(2)}
@@ -590,9 +590,9 @@ export default function PurchasesPage() {
                           maximumFractionDigits: 2,
                         })}
                       </span>
-                      <span className="text-brown/50 text-xs"> ر.س</span>
+                      <span className="text-brown text-xs"> ر.س</span>
                     </td>
-                    <td className="px-4 py-3 text-brown/70 max-w-[180px] truncate">
+                    <td className="px-4 py-3 text-brown max-w-[180px] truncate">
                       {p.notes || "—"}
                     </td>
                   </tr>
