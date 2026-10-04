@@ -24,6 +24,7 @@ export function Metric({
   comparison,
   unavailable,
   loading = false,
+  plain = false,
   children,
 }: {
   label: string;
@@ -34,11 +35,13 @@ export function Metric({
   /** Shown in place of the comparison when value is null. */
   unavailable?: string;
   loading?: boolean;
+  /** Sit on the page with no card — for a row of headline figures at the top of a screen. */
+  plain?: boolean;
   children?: ReactNode;
 }) {
   return (
-    <div className="bg-white border border-hq-line rounded-lg p-6 flex flex-col gap-2 min-w-0">
-      <p className="text-sm leading-6 font-semibold text-hq-ink">{label}</p>
+    <div className={`flex flex-col min-w-0 ${plain ? "gap-1" : "bg-white border border-hq-line rounded-lg p-6 gap-2"}`}>
+      <p className={plain ? "text-xs leading-5 text-hq-muted" : "text-sm leading-6 font-semibold text-hq-ink"}>{label}</p>
       {loading ? (
         <div className="space-y-2" aria-hidden="true">
           <div className="h-9 w-32 rounded bg-hq-neutral animate-pulse" />

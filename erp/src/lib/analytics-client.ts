@@ -24,8 +24,20 @@ export type WeekPoint = {
   weekStart: string; label: string; roastedKg: number; greenKg: number; partial: boolean;
 };
 
+export type DayPoint = { date: string; label: string; roastedKg: number; greenKg: number; partial: boolean };
+
+export type PeriodView = {
+  from: string; to: string; prevFrom: string; prevTo: string;
+  roastedKg: number; greenKg: number; batchCount: number;
+  prevRoastedKg: number; trendPct: number | null;
+  lossPct: number | null;
+  qcPassCount: number; qcRejectCount: number; qcPassRate: number | null;
+  series: DayPoint[];
+};
+
 export type AnalyticsData = {
   generatedAt: string;
+  periods: { week: PeriodView; month: PeriodView };
   policy: { lowStockKg: number; qcUrgentHours: number };
   period: { currentMonthStart: string; prevMonthStart: string; prevMonthToDateEnd: string; prevMonthEnd: string };
   kpi: {

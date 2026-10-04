@@ -1,122 +1,70 @@
 "use client";
 
-import type { ReactNode } from "react";
-import {
-  AlertTriangle, ClipboardCheck, Package, ShoppingCart, Factory, Box, Truck, ShieldAlert,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, ShieldAlert } from "lucide-react";
 import { useI18n } from "@/lib/i18n/context";
-import type { Lang } from "@/lib/i18n/translations";
-import { ROLE_LABELS, hasModuleAccess } from "@/lib/auth-shared";
-import {
-  fmtNumber, fmtInt, fmtTime, fmtDateTime, fmtLongDate, fmtShortDate, hoursUntil, fmtDuration,
-} from "@/lib/format";
+import type { Lang, TranslationKey } from "@/lib/i18n/translations";
+import { hasModuleAccess, hasSubPrivilege } from "@/lib/auth-shared";
+import { fmtNumber, fmtInt, fmtTime, fmtDateTime, fmtLongDate, fmtShortDate, hoursUntil, fmtDuration } from "@/lib/format";
 import { useAnalytics, type AnalyticsData } from "@/lib/analytics-client";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { Metric } from "@/components/ui/Metric";
-import { Panel } from "@/components/ui/Panel";
 import { InlineAlert } from "@/components/ui/InlineAlert";
-import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { OrderStatusBadge } from "@/components/OrderLifecyclePanel";
 import { useUser } from "../user-context";
 
-// ─── Home: what needs action now ────────────────────────────────────────────
+// ─── Operations overview («لوحة التشغيل») ───────────────────────────────────
 //
-// Built only from the analytics feed the dashboard already uses, so it shows nothing
-// the dashboard permission does not already cover. Orders carry no due date in the
-// system, so order rows show when the order was raised — never an invented deadline.
-// A link to a module is shown only to someone who can open that module.
+// Laid out after the Hiqbah operations design (Figma, page 01): headline figures on the
+// page, one priority line, the orders that need a decision, then stock and QC deadlines.
+// Where the design shows money (sales, collections) this screen shows operational
+// figures instead: orders carry no prices in the system, and nothing here invents them.
 
-type T = ReturnType<typeof useI18n>["t"];
+type T = (key: TranslationKey) => string;
 
-// The API returns at most this many open QC batches.
-const QC_FEED_CAP = 50;
-const ROWS_SHOWN = 10;
-
-type Intervention = {
-  key: string;
-  rank: number;
-  tone: "danger" | "warning" | "neutral";
-  icon: React.ElementType;
-  title: ReactNode;
-  meta: string;
-  when: { primary: string; secondary?: string; secondaryTone?: "danger" | "warning" | "muted" };
-  badge: ReactNode;
-  action?: { href: string; label: string };
+type ActionOrder = {
+  id: string; orderNumber: number; status: string; createdAt: string;
+  customer: { name: string; nameAr: string | null } | null;
+  items: { quantityKg: number }[];
 };
 
-function buildInterventions(data: AnalyticsData, lang: Lang, t: T, can: (m: string) => boolean): Intervention[] {
-  const now = new Date(data.generatedAt);
-  const disp = (en: string, ar: string | null) => (lang === "ar" && ar ? ar : en);
-  const items: Intervention[] = [];
+// Order states that wait on somebody, in the order a supervisor clears them.
+const ACTION_STATUSES = ["Ready for Shipping", "Preparing", "Waiting Preparation Review", "Waiting Approval", "On Hold"] as const;
+const STATUS_LABEL: Record<(typeof ACTION_STATUSES)[number], TranslationKey> = {
+  "Ready for Shipping": "orderStatusReadyForShipping",
+  "Preparing": "orderStatusPreparing",
+  "Waiting Preparation Review": "orderStatusWaitingPrepReview",
+  "Waiting Approval": "orderStatusWaitingApproval",
+  "On Hold": "orderStatusOnHold",
+};
+const ROWS_SHOWN = 8;
 
-  data.qcBatchAlerts.forEach((b, i) => {
-    const left = b.deadline ? hoursUntil(b.deadline, now) : null;
-    const tone: Intervention["tone"] = b.isOverdue ? "danger" : b.isUrgent ? "warning" : "neutral";
-    items.push({
-      key: `qc-${b.id}`,
-      rank: (b.isOverdue ? 0 : b.isUrgent ? 1 : 3) * 1000 + i,
-      tone,
-      icon: ClipboardCheck,
-      title: <><bdi className="identifier">{b.batchNumber}</bdi> · {b.origin}</>,
-      meta: `${t("hqAwaitingQcDecision")} · ${t("hqVerdictsRecorded")}: ${fmtInt(b.testerCount, lang)}`,
-      when: b.deadline && left
-        ? {
-            primary: fmtDateTime(b.deadline, lang),
-            secondary: `${left.overdue ? t("hqOverdueBy") : t("hqTimeLeft")} ${fmtDuration(left.minutes, lang)}`,
-            secondaryTone: left.overdue ? "danger" : b.isUrgent ? "warning" : "muted",
-          }
-        : { primary: t("hqNoDeadline") },
-      badge: <StatusBadge tone={tone}>{b.isOverdue ? t("hqOverdue") : b.isUrgent ? t("hqDueSoon") : t("hqAwaitingDecision")}</StatusBadge>,
-      action: can("qc") ? { href: "/dashboard/qc", label: t("hqOpenQc") } : undefined,
-    });
-  });
-
-  data.inventoryAlerts.forEach((a, i) => {
-    const empty = a.quantityKg <= 0;
-    items.push({
-      key: `stock-${a.id}`,
-      rank: (empty ? 2 : 4) * 1000 + i,
-      tone: empty ? "danger" : "warning",
-      icon: Package,
-      title: disp(a.beanType, a.beanTypeAr),
-      meta: `${disp(a.country, a.countryAr)} · ${t("hqOnHand")} ${fmtNumber(a.quantityKg, lang)} ${t("kgUnit")} · ${t("hqAlertLine")} ${fmtInt(data.policy.lowStockKg, lang)} ${t("kgUnit")}`,
-      when: { primary: t("hqNoDeadline") },
-      badge: <StatusBadge tone={empty ? "danger" : "warning"}>{empty ? t("hqOutOfStock") : t("hqBelowLine")}</StatusBadge>,
-      action: can("inventory") ? { href: "/dashboard/inventory", label: t("hqOpenInventory") } : undefined,
-    });
-  });
-
-  data.recentActiveOrders.forEach((o, i) => {
-    const totalKg = o.items.reduce((s, it) => s + it.quantityKg, 0);
-    const open = o.items.filter((it) => it.productionStatus !== "Completed").length;
-    items.push({
-      key: `order-${o.id}`,
-      rank: 5 * 1000 + i,
-      tone: "neutral",
-      icon: ShoppingCart,
-      title: <><bdi className="identifier">#{o.orderNumber}</bdi> · {disp(o.customer.name, o.customer.nameAr)}</>,
-      meta: `${fmtNumber(totalKg, lang)} ${t("kgUnit")} · ${t("hqLinesInProduction")}: ${fmtInt(open, lang)} ${t("hqOf")} ${fmtInt(o.items.length, lang)}`,
-      when: { primary: `${t("hqRaised")} ${fmtShortDate(o.createdAt, lang)}`, secondary: t("hqNoDueDate"), secondaryTone: "muted" },
-      badge: <OrderStatusBadge status={o.status} />,
-      action: can("orders") ? { href: "/dashboard/orders", label: t("hqOpenOrders") } : undefined,
-    });
-  });
-
-  return items.sort((a, b) => a.rank - b.rank);
+function useActionOrders(enabled: boolean) {
+  const [orders, setOrders] = useState<ActionOrder[] | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!enabled) return;
+    let cancelled = false;
+    fetch("/api/orders", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((all: ActionOrder[]) => {
+        if (cancelled) return;
+        setOrders(all.filter((o) => (ACTION_STATUSES as readonly string[]).includes(o.status)));
+      })
+      .catch(() => { if (!cancelled) setFailed(true); });
+    return () => { cancelled = true; };
+  }, [enabled]);
+  return { orders, failed };
 }
 
-const CHIP: Record<Intervention["tone"], string> = {
-  danger: "bg-hq-danger-soft text-hq-danger",
-  warning: "bg-hq-warning-soft text-hq-warning",
-  neutral: "bg-hq-neutral text-hq-ink",
-};
-const WHEN_TONE = { danger: "text-hq-danger", warning: "text-hq-warning", muted: "text-hq-muted" } as const;
-
-export default function TodayPage() {
+export default function OperationsOverview() {
   const { t, lang } = useI18n();
   const user = useUser();
-  const { data, state, refreshing, refreshFailed, refresh, retry } = useAnalytics();
+  const { data, state, retry } = useAnalytics();
   const can = (module: string) => !!user && hasModuleAccess(user.permissions, module);
+  const canOrders = can("orders");
+  const canCreateOrder = !!user && hasSubPrivilege(user.permissions, "orders", "create");
+  const { orders, failed: ordersFailed } = useActionOrders(canOrders);
 
   if (state === "forbidden") {
     return (
@@ -131,33 +79,26 @@ export default function TodayPage() {
   }
 
   const now = data ? new Date(data.generatedAt) : new Date();
-  const interventions = data ? buildInterventions(data, lang, t, can) : [];
-  const qcCount = data?.qcBatchAlerts.length ?? 0;
-  const qcOverdue = data?.qcBatchAlerts.filter((b) => b.isOverdue).length ?? 0;
-
-  const actions = (
-    <>
-      {can("orders") && (
-        <a href="/dashboard/workstation/preparation" className="inline-flex items-center h-9 px-4 bg-white border border-hq-control rounded-md text-sm font-semibold text-hq-ink hover:bg-hq-neutral transition-colors">
-          {t("workstationPreparation")}
-        </a>
-      )}
-      {can("production") && (
-        <a href="/dashboard/production" className="inline-flex items-center h-9 px-4 bg-hq-primary text-white rounded-md text-sm font-semibold hover:bg-hq-primary-strong transition-colors">
-          {t("hqRecordRoast")}
-        </a>
-      )}
-    </>
-  );
 
   return (
-    <div className="space-y-6 max-w-[1400px]">
-      <PageHeader
-        title={t("hqTodayTitle")}
-        description={t("hqTodayDescription")}
-        meta={`${fmtLongDate(now, lang)} · ${fmtTime(now, lang)} (${t("hqRiyadhTime")})${user ? ` · ${ROLE_LABELS[user.role] || user.role}` : ""}`}
-        actions={actions}
-      />
+    <div className="space-y-8 max-w-[1180px]">
+      {/* Header */}
+      <header className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-[26px] leading-10 font-bold text-hq-ink">{t("hqOpsTitle")}</h1>
+          <p className="text-sm leading-6 text-hq-muted">{t("hqOpsSubtitle")}</p>
+        </div>
+        <div className="flex items-center gap-3 flex-wrap">
+          <p className="h-9 px-4 inline-flex items-center bg-white border border-hq-line rounded-md text-sm text-hq-ink">
+            {fmtLongDate(now, lang)}
+          </p>
+          {canCreateOrder && (
+            <a href="/dashboard/orders?new=1" className="inline-flex items-center h-9 px-5 bg-hq-primary text-white rounded-md text-sm font-semibold hover:bg-hq-primary-strong transition-colors">
+              {t("newOrder")}
+            </a>
+          )}
+        </div>
+      </header>
 
       {state === "error" && (
         <InlineAlert
@@ -169,122 +110,290 @@ export default function TodayPage() {
         </InlineAlert>
       )}
 
-      {refreshFailed && data && (
-        <InlineAlert tone="warning" title={`${t("hqStaleTitle")} ${fmtTime(data.generatedAt, lang)}`}>
-          {t("hqStaleBody")}
-        </InlineAlert>
-      )}
-
       {state !== "error" && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Metric
-              loading={state === "loading"}
-              label={t("hqCounterQc")}
-              value={data ? `${fmtInt(qcCount, lang)}${qcCount >= QC_FEED_CAP ? "+" : ""}` : null}
-              unit={t("hqBatchesUnit")}
-              definition={t("hqCounterQcDef")}
-              comparison={data ? { text: `${t("hqPastDeadline")}: ${fmtInt(qcOverdue, lang)}`, tone: qcOverdue > 0 ? "negative" : "neutral" } : undefined}
-            />
-            <Metric
-              loading={state === "loading"}
-              label={t("hqLinesAwaitingProduction")}
-              value={data ? fmtInt(data.pipeline.pending, lang) : null}
-              unit={t("hqLinesUnit")}
-              definition={t("hqCounterLinesDef")}
-              comparison={data ? { text: `${t("statusInProd")}: ${fmtInt(data.pipeline.inProduction, lang)}` } : undefined}
-            />
-            <Metric
-              loading={state === "loading"}
-              label={t("hqCounterStock")}
-              value={data ? fmtInt(data.inventoryAlerts.length, lang) : null}
-              unit={t("hqItemsUnit")}
-              definition={data ? `${t("hqCounterStockDef")} ${fmtInt(data.policy.lowStockKg, lang)} ${t("kgUnit")}` : t("hqCounterStockDef")}
-              comparison={data ? { text: t("hqCounterStockNote") } : undefined}
-            />
-          </div>
-
+          <HeadlineFigures data={data} loading={state === "loading"} orders={canOrders ? orders : undefined} lang={lang} t={t} />
+          {data && <PriorityLine data={data} lang={lang} t={t} can={can} />}
+          {canOrders && <OrdersNeedingAction orders={orders} failed={ordersFailed} lang={lang} t={t} updatedAt={data?.generatedAt} />}
           {data && (
-            <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_344px] gap-6 items-start">
-              <Panel
-                flush
-                title={t("hqInterventionsTitle")}
-                meta={`${t("hqInterventionsMeta")} · ${t("hqUpdated")} ${fmtTime(data.generatedAt, lang)}`}
-                actions={
-                  <button type="button" onClick={refresh} disabled={refreshing} className="h-9 px-3 rounded-md text-sm font-semibold text-hq-primary hover:bg-hq-primary-soft disabled:opacity-60">
-                    {refreshing ? t("hqRefreshing") : t("hqRefreshData")}
-                  </button>
-                }
-                footer={interventions.length > 0
-                  ? `${t("hqShowing")} ${fmtInt(Math.min(ROWS_SHOWN, interventions.length), lang)} ${t("hqOf")} ${fmtInt(interventions.length, lang)} · ${t("hqInterventionsOrder")}`
-                  : undefined}
-              >
-                {interventions.length === 0 ? (
-                  <div className="px-6 pb-8 pt-2 text-center">
-                    <p className="text-base leading-[26px] font-bold text-hq-ink">{t("hqNoInterventions")}</p>
-                    <p className="text-xs leading-5 text-hq-muted mt-1">{t("hqNoInterventionsBody")} {fmtTime(data.generatedAt, lang)}</p>
-                  </div>
-                ) : (
-                  <ul className="border-t border-hq-line">
-                    {interventions.slice(0, ROWS_SHOWN).map((it) => (
-                      <li key={it.key} className="flex flex-wrap items-center gap-3 px-4 py-3 border-b border-hq-line last:border-0">
-                        <span className={`w-9 h-9 rounded-md flex items-center justify-center flex-shrink-0 ${CHIP[it.tone]}`}>
-                          {it.tone === "danger" ? <AlertTriangle size={20} aria-hidden="true" /> : <it.icon size={20} aria-hidden="true" />}
-                        </span>
-                        <div className="flex-1 min-w-[180px]">
-                          <p className="text-sm leading-6 font-semibold text-hq-ink">{it.title}</p>
-                          <p className="text-xs leading-5 text-hq-muted">{it.meta}</p>
-                        </div>
-                        <div className="w-[176px] flex-shrink-0">
-                          <p className="text-xs leading-5 text-hq-ink">{it.when.primary}</p>
-                          {it.when.secondary && <p className={`text-xs leading-5 ${WHEN_TONE[it.when.secondaryTone ?? "muted"]}`}>{it.when.secondary}</p>}
-                        </div>
-                        <div className="flex-shrink-0">{it.badge}</div>
-                        {it.action ? (
-                          <a href={it.action.href} className="flex-shrink-0 inline-flex items-center h-9 px-3 rounded-md text-sm font-semibold text-hq-primary hover:bg-hq-primary-soft">
-                            {it.action.label}
-                          </a>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Panel>
-
-              <QuickAccess data={data} lang={lang} t={t} can={can} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              <GreenStock data={data} lang={lang} t={t} canOpen={can("inventory")} />
+              <QcDeadlines data={data} lang={lang} t={t} canOpen={can("qc")} now={now} />
             </div>
           )}
         </>
+      )}
+
+      <p dir="ltr" className="text-xs text-hq-muted text-end">HIQBAH / OPERATIONS</p>
+    </div>
+  );
+}
+
+// ─── Headline figures — on the page, not in cards ───────────────────────────
+
+function HeadlineFigures({ data, loading, orders, lang, t }: {
+  data: AnalyticsData | null; loading: boolean; orders: ActionOrder[] | null | undefined; lang: Lang; t: T;
+}) {
+  const qc = data?.qcBatchAlerts ?? [];
+  const overdue = qc.filter((b) => b.isOverdue).length;
+  const urgent = qc.filter((b) => !b.isOverdue && b.isUrgent).length;
+  const count = (s: string) => orders?.filter((o) => o.status === s).length ?? 0;
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <Metric
+        plain
+        loading={loading}
+        label={t("hqLinesAwaitingProduction")}
+        value={data ? fmtInt(data.pipeline.pending, lang) : null}
+        unit={t("hqLinesUnit")}
+        definition={data ? `${t("statusInProd")} ${fmtInt(data.pipeline.inProduction, lang)} · ${t("hqLinesReadyToShip")} ${fmtInt(data.pipeline.readyToDispatch, lang)}` : ""}
+      />
+      {orders !== undefined ? (
+        <Metric
+          plain
+          loading={loading || orders === null}
+          label={t("hqOrdersNeedingAction")}
+          value={orders ? fmtInt(orders.length, lang) : null}
+          unit={t("hqOrdersUnit")}
+          definition={`${t("orderStatusReadyForShipping")} ${fmtInt(count("Ready for Shipping"), lang)} · ${t("orderStatusPreparing")} ${fmtInt(count("Preparing"), lang)} · ${t("orderStatusWaitingApproval")} ${fmtInt(count("Waiting Approval"), lang)}`}
+        />
+      ) : (
+        <Metric
+          plain
+          loading={loading}
+          label={t("hqCounterStock")}
+          value={data ? fmtInt(data.inventoryAlerts.length, lang) : null}
+          unit={t("hqItemsUnit")}
+          definition={data ? `${t("hqAlertLine")} ${fmtInt(data.policy.lowStockKg, lang)} ${t("kgUnit")}` : ""}
+        />
+      )}
+      <Metric
+        plain
+        loading={loading}
+        label={t("hqCounterQc")}
+        value={data ? fmtInt(qc.length, lang) : null}
+        unit={t("hqBatchesUnit")}
+        definition={`${t("hqPastDeadline")} ${fmtInt(overdue, lang)} · ${t("hqDueSoon")} ${fmtInt(urgent, lang)}`}
+      />
+    </div>
+  );
+}
+
+// ─── One priority line ──────────────────────────────────────────────────────
+
+function PriorityLine({ data, lang, t, can }: { data: AnalyticsData; lang: Lang; t: T; can: (m: string) => boolean }) {
+  const now = new Date(data.generatedAt);
+  const overdue = data.qcBatchAlerts.find((b) => b.isOverdue);
+  const empty = data.inventoryAlerts.find((a) => a.quantityKg <= 0);
+  const low = data.inventoryAlerts[0];
+  const disp = (en: string, ar: string | null) => (lang === "ar" && ar ? ar : en);
+
+  let text: string | null = null;
+  let link: { href: string; label: string } | null = null;
+  if (overdue && overdue.deadline) {
+    text = `${t("hqPriorityToday")}: ${overdue.batchNumber} — ${t("hqQcOverdueBy")} ${fmtDuration(hoursUntil(overdue.deadline, now).minutes, lang)}.`;
+    if (can("qc")) link = { href: "/dashboard/qc", label: t("hqOpenQc") };
+  } else if (empty) {
+    text = `${t("hqPriorityToday")}: ${disp(empty.beanType, empty.beanTypeAr)} — ${t("hqOutOfStockLong")}.`;
+    if (can("inventory")) link = { href: "/dashboard/inventory", label: t("hqOpenInventory") };
+  } else if (low) {
+    text = `${t("hqPriorityToday")}: ${disp(low.beanType, low.beanTypeAr)} — ${t("hqOnHand")} ${fmtNumber(low.quantityKg, lang)} ${t("kgUnit")}, ${t("hqUnderLineOf")} ${fmtInt(data.policy.lowStockKg, lang)} ${t("kgUnit")}.`;
+    if (can("inventory")) link = { href: "/dashboard/inventory", label: t("hqOpenInventory") };
+  }
+  if (!text) return null;
+
+  return (
+    <div role="status" className="flex items-center justify-between gap-4 flex-wrap bg-hq-warning-soft rounded-md px-4 py-3">
+      <p className="text-sm leading-6 text-hq-warning">{text}</p>
+      {link && (
+        <a href={link.href} className="inline-flex items-center gap-1 text-sm font-semibold text-hq-warning hover:underline">
+          {link.label} <ArrowLeft size={14} aria-hidden="true" className="ltr:rotate-180" />
+        </a>
       )}
     </div>
   );
 }
 
-function QuickAccess({ data, lang, t, can }: { data: AnalyticsData; lang: Lang; t: T; can: (m: string) => boolean }) {
-  const tiles: { module: string; href: string; icon: React.ElementType; label: string; note?: string; tone?: BadgeTone }[] = [
-    { module: "orders", href: "/dashboard/orders", icon: ShoppingCart, label: t("orders") },
-    { module: "production", href: "/dashboard/production", icon: Factory, label: t("production"), note: `${fmtInt(data.pipeline.pending, lang)} ${t("hqLinesAwaitingShort")}` },
-    { module: "qc", href: "/dashboard/qc", icon: ClipboardCheck, label: t("qc"), note: `${fmtInt(data.qcBatchAlerts.length, lang)}${data.qcBatchAlerts.length >= QC_FEED_CAP ? "+" : ""} ${t("hqAwaitingDecisionShort")}` },
-    { module: "inventory", href: "/dashboard/inventory", icon: Package, label: t("inventory"), note: `${fmtInt(data.inventoryAlerts.length, lang)} ${t("hqBelowLineShort")}` },
-    { module: "packaging", href: "/dashboard/packaging", icon: Box, label: t("packaging") },
-    { module: "dispatch", href: "/dashboard/dispatch", icon: Truck, label: t("dispatch"), note: `${fmtInt(data.pipeline.readyToDispatch, lang)} ${t("hqReadyShort")}` },
-  ].filter((tile) => can(tile.module));
+// ─── Orders that need a decision ────────────────────────────────────────────
 
-  if (tiles.length === 0) return null;
+function OrdersNeedingAction({ orders, failed, lang, t, updatedAt }: {
+  orders: ActionOrder[] | null; failed: boolean; lang: Lang; t: T; updatedAt?: string;
+}) {
+  const [tab, setTab] = useState<string>("all");
+  const tabs = ACTION_STATUSES
+    .map((s) => ({ s, n: orders?.filter((o) => o.status === s).length ?? 0 }))
+    .filter((x) => x.n > 0);
+  const shown = (orders ?? [])
+    .filter((o) => tab === "all" || o.status === tab)
+    .sort((a, b) =>
+      ACTION_STATUSES.indexOf(a.status as (typeof ACTION_STATUSES)[number]) - ACTION_STATUSES.indexOf(b.status as (typeof ACTION_STATUSES)[number])
+      || new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const totalKg = shown.reduce((s, o) => s + o.items.reduce((x, i) => x + i.quantityKg, 0), 0);
+  const disp = (c: ActionOrder["customer"]) => (c ? (lang === "ar" && c.nameAr ? c.nameAr : c.name) : "—");
 
   return (
-    <Panel title={t("hqQuickAccess")} meta={t("hqQuickAccessMeta")}>
-      <ul className="grid grid-cols-2 gap-3">
-        {tiles.map((tile) => (
-          <li key={tile.module}>
-            <a href={tile.href} className="flex flex-col gap-1 p-3 h-full bg-white border border-hq-line rounded-lg hover:border-hq-control transition-colors">
-              <tile.icon size={20} className="text-hq-primary" aria-hidden="true" />
-              <span className="text-sm leading-6 font-semibold text-hq-ink">{tile.label}</span>
-              {tile.note && <span className="text-xs leading-5 text-hq-muted">{tile.note}</span>}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </Panel>
+    <section aria-labelledby="orders-needing-action" className="bg-white border border-hq-line rounded-lg">
+      <div className="flex items-center justify-between gap-3 flex-wrap px-6 pt-5 pb-3">
+        <h2 id="orders-needing-action" className="text-base leading-[26px] font-bold text-hq-ink">{t("hqOrdersNeedingAction")}</h2>
+        <a href="/dashboard/orders" className="inline-flex items-center h-9 px-4 bg-white border border-hq-control rounded-md text-sm font-semibold text-hq-ink hover:bg-hq-neutral">
+          {t("hqAllOrders")}
+        </a>
+      </div>
+
+      {failed ? (
+        <p className="px-6 pb-6 text-sm text-hq-danger">{t("hqOrdersLoadFailed")}</p>
+      ) : orders === null ? (
+        <div className="px-6 pb-6 space-y-2" aria-hidden="true">
+          {[0, 1, 2].map((i) => <div key={i} className="h-10 rounded bg-hq-neutral animate-pulse" />)}
+        </div>
+      ) : orders.length === 0 ? (
+        <p className="px-6 pb-6 text-sm text-hq-muted">{t("hqNoOrdersNeedingAction")}</p>
+      ) : (
+        <>
+          <div role="group" aria-label={t("hqFilterByStatus")} className="relative flex items-center gap-6 px-6 border-b border-hq-line overflow-x-auto">
+            {[{ s: "all", n: orders.length }, ...tabs].map(({ s, n }) => (
+              <button
+                key={s}
+                type="button"
+                aria-pressed={tab === s}
+                onClick={() => setTab(s)}
+                className={`h-10 -mb-px border-b-2 text-sm whitespace-nowrap transition-colors ${
+                  tab === s ? "border-hq-primary text-hq-primary font-bold" : "border-transparent text-hq-ink hover:text-hq-primary"
+                }`}
+              >
+                {s === "all" ? t("hqAll") : t(STATUS_LABEL[s as (typeof ACTION_STATUSES)[number]])} <span className="numeric">{fmtInt(n, lang)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="relative overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-hq-neutral text-xs text-hq-ink">
+                  <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqOrder")}</th>
+                  <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqCustomer")}</th>
+                  <th scope="col" className="text-end font-semibold px-3 py-2">{t("hqQuantity")} ({t("kgUnit")})</th>
+                  <th scope="col" className="text-end font-semibold px-3 py-2">{t("hqLines")}</th>
+                  <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqCreated")}</th>
+                  <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqStatus")}</th>
+                  <th scope="col" className="text-start font-semibold px-6 py-2"><span className="sr-only">{t("hqAction")}</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {shown.slice(0, ROWS_SHOWN).map((o) => (
+                  <tr key={o.id} className="border-b border-hq-line last:border-0 h-11">
+                    <td className="px-6 py-2"><bdi className="identifier text-hq-muted">#{o.orderNumber}</bdi></td>
+                    <td className="px-3 py-2 font-semibold text-hq-ink">{disp(o.customer)}</td>
+                    <td className="px-3 py-2 text-end numeric">{fmtNumber(o.items.reduce((x, i) => x + i.quantityKg, 0), lang)}</td>
+                    <td className="px-3 py-2 text-end numeric">{fmtInt(o.items.length, lang)}</td>
+                    <td className="px-3 py-2 text-hq-muted">{fmtShortDate(o.createdAt, lang)}</td>
+                    <td className="px-3 py-2"><OrderStatusBadge status={o.status} /></td>
+                    <td className="px-6 py-2">
+                      <a href={`/dashboard/orders?order=${o.id}`} className="text-sm font-semibold text-hq-primary hover:underline">
+                        {t("hqView")}<span className="sr-only"> #{o.orderNumber}</span>
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex items-center justify-between gap-3 flex-wrap px-6 py-3 border-t border-hq-line text-xs text-hq-muted">
+            <span>
+              {shown.length > ROWS_SHOWN ? `${t("hqShowing")} ${fmtInt(ROWS_SHOWN, lang)} ${t("hqOf")} ` : ""}
+              {fmtInt(shown.length, lang)} {t("hqOrdersUnit")} · {fmtNumber(totalKg, lang)} {t("kgUnit")} {t("hqTotalQuantity")} · {t("hqOldestFirst")}
+            </span>
+            {updatedAt && <span>{t("hqLastUpdate")} {fmtTime(updatedAt, lang)}</span>}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+// ─── Two cards: green coffee and QC deadlines ───────────────────────────────
+
+function CardHead({ title, link }: { title: string; link?: { href: string; label: string } }) {
+  return (
+    <div className="flex items-center justify-between gap-3 px-6 pt-5 pb-3">
+      <h2 className="text-base leading-[26px] font-bold text-hq-ink">{title}</h2>
+      {link && (
+        <a href={link.href} className="inline-flex items-center gap-1 text-xs font-semibold text-hq-primary hover:underline">
+          {link.label} <ArrowLeft size={12} aria-hidden="true" className="ltr:rotate-180" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+function GreenStock({ data, lang, t, canOpen }: { data: AnalyticsData; lang: Lang; t: T; canOpen: boolean }) {
+  const rows = data.inventoryAlerts.slice(0, 5);
+  const disp = (en: string, ar: string | null) => (lang === "ar" && ar ? ar : en);
+  return (
+    <section className="bg-white border border-hq-line rounded-lg">
+      <CardHead title={t("hqGreenContinuity")} link={canOpen ? { href: "/dashboard/inventory", label: t("hqViewInventory") } : undefined} />
+      {rows.length === 0 ? (
+        <p className="px-6 pb-5 text-sm text-hq-muted">{t("hqNoLowStock")}</p>
+      ) : (
+        <ul className="px-6 pb-4">
+          {rows.map((a) => (
+            <li key={a.id} className="flex items-center gap-3 py-2.5 border-b border-hq-line last:border-0">
+              <span className="flex-1 text-sm font-semibold text-hq-ink">{disp(a.beanType, a.beanTypeAr)}</span>
+              <span className="text-sm text-hq-ink numeric">{fmtNumber(a.quantityKg, lang)} {t("kgUnit")}</span>
+              <StatusBadge tone={a.quantityKg <= 0 ? "danger" : "warning"}>{a.quantityKg <= 0 ? t("hqOutOfStock") : t("hqBelowLine")}</StatusBadge>
+            </li>
+          ))}
+        </ul>
+      )}
+      <dl className="mx-6 mb-3 grid grid-cols-2 gap-4 border-t border-hq-line pt-3">
+        <div>
+          <dt className="text-xs text-hq-muted">{t("hqGreenStock")}</dt>
+          <dd className="text-sm font-semibold text-hq-ink numeric">{fmtNumber(data.kpi.rawMaterialKg, lang)} {t("kgUnit")}</dd>
+        </div>
+        <div>
+          <dt className="text-xs text-hq-muted">{t("hqFinishedStock")}</dt>
+          <dd className="text-sm font-semibold text-hq-ink numeric">{fmtNumber(data.kpi.finishedGoodsKg, lang)} {t("kgUnit")}</dd>
+        </div>
+      </dl>
+      <p className="px-6 pb-4 text-xs text-hq-muted">{t("hqAlertLine")} {fmtInt(data.policy.lowStockKg, lang)} {t("kgUnit")} · {t("hqLowStockPolicy")} · {t("hqStockNotSummed")}</p>
+    </section>
+  );
+}
+
+function QcDeadlines({ data, lang, t, canOpen, now }: { data: AnalyticsData; lang: Lang; t: T; canOpen: boolean; now: Date }) {
+  const rows = data.qcBatchAlerts.slice(0, 5);
+  return (
+    <section className="bg-white border border-hq-line rounded-lg">
+      <CardHead title={t("hqQcDeadlines")} link={canOpen ? { href: "/dashboard/qc", label: t("hqViewQc") } : undefined} />
+      {rows.length === 0 ? (
+        <p className="px-6 pb-5 text-sm text-hq-muted">{t("hqNoOpenQc")}</p>
+      ) : (
+        <ul className="px-6 pb-4">
+          {rows.map((b) => {
+            const left = b.deadline ? hoursUntil(b.deadline, now) : null;
+            return (
+              <li key={b.id} className="flex items-center gap-3 py-2.5 border-b border-hq-line last:border-0">
+                <span className="flex-1 min-w-0">
+                  <bdi className="identifier block text-sm font-semibold text-hq-ink text-start">{b.batchNumber}</bdi>
+                  <span className="block text-xs text-hq-muted">{b.origin}</span>
+                </span>
+                <span className="text-xs text-end">
+                  <span className="block text-hq-ink">{b.deadline ? fmtDateTime(b.deadline, lang) : t("hqNoDeadline")}</span>
+                  {left && (
+                    <span className={`block ${left.overdue ? "text-hq-danger" : b.isUrgent ? "text-hq-warning" : "text-hq-muted"}`}>
+                      {left.overdue ? t("hqOverdueBy") : t("hqTimeLeft")} {fmtDuration(left.minutes, lang)}
+                    </span>
+                  )}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <p className="px-6 pb-4 text-xs text-hq-muted">
+        {data.qcBatchAlerts.length > rows.length ? `${t("hqShowing")} ${fmtInt(rows.length, lang)} ${t("hqOf")} ${fmtInt(data.qcBatchAlerts.length, lang)} · ` : ""}
+        {t("hqSortedByDeadline")} · {t("hqDueSoonPolicy")} {fmtInt(data.policy.qcUrgentHours, lang)} {t("hqHours")}
+      </p>
+    </section>
   );
 }

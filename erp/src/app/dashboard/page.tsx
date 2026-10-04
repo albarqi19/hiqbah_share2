@@ -1,50 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { RefreshCw, ShieldAlert, Table2, BarChart3 } from "lucide-react";
+import { ShieldAlert, Table2, LineChart as LineIcon } from "lucide-react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
 } from "recharts";
 import { useI18n } from "@/lib/i18n/context";
-import type { Lang } from "@/lib/i18n/translations";
-import { hasModuleAccess } from "@/lib/auth-shared";
+import type { Lang, TranslationKey } from "@/lib/i18n/translations";
 import { HQ } from "@/lib/hiqbah-colors";
-import {
-  fmtNumber, fmtInt, fmtTime, fmtDateTime, fmtMonthYear, dayOfMonth, fmtShortDate,
-  hoursUntil, fmtDuration,
-} from "@/lib/format";
-import { useAnalytics, type AnalyticsData, type QcAlert } from "@/lib/analytics-client";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { fmtNumber, fmtInt, fmtTime, fmtShortDate } from "@/lib/format";
+import { useAnalytics, type PeriodView, type DayPoint } from "@/lib/analytics-client";
 import { Metric } from "@/components/ui/Metric";
-import { Panel } from "@/components/ui/Panel";
 import { InlineAlert } from "@/components/ui/InlineAlert";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import { OrderStatusBadge } from "@/components/OrderLifecyclePanel";
-import { useUser } from "./user-context";
 
-// ─── Executive dashboard ────────────────────────────────────────────────────
+// ─── Performance in figures («الأداء بالأرقام») ─────────────────────────────
 //
-// Every figure here states what it measures and over which period, and is compared
-// only with a period of the same length. Nothing is coloured good or bad against a
-// threshold the business has not set: the loss and pass-rate figures are shown as
-// measured. The two thresholds that do exist (the low-stock line and the QC "due soon"
-// window) come from the API and are named where they are used.
+// Laid out after the Hiqbah analytics design (Figma, page 01): a period switch, three
+// headline figures, a trend line you can tap for a value, a composition donut, paired
+// bars and a short reading of the period. The design's money series (sales, collections,
+// channels) have no source in the system — orders carry no prices — so the same slots
+// show production and quality, which do. Switching the period changes every figure and
+// chart together; each period is compared only with an equal stretch of time before it.
+
+type T = (key: TranslationKey) => string;
+type PeriodKey = "week" | "month";
+
+const dayDate = (p: DayPoint) => p.date + "T12:00:00Z";
 
 function signed(n: number, lang: Lang) {
   const s = fmtNumber(Math.abs(n), lang, 1);
   return n > 0 ? `+${s}` : n < 0 ? `−${s}` : s;
 }
 
-function qcTone(b: QcAlert): "danger" | "warning" | "neutral" {
-  return b.isOverdue ? "danger" : b.isUrgent ? "warning" : "neutral";
-}
-
-export default function DashboardPage() {
-  const { t, lang } = useI18n();
-  const user = useUser();
+export default function PerformancePage() {
+  const { t, lang, dir } = useI18n();
   const { data, state, refreshing, refreshFailed, refresh, retry } = useAnalytics();
-  const can = (module: string) => !!user && hasModuleAccess(user.permissions, module);
+  const [period, setPeriod] = useState<PeriodKey>("week");
+  const [selected, setSelected] = useState<number | null>(null);
 
   if (state === "forbidden") {
     return (
@@ -58,171 +51,184 @@ export default function DashboardPage() {
     );
   }
 
-  const now = data ? new Date(data.generatedAt) : new Date();
-  const periodText = `${fmtMonthYear(now, lang)} (1–${dayOfMonth(now)})`;
+  const view = data?.periods[period] ?? null;
+  const series = view?.series ?? [];
+  const sel = series.length ? Math.min(selected ?? series.length - 1, series.length - 1) : null;
+  const choose = (p: PeriodKey) => { setPeriod(p); setSelected(null); };
 
   return (
-    <div className="space-y-6 max-w-[1400px]">
-      <PageHeader
-        title={t("execDashTitle")}
-        description={t("hqDashDescription")}
-        meta={data
-          ? `${t("hqPeriod")}: ${periodText} · ${t("hqLastSuccessfulUpdate")}: ${fmtTime(data.generatedAt, lang)} (${t("hqRiyadhTime")})`
-          : undefined}
-        actions={state === "ready" && (
-          <button
-            type="button"
-            onClick={refresh}
-            disabled={refreshing}
-            className="inline-flex items-center gap-2 h-9 px-4 bg-hq-primary text-white rounded-md text-sm font-semibold hover:bg-hq-primary-strong transition-colors disabled:opacity-60"
-          >
-            <RefreshCw size={16} aria-hidden="true" className={refreshing ? "animate-spin" : ""} />
-            {refreshing ? t("hqRefreshing") : t("hqRefreshData")}
-          </button>
-        )}
-      />
+    <div className="space-y-8 max-w-[1180px]">
+      {/* Header */}
+      <header className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-[26px] leading-10 font-bold text-hq-ink">{t("hqPerfTitle")}</h1>
+          <p className="text-sm leading-6 text-hq-muted">{t("hqPerfSubtitle")}</p>
+        </div>
+        <div className="flex items-center gap-3 flex-wrap">
+          {view && (
+            <p className="text-xs text-hq-muted numeric">
+              {fmtShortDate(view.from, lang)} – {fmtShortDate(view.to, lang)} · {t("hqLastSuccessfulUpdate")} {fmtTime(data!.generatedAt, lang)}
+            </p>
+          )}
+          <div role="group" aria-label={t("hqPeriod")} className="flex gap-2">
+            {(["week", "month"] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                aria-pressed={period === p}
+                onClick={() => choose(p)}
+                className={`h-9 px-4 rounded-md text-sm font-semibold transition-colors ${
+                  period === p ? "bg-hq-primary text-white" : "bg-white border border-hq-control text-hq-ink hover:bg-hq-neutral"
+                }`}
+              >
+                {p === "week" ? t("hqLast7Days") : t("hqThisMonth")}
+              </button>
+            ))}
+          </div>
+          {state === "ready" && (
+            <button type="button" onClick={refresh} disabled={refreshing} className="h-9 px-3 rounded-md text-sm font-semibold text-hq-primary hover:bg-hq-primary-soft disabled:opacity-60">
+              {refreshing ? t("hqRefreshing") : t("hqRefreshData")}
+            </button>
+          )}
+        </div>
+      </header>
 
       {state === "error" && (
         <InlineAlert
           tone="danger"
           title={t("hqDashLoadFailed")}
-          action={
-            <button type="button" onClick={retry} className="h-9 px-4 bg-white border border-hq-control rounded-md text-sm font-semibold text-hq-ink hover:bg-hq-neutral">
-              {t("hqRetry")}
-            </button>
-          }
+          action={<button type="button" onClick={retry} className="h-9 px-4 bg-white border border-hq-control rounded-md text-sm font-semibold text-hq-ink hover:bg-hq-neutral">{t("hqRetry")}</button>}
         >
           {t("hqDashLoadFailedBody")}
         </InlineAlert>
       )}
-
       {refreshFailed && data && (
-        <InlineAlert tone="warning" title={`${t("hqStaleTitle")} ${fmtTime(data.generatedAt, lang)}`}>
-          {t("hqStaleBody")}
-        </InlineAlert>
+        <InlineAlert tone="warning" title={`${t("hqStaleTitle")} ${fmtTime(data.generatedAt, lang)}`}>{t("hqStaleBody")}</InlineAlert>
       )}
 
       {state !== "error" && (
         <>
-          <KpiRow data={data} loading={state === "loading"} lang={lang} t={t} periodText={periodText} />
+          <Headline view={view} loading={state === "loading"} period={period} lang={lang} t={t} />
 
-          {data && (
+          {view && (
             <>
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
-                <WeeklyProduction data={data} lang={lang} t={t} className="xl:col-span-2" />
-                <QcDecisions data={data} lang={lang} t={t} />
+                <Trend className="xl:col-span-2" view={view} sel={sel} onSelect={setSelected} period={period} lang={lang} t={t} dir={dir} />
+                <Verdicts view={view} lang={lang} t={t} />
               </div>
-
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
-                <Pipeline data={data} lang={lang} t={t} className="xl:col-span-2" />
-                <StockOnHand data={data} lang={lang} t={t} />
+                <InOut className="xl:col-span-2" view={view} sel={sel} onSelect={setSelected} lang={lang} t={t} dir={dir} />
+                <QuickRead view={view} period={period} lang={lang} t={t} />
               </div>
-
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-                <OpenQc data={data} lang={lang} t={t} canOpen={can("qc")} />
-                <LowStock data={data} lang={lang} t={t} canOpen={can("inventory")} />
-              </div>
-
-              <ActiveOrders data={data} lang={lang} t={t} canOpen={can("orders")} />
             </>
           )}
         </>
       )}
+
+      <p dir="ltr" className="text-xs text-hq-muted text-end">HIQBAH / ANALYTICS</p>
     </div>
   );
 }
 
-type T = ReturnType<typeof useI18n>["t"];
-type SectionProps = { data: AnalyticsData; lang: Lang; t: T; className?: string };
+// ─── Headline figures ───────────────────────────────────────────────────────
 
-// ─── KPIs ───────────────────────────────────────────────────────────────────
-
-function KpiRow({ data, loading, lang, t, periodText }: { data: AnalyticsData | null; loading: boolean; lang: Lang; t: T; periodText: string }) {
-  const k = data?.kpi;
-  const prevDays = data ? dayOfMonth(data.period.prevMonthToDateEnd) : 0;
-  const prevMonth = data ? fmtMonthYear(data.period.prevMonthStart, lang) : "";
-
+function Headline({ view, loading, period, lang, t }: { view: PeriodView | null; loading: boolean; period: PeriodKey; lang: Lang; t: T }) {
+  const cmpBasis = period === "week" ? t("hqVsPrev7Days") : t("hqVsSameDays");
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
       <Metric
+        plain
         loading={loading}
-        label={t("productionThisMonth")}
-        value={k ? fmtNumber(k.currentMonthKg, lang) : null}
-        unit={t("kgUnit")}
-        definition={`${t("hqProdDefinition")} · ${periodText} · ${k ? fmtInt(k.batchCount, lang) : "—"} ${t("hqBatches")}`}
-        comparison={k && k.productionTrendSameDays !== null ? {
-          text: `${signed(k.productionTrendSameDays, lang)}% ${t("hqVsSameDays")} (${prevMonth} 1–${prevDays}: ${fmtNumber(k.prevMonthToDateKg, lang)} ${t("kgUnit")})`,
-          tone: k.productionTrendSameDays > 0 ? "positive" : k.productionTrendSameDays < 0 ? "negative" : "neutral",
-        } : k ? { text: t("hqNoSameDaysComparison"), tone: "neutral" } : undefined}
+        label={`${t("hqRoastedOutput")} · ${t("kgUnit")}`}
+        value={view ? fmtNumber(view.roastedKg, lang) : null}
+        definition={view ? `${fmtInt(view.batchCount, lang)} ${t("hqBatches")} · ${t("hqSingleOriginCompleted")}` : ""}
+        comparison={view ? (view.trendPct !== null
+          ? { text: `${signed(view.trendPct, lang)}% ${cmpBasis} (${fmtNumber(view.prevRoastedKg, lang)} ${t("kgUnit")})`, tone: view.trendPct > 0 ? "positive" : view.trendPct < 0 ? "negative" : "neutral" }
+          : { text: t("hqNoComparableBatches") }) : undefined}
       />
       <Metric
+        plain
         loading={loading}
-        label={t("avgRoastLoss")}
-        value={k?.avgLossPct != null ? fmtNumber(k.avgLossPct, lang) : null}
-        unit="%"
-        definition={t("hqLossDefinition")}
-        unavailable={t("hqLossUnavailable")}
+        label={`${t("avgRoastLoss")} · %`}
+        value={view?.lossPct != null ? fmtNumber(view.lossPct, lang) : null}
+        definition={t("hqLossBasisShort")}
+        unavailable={t("hqNoBatchesInPeriod")}
       />
       <Metric
+        plain
         loading={loading}
-        label={t("qcPassRateLabel")}
-        value={k?.qcPassRate != null ? fmtNumber(k.qcPassRate, lang) : null}
-        unit="%"
-        definition={t("hqQcRateDefinition")}
-        comparison={k && k.qcTotalCount > 0 ? {
-          text: `${fmtInt(k.qcPassCount, lang)} ${t("hqOf")} ${fmtInt(k.qcTotalCount, lang)} ${t("hqVerdicts")}`,
-        } : undefined}
-        unavailable={t("hqQcUnavailable")}
+        label={`${t("qcPassRateLabel")} · %`}
+        value={view?.qcPassRate != null ? fmtNumber(view.qcPassRate, lang) : null}
+        definition={view ? `${fmtInt(view.qcPassCount, lang)} ${t("hqOf")} ${fmtInt(view.qcPassCount + view.qcRejectCount, lang)} ${t("hqVerdicts")} · ${t("hqAcceptOverAll")}` : ""}
+        unavailable={t("hqNoVerdictsInPeriod")}
       />
     </div>
   );
 }
 
-// ─── Weekly production ──────────────────────────────────────────────────────
+// ─── Card frame ─────────────────────────────────────────────────────────────
 
-function WeeklyProduction({ data, lang, t, className }: SectionProps) {
-  const { dir } = useI18n();
+function Card({ title, meta, action, className = "", children }: { title: string; meta?: string; action?: React.ReactNode; className?: string; children: React.ReactNode }) {
+  return (
+    <section className={`bg-white border border-hq-line rounded-lg p-6 min-w-0 ${className}`}>
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="min-w-0">
+          <h2 className="text-base leading-[26px] font-bold text-hq-ink">{title}</h2>
+          {meta && <p className="text-xs leading-5 text-hq-muted">{meta}</p>}
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Strip({ children }: { children: React.ReactNode }) {
+  return <p role="status" className="mt-3 px-4 py-2 rounded-md bg-hq-primary-soft text-sm text-hq-ink numeric">{children}</p>;
+}
+
+const axisLabel = (p: DayPoint) => (p.partial ? `${p.label}*` : p.label);
+
+// ─── Trend (line) ───────────────────────────────────────────────────────────
+
+function Trend({ view, sel, onSelect, period, lang, t, dir, className }: {
+  view: PeriodView; sel: number | null; onSelect: (i: number) => void; period: PeriodKey; lang: Lang; t: T; dir: "ltr" | "rtl"; className?: string;
+}) {
   const [asTable, setAsTable] = useState(false);
-  const weeks = data.weeklyProduction;
-  const hasAny = weeks.some((w) => w.roastedKg > 0 || w.greenKg > 0);
-  const chartData = weeks.map((w) => ({ ...w, axis: w.partial ? `${w.label}*` : w.label }));
+  const data = view.series.map((p) => ({ ...p, axis: axisLabel(p) }));
+  const hasAny = view.series.some((p) => p.roastedKg > 0);
+  const point = sel !== null ? view.series[sel] : null;
 
   return (
-    <Panel
+    <Card
       className={className}
-      title={t("hqWeeklyTitle")}
-      meta={`${t("hqUnitKg")} · ${t("hqWeeklyPeriod")} · ${t("hqWeeklySource")} · ${t("hqUpdated")} ${fmtTime(data.generatedAt, lang)}`}
-      actions={hasAny && (
-        <button
-          type="button"
-          onClick={() => setAsTable((v) => !v)}
-          aria-pressed={asTable}
-          className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-sm font-semibold text-hq-primary hover:bg-hq-primary-soft"
-        >
-          {asTable ? <BarChart3 size={16} aria-hidden="true" /> : <Table2 size={16} aria-hidden="true" />}
+      title={t("hqProductionTrend")}
+      meta={`${t("hqUnitKg")} · ${period === "week" ? t("hqLast7Days") : t("hqThisMonth")} · ${t("hqPerDay")} · ${t("hqTapPoint")}`}
+      action={hasAny && (
+        <button type="button" onClick={() => setAsTable((v) => !v)} aria-pressed={asTable} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-md text-sm font-semibold text-hq-primary hover:bg-hq-primary-soft">
+          {asTable ? <LineIcon size={16} aria-hidden="true" /> : <Table2 size={16} aria-hidden="true" />}
           {asTable ? t("hqShowChart") : t("hqShowTable")}
         </button>
       )}
-      footer={hasAny ? t("hqWeeklyFootnote") : undefined}
     >
       {!hasAny ? (
-        <p className="py-12 text-center text-sm text-hq-muted">{t("hqWeeklyEmpty")}</p>
+        <p className="py-12 text-center text-sm text-hq-muted">{t("hqNoBatchesInPeriod")}</p>
       ) : asTable ? (
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-hq-ink border-b border-hq-line">
-                <th scope="col" className="text-start font-semibold py-2">{t("hqWeekOf")}</th>
+                <th scope="col" className="text-start font-semibold py-2">{t("hqDay")}</th>
                 <th scope="col" className="text-end font-semibold py-2">{t("hqGreenIn")} ({t("kgUnit")})</th>
                 <th scope="col" className="text-end font-semibold py-2">{t("hqRoastedOut")} ({t("kgUnit")})</th>
               </tr>
             </thead>
             <tbody>
-              {weeks.map((w) => (
-                <tr key={w.weekStart} className="border-b border-hq-line last:border-0">
-                  <td className="py-2">{fmtShortDate(w.weekStart + "T12:00:00Z", lang)}{w.partial ? ` · ${t("hqWeekSoFar")}` : ""}</td>
-                  <td className="py-2 text-end">{fmtNumber(w.greenKg, lang)}</td>
-                  <td className="py-2 text-end">{fmtNumber(w.roastedKg, lang)}</td>
+              {view.series.map((p) => (
+                <tr key={p.date} className="border-b border-hq-line last:border-0">
+                  <td className="py-2">{fmtShortDate(dayDate(p), lang)}{p.partial ? ` · ${t("hqWeekSoFar")}` : ""}</td>
+                  <td className="py-2 text-end">{fmtNumber(p.greenKg, lang)}</td>
+                  <td className="py-2 text-end">{fmtNumber(p.roastedKg, lang)}</td>
                 </tr>
               ))}
             </tbody>
@@ -230,72 +236,63 @@ function WeeklyProduction({ data, lang, t, className }: SectionProps) {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-end gap-4 mb-2 text-xs text-hq-ink">
-            <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: HQ.chart2 }} aria-hidden="true" />{t("hqGreenIn")}</span>
-            <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: HQ.chart1 }} aria-hidden="true" />{t("hqRoastedOut")}</span>
-          </div>
-          <div className="h-64" role="img" aria-label={t("hqWeeklyAria")}>
+          <div className="h-60" role="img" aria-label={t("hqTrendAria")}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barGap={4} barCategoryGap="28%" margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="0" stroke={HQ.line} vertical={false} />
-                <XAxis
-                  dataKey="axis"
-                  reversed={dir === "rtl"}
-                  tick={{ fontSize: 12, fill: HQ.ink }}
-                  axisLine={{ stroke: HQ.control }}
-                  tickLine={false}
-                />
-                <YAxis
-                  orientation={dir === "rtl" ? "right" : "left"}
-                  domain={[0, "auto"]}
-                  allowDecimals={false}
-                  tick={{ fontSize: 12, fill: HQ.muted }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={44}
-                />
+              <AreaChart
+                data={data}
+                margin={{ top: 8, right: 8, left: 8, bottom: 0 }}
+                onClick={(e) => { const i = Number(e?.activeTooltipIndex); if (Number.isFinite(i)) onSelect(i); }}
+              >
+                <CartesianGrid stroke={HQ.line} vertical={false} />
+                <XAxis dataKey="axis" reversed={dir === "rtl"} tick={{ fontSize: 12, fill: HQ.ink }} axisLine={{ stroke: HQ.control }} tickLine={false} interval="preserveStartEnd" />
+                <YAxis orientation={dir === "rtl" ? "right" : "left"} domain={[0, "auto"]} tick={{ fontSize: 12, fill: HQ.muted }} axisLine={false} tickLine={false} width={44} />
                 <Tooltip
-                  cursor={{ fill: HQ.neutral }}
+                  cursor={{ stroke: HQ.control }}
                   contentStyle={{ borderRadius: 8, border: `1px solid ${HQ.line}`, fontSize: 12, fontFamily: "inherit" }}
-                  labelFormatter={(_, payload) => {
-                    const w = payload?.[0]?.payload as (typeof chartData)[number] | undefined;
-                    return w ? `${t("hqWeekOf")} ${fmtShortDate(w.weekStart + "T12:00:00Z", lang)}${w.partial ? ` · ${t("hqWeekSoFar")}` : ""}` : "";
-                  }}
-                  formatter={(value, name) => [`${fmtNumber(Number(value), lang)} ${t("kgUnit")}`, name]}
+                  labelFormatter={(_, p) => { const d = p?.[0]?.payload as DayPoint | undefined; return d ? fmtShortDate(dayDate(d), lang) : ""; }}
+                  formatter={(v) => [`${fmtNumber(Number(v), lang)} ${t("kgUnit")}`, t("hqRoastedOut")]}
                 />
-                <Bar dataKey="greenKg" name={t("hqGreenIn")} fill={HQ.chart2} radius={[3, 3, 0, 0]} />
-                <Bar dataKey="roastedKg" name={t("hqRoastedOut")} fill={HQ.chart1} radius={[3, 3, 0, 0]} />
-              </BarChart>
+                <Area
+                  type="linear"
+                  dataKey="roastedKg"
+                  stroke={HQ.primary}
+                  strokeWidth={2}
+                  fill={HQ.primarySoft}
+                  fillOpacity={1}
+                  isAnimationActive={false}
+                  dot={{ r: 4, stroke: HQ.primary, strokeWidth: 2, fill: "#fff" }}
+                  activeDot={{ r: 6, stroke: HQ.primary, strokeWidth: 2, fill: HQ.primary }}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
+          {point && (
+            <Strip>
+              {fmtShortDate(dayDate(point), lang)}{point.partial ? ` (${t("hqWeekSoFar")})` : ""} · {fmtNumber(point.roastedKg, lang)} {t("kgUnit")} {t("hqRoastedOut")}
+            </Strip>
+          )}
+          <p className="mt-2 text-xs text-hq-muted">{t("hqDayFootnote")}</p>
         </>
       )}
-    </Panel>
+    </Card>
   );
 }
 
-// ─── QC decisions ───────────────────────────────────────────────────────────
+// ─── Verdicts (donut) ───────────────────────────────────────────────────────
 
-function QcDecisions({ data, lang, t }: SectionProps) {
-  const { qcPassCount: pass, qcTotalCount: total, qcPassRate } = data.kpi;
-  const reject = total - pass;
-  // The pass share is the API's rounded rate; the reject share is its complement, so the
-  // two printed shares always add to exactly 100.0.
-  const passPct = qcPassRate ?? 0;
-  const rejectPct = total > 0 ? 100 - passPct : 0;
+function Verdicts({ view, lang, t }: { view: PeriodView; lang: Lang; t: T }) {
+  const pass = view.qcPassCount, reject = view.qcRejectCount, total = pass + reject;
+  // The pass share is the API's rounded rate and the reject share its complement, so
+  // the two printed shares always add to exactly 100.0.
+  const passPct = view.qcPassRate ?? 0;
   const slices = [
     { name: t("hqAccepted"), value: pass, pct: passPct, color: HQ.chart1 },
-    { name: t("hqRejected"), value: reject, pct: rejectPct, color: HQ.danger },
+    { name: t("hqRejected"), value: reject, pct: total > 0 ? 100 - passPct : 0, color: HQ.danger },
   ];
-
   return (
-    <Panel
-      title={t("hqQcTitle")}
-      meta={`${t("hqLast30Days")} · ${t("hqQcSource")}`}
-      footer={total > 0 ? `${t("hqTotal")} ${fmtInt(total, lang)} = ${fmtInt(pass, lang)} + ${fmtInt(reject, lang)} · ${t("hqRoundingNote")}` : undefined}
-    >
+    <Card title={t("hqQcTitle")} meta={t("hqVerdictShare")}>
       {total === 0 ? (
-        <p className="py-12 text-center text-sm text-hq-muted">{t("hqQcEmpty")}</p>
+        <p className="py-12 text-center text-sm text-hq-muted">{t("hqNoVerdictsInPeriod")}</p>
       ) : (
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-40 h-40" role="img" aria-label={`${t("hqQcTitle")}: ${slices.map((s) => `${s.name} ${s.value}`).join("، ")}`}>
@@ -307,246 +304,112 @@ function QcDecisions({ data, lang, t }: SectionProps) {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-[30px] leading-10 font-semibold text-hq-ink numeric">{fmtInt(total, lang)}</span>
+              <span className="text-xl font-bold text-hq-ink numeric">{fmtInt(total, lang)}</span>
               <span className="text-xs text-hq-muted">{t("hqVerdicts")}</span>
             </div>
           </div>
           <ul className="w-full space-y-2">
             {slices.map((s) => (
               <li key={s.name} className="flex items-center gap-2 text-sm">
-                <span className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: s.color }} aria-hidden="true" />
-                <span className="font-semibold text-hq-ink">{s.name}</span>
+                <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: s.color }} aria-hidden="true" />
+                <span className="text-hq-ink">{s.name}</span>
                 <span className="ms-auto text-xs text-hq-muted numeric">{fmtInt(s.value, lang)} · {fmtNumber(s.pct, lang)}%</span>
               </li>
             ))}
           </ul>
+          <p className="w-full text-xs text-hq-muted">{t("hqTotal")} {fmtInt(total, lang)} = {fmtInt(pass, lang)} + {fmtInt(reject, lang)} · {t("hqRoundingNote")}</p>
         </div>
       )}
-    </Panel>
+    </Card>
   );
 }
 
-// ─── Order-line pipeline ────────────────────────────────────────────────────
+// ─── Green in, roasted out (paired bars) ────────────────────────────────────
 
-function Pipeline({ data, lang, t, className }: SectionProps) {
-  const { pending, inProduction, readyToDispatch } = data.pipeline;
-  const total = pending + inProduction + readyToDispatch;
-  const stages = [
-    { label: t("hqLinesAwaitingProduction"), value: pending, box: "bg-hq-neutral border-hq-control", fg: "text-hq-ink" },
-    { label: t("statusInProd"), value: inProduction, box: "bg-hq-warning-soft border-hq-warning", fg: "text-hq-warning" },
-    { label: t("hqLinesReadyToShip"), value: readyToDispatch, box: "bg-hq-primary-soft border-hq-primary", fg: "text-hq-primary" },
-  ];
+function InOut({ view, sel, onSelect, lang, t, dir, className }: {
+  view: PeriodView; sel: number | null; onSelect: (i: number) => void; lang: Lang; t: T; dir: "ltr" | "rtl"; className?: string;
+}) {
+  const data = view.series.map((p) => ({ ...p, axis: axisLabel(p) }));
+  const hasAny = view.series.some((p) => p.greenKg > 0 || p.roastedKg > 0);
+  const point = sel !== null ? view.series[sel] : null;
   return (
-    <Panel
+    <Card
       className={className}
-      title={t("hqPipelineTitle")}
-      meta={`${t("hqLive")} · ${t("hqPipelineSource")}`}
-      footer={`${fmtInt(total, lang)} ${t("hqOrderLines")} = ${stages.map((s) => fmtInt(s.value, lang)).join(" + ")} · ${t("hqPipelineFootnote")}`}
+      title={t("hqGreenVsRoasted")}
+      meta={`${t("hqUnitKg")} · ${t("hqPerDay")}`}
+      action={
+        <div className="flex items-center gap-4 text-xs text-hq-ink">
+          <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: HQ.chart2 }} aria-hidden="true" />{t("hqGreenIn")}</span>
+          <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm" style={{ background: HQ.chart1 }} aria-hidden="true" />{t("hqRoastedOut")}</span>
+        </div>
+      }
     >
-      <ol className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {stages.map((s) => (
-          <li key={s.label} className={`border rounded-lg p-4 text-center ${s.box}`}>
-            <p className={`text-[30px] leading-10 font-semibold numeric ${s.fg}`}>{fmtInt(s.value, lang)}</p>
-            <p className="text-sm leading-6 font-semibold text-hq-ink">{s.label}</p>
-          </li>
-        ))}
-      </ol>
-    </Panel>
+      {!hasAny ? (
+        <p className="py-12 text-center text-sm text-hq-muted">{t("hqNoBatchesInPeriod")}</p>
+      ) : (
+        <>
+          <div className="h-48" role="img" aria-label={t("hqInOutAria")}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={data}
+                barGap={4}
+                barCategoryGap="30%"
+                margin={{ top: 8, right: 8, left: 8, bottom: 0 }}
+                onClick={(e) => { const i = Number(e?.activeTooltipIndex); if (Number.isFinite(i)) onSelect(i); }}
+              >
+                <CartesianGrid stroke={HQ.line} vertical={false} />
+                <XAxis dataKey="axis" reversed={dir === "rtl"} tick={{ fontSize: 12, fill: HQ.ink }} axisLine={{ stroke: HQ.control }} tickLine={false} interval="preserveStartEnd" />
+                <YAxis orientation={dir === "rtl" ? "right" : "left"} domain={[0, "auto"]} tick={{ fontSize: 12, fill: HQ.muted }} axisLine={false} tickLine={false} width={44} />
+                <Tooltip
+                  cursor={{ fill: HQ.neutral }}
+                  contentStyle={{ borderRadius: 8, border: `1px solid ${HQ.line}`, fontSize: 12, fontFamily: "inherit" }}
+                  labelFormatter={(_, p) => { const d = p?.[0]?.payload as DayPoint | undefined; return d ? fmtShortDate(dayDate(d), lang) : ""; }}
+                  formatter={(v, name) => [`${fmtNumber(Number(v), lang)} ${t("kgUnit")}`, name]}
+                />
+                <Bar dataKey="greenKg" name={t("hqGreenIn")} fill={HQ.chart2} radius={[3, 3, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey="roastedKg" name={t("hqRoastedOut")} fill={HQ.chart1} radius={[3, 3, 0, 0]} isAnimationActive={false} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          {point && (
+            <Strip>
+              {fmtShortDate(dayDate(point), lang)} · {t("hqGreenIn")} {fmtNumber(point.greenKg, lang)} · {t("hqRoastedOut")} {fmtNumber(point.roastedKg, lang)} {t("kgUnit")}
+            </Strip>
+          )}
+        </>
+      )}
+    </Card>
   );
 }
 
-// ─── Stock on hand ──────────────────────────────────────────────────────────
+// ─── Quick reading of the period ────────────────────────────────────────────
 
-function StockOnHand({ data, lang, t }: SectionProps) {
-  const k = data.kpi;
+function QuickRead({ view, period, lang, t }: { view: PeriodView; period: PeriodKey; lang: Lang; t: T }) {
+  const days = view.series;
+  const roastDays = days.filter((d) => d.roastedKg > 0);
+  const best = roastDays.reduce<DayPoint | null>((b, d) => (!b || d.roastedKg > b.roastedKg ? d : b), null);
+  const sumDays = days.reduce((s, d) => s + d.roastedKg, 0);
   return (
-    <Panel title={t("hqStockTitle")} meta={`${t("hqLive")} · ${fmtTime(data.generatedAt, lang)}`}>
-      <dl className="space-y-4">
-        <div>
-          <dt className="text-sm leading-6 font-semibold text-hq-ink">{t("hqGreenStock")}</dt>
-          <dd className="flex items-baseline gap-1 numeric">
-            <span className="text-[30px] leading-10 font-semibold text-hq-ink">{fmtNumber(k.rawMaterialKg, lang)}</span>
-            <span className="text-xs text-hq-muted">{t("kgUnit")}</span>
-          </dd>
-          <dd className="text-xs leading-5 text-hq-muted">{t("hqGreenStockDef")}</dd>
-        </div>
-        <div className="border-t border-hq-line pt-4">
-          <dt className="text-sm leading-6 font-semibold text-hq-ink">{t("hqFinishedStock")}</dt>
-          <dd className="flex items-baseline gap-1 numeric">
-            <span className="text-[30px] leading-10 font-semibold text-hq-ink">{fmtNumber(k.finishedGoodsKg, lang)}</span>
-            <span className="text-xs text-hq-muted">{t("kgUnit")}</span>
-          </dd>
-          <dd className="text-xs leading-5 text-hq-muted">{t("hqFinishedStockDef")}</dd>
-          {k.finishedGoodsUnitLotsWithoutWeight > 0 && (
-            <dd className="text-xs leading-5 text-hq-warning mt-1">
-              {t("hqLotsWithoutWeight")}: {fmtInt(k.finishedGoodsUnitLotsWithoutWeight, lang)}
-            </dd>
+    <Card title={t("hqQuickRead")} meta={period === "week" ? t("hqLast7Days") : t("hqThisMonth")}>
+      {roastDays.length === 0 ? (
+        <p className="text-sm text-hq-muted">{t("hqNoBatchesInPeriod")}</p>
+      ) : (
+        <div className="space-y-4">
+          {best && (
+            <div>
+              <p className="text-sm font-bold text-hq-primary">{t("hqBestDay")}: {fmtShortDate(dayDate(best), lang)}</p>
+              <p className="text-sm text-hq-ink numeric">{fmtNumber(best.roastedKg, lang)} {t("kgUnit")} {t("hqRoastedOut")}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-sm font-bold text-hq-ink numeric">{fmtInt(roastDays.length, lang)} {t("hqOf")} {fmtInt(days.length, lang)} {t("hqDaysWithRoasting")}</p>
+            <p className="text-xs text-hq-muted">{t("hqZeroDaysNote")}</p>
+          </div>
+          {fmtNumber(sumDays, lang) === fmtNumber(view.roastedKg, lang) && (
+            <p className="text-xs text-hq-muted numeric">{t("hqDaysSumCheck")}: {fmtNumber(sumDays, lang)} {t("kgUnit")}</p>
           )}
         </div>
-        <p className="text-xs leading-5 text-hq-muted">{t("hqStockNotSummed")}</p>
-      </dl>
-    </Panel>
-  );
-}
-
-// ─── Open QC batches ────────────────────────────────────────────────────────
-
-const ROWS_SHOWN = 8;
-
-function OpenQc({ data, lang, t, canOpen }: SectionProps & { canOpen: boolean }) {
-  const rows = data.qcBatchAlerts;
-  const now = new Date(data.generatedAt);
-  return (
-    <Panel
-      flush
-      title={t("openQcBatches")}
-      meta={`${t("hqOpenQcMeta")} · ${t("hqDueSoonPolicy")} ${data.policy.qcUrgentHours} ${t("hqHours")}`}
-      actions={canOpen && <a href="/dashboard/qc" className="text-sm font-semibold text-hq-primary hover:underline">{t("hqOpenModule")} ({fmtInt(rows.length, lang)})</a>}
-      footer={rows.length > ROWS_SHOWN ? `${t("hqShowing")} ${ROWS_SHOWN} ${t("hqOf")} ${fmtInt(rows.length, lang)} · ${t("hqSortedByDeadline")}` : t("hqSortedByDeadline")}
-    >
-      {rows.length === 0 ? (
-        <p className="px-6 pb-6 text-sm text-hq-muted">{t("hqNoOpenQc")}</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-hq-neutral text-xs text-hq-ink border-y border-hq-line">
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqBatch")}</th>
-                <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqDeadline")}</th>
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqStatus")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice(0, ROWS_SHOWN).map((b) => {
-                const left = b.deadline ? hoursUntil(b.deadline, now) : null;
-                return (
-                  <tr key={b.id} className="border-b border-hq-line last:border-0">
-                    <td className="px-6 py-3">
-                      <p className="font-semibold text-hq-ink identifier text-start">{b.batchNumber}</p>
-                      <p className="text-xs text-hq-muted">{b.origin} · {t("hqVerdictsRecorded")}: {fmtInt(b.testerCount, lang)}</p>
-                    </td>
-                    <td className="px-3 py-3">
-                      {b.deadline && left ? (
-                        <>
-                          <p className="text-xs text-hq-ink">{fmtDateTime(b.deadline, lang)}</p>
-                          <p className={`text-xs ${left.overdue ? "text-hq-danger" : b.isUrgent ? "text-hq-warning" : "text-hq-muted"}`}>
-                            {left.overdue ? t("hqOverdueBy") : t("hqTimeLeft")} {fmtDuration(left.minutes, lang)}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="text-xs text-hq-muted">{t("hqNoDeadline")}</p>
-                      )}
-                    </td>
-                    <td className="px-6 py-3">
-                      <StatusBadge tone={qcTone(b)}>
-                        {b.isOverdue ? t("hqOverdue") : b.isUrgent ? t("hqDueSoon") : t("hqAwaitingDecision")}
-                      </StatusBadge>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
       )}
-    </Panel>
-  );
-}
-
-// ─── Low green-bean stock ───────────────────────────────────────────────────
-
-function LowStock({ data, lang, t, canOpen }: SectionProps & { canOpen: boolean }) {
-  const rows = data.inventoryAlerts;
-  const disp = (en: string, ar: string | null) => (lang === "ar" && ar ? ar : en);
-  return (
-    <Panel
-      flush
-      title={t("inventoryAlertsTitle")}
-      meta={`${t("hqLowStockMeta")} ${fmtInt(data.policy.lowStockKg, lang)} ${t("kgUnit")} · ${t("hqLowStockPolicy")}`}
-      actions={canOpen && <a href="/dashboard/inventory" className="text-sm font-semibold text-hq-primary hover:underline">{t("hqOpenModule")}</a>}
-      footer={rows.length > ROWS_SHOWN ? `${t("hqShowing")} ${ROWS_SHOWN} ${t("hqOf")} ${fmtInt(rows.length, lang)} · ${t("hqSortedByQty")}` : t("hqSortedByQty")}
-    >
-      {rows.length === 0 ? (
-        <p className="px-6 pb-6 text-sm text-hq-muted">{t("hqNoLowStock")}</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-hq-neutral text-xs text-hq-ink border-y border-hq-line">
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqGreenBean")}</th>
-                <th scope="col" className="text-end font-semibold px-3 py-2">{t("hqOnHand")} ({t("kgUnit")})</th>
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqStatus")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice(0, ROWS_SHOWN).map((a) => (
-                <tr key={a.id} className="border-b border-hq-line last:border-0">
-                  <td className="px-6 py-3">
-                    <p className="font-semibold text-hq-ink">{disp(a.beanType, a.beanTypeAr)}</p>
-                    <p className="text-xs text-hq-muted">{disp(a.country, a.countryAr)}</p>
-                  </td>
-                  <td className="px-3 py-3 text-end font-semibold text-hq-ink numeric">{fmtNumber(a.quantityKg, lang)}</td>
-                  <td className="px-6 py-3">
-                    <StatusBadge tone={a.quantityKg <= 0 ? "danger" : "warning"}>
-                      {a.quantityKg <= 0 ? t("hqOutOfStock") : t("hqBelowLine")}
-                    </StatusBadge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </Panel>
-  );
-}
-
-// ─── Active orders ──────────────────────────────────────────────────────────
-
-function ActiveOrders({ data, lang, t, canOpen }: SectionProps & { canOpen: boolean }) {
-  const rows = data.recentActiveOrders;
-  const disp = (en: string, ar: string | null) => (lang === "ar" && ar ? ar : en);
-  return (
-    <Panel
-      flush
-      title={t("activeOrdersTitle")}
-      meta={t("hqActiveOrdersMeta")}
-      actions={canOpen && <a href="/dashboard/orders" className="text-sm font-semibold text-hq-primary hover:underline">{t("hqOpenModule")}</a>}
-    >
-      {rows.length === 0 ? (
-        <p className="px-6 pb-6 text-sm text-hq-muted">{t("noActiveOrders")}</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-hq-neutral text-xs text-hq-ink border-y border-hq-line">
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqOrder")}</th>
-                <th scope="col" className="text-end font-semibold px-3 py-2">{t("hqQuantity")} ({t("kgUnit")})</th>
-                <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqLinesInProduction")}</th>
-                <th scope="col" className="text-start font-semibold px-3 py-2">{t("hqCreated")}</th>
-                <th scope="col" className="text-start font-semibold px-6 py-2">{t("hqStatus")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((o) => {
-                const totalKg = o.items.reduce((s, i) => s + i.quantityKg, 0);
-                const open = o.items.filter((i) => i.productionStatus !== "Completed").length;
-                return (
-                  <tr key={o.id} className="border-b border-hq-line last:border-0">
-                    <td className="px-6 py-3">
-                      <p className="font-semibold text-hq-ink"><bdi className="identifier">#{o.orderNumber}</bdi> · {disp(o.customer.name, o.customer.nameAr)}</p>
-                    </td>
-                    <td className="px-3 py-3 text-end numeric">{fmtNumber(totalKg, lang)}</td>
-                    <td className="px-3 py-3 text-xs text-hq-ink numeric">{fmtInt(open, lang)} {t("hqOf")} {fmtInt(o.items.length, lang)}</td>
-                    <td className="px-3 py-3 text-xs text-hq-muted">{fmtShortDate(o.createdAt, lang)}</td>
-                    <td className="px-6 py-3"><OrderStatusBadge status={o.status} /></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </Panel>
+    </Card>
   );
 }

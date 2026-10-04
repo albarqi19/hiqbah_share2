@@ -149,7 +149,19 @@ export default function OrdersPage() {
   }>({ quotationNumber: "", approvalStatus: "", paymentStatus: "", vatInvoiceStatus: "", notes: "", items: [] });
 
   useEffect(() => {
-    loadData();
+    // Deep links from the operations overview: ?order=<id> opens that order's card,
+    // ?new=1 opens the create form. Applied once, after the first load, so the order
+    // being opened is already on the page.
+    loadData().then(() => {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get("order");
+      if (orderId) {
+        setExpanded(orderId);
+        requestAnimationFrame(() => document.getElementById(`order-${orderId}`)?.scrollIntoView({ block: "start" }));
+      }
+      if (params.get("new") === "1" && canCreate) setShowForm(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadData() {
@@ -560,7 +572,7 @@ export default function OrdersPage() {
 
       <div className="space-y-3">
         {filtered.map((order) => (
-          <div key={order.id} data-testid={`order-card-${order.orderNumber}`} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+          <div key={order.id} id={`order-${order.id}`} data-testid={`order-card-${order.orderNumber}`} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
             <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-cream/50" onClick={() => setExpanded(expanded === order.id ? null : order.id)}>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-cream rounded-lg flex items-center justify-center">

@@ -2,42 +2,41 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  LayoutDashboard, Package, ShoppingCart, Factory, ClipboardCheck, Box,
-  Truck, History, TrendingUp, Tag, Users, LogOut, Menu, X, ChevronRight,
-  Settings, FlaskConical, Users2, ShoppingBag, Wallet, PackageCheck,
-  ClipboardList, ShieldAlert, Home,
-} from "lucide-react";
+import { LogOut, Menu, X, ShieldAlert } from "lucide-react";
 import { ROLE_LABELS, hasModuleAccess } from "@/lib/auth-shared";
 import { LanguageProvider, useI18n } from "@/lib/i18n/context";
 import type { TranslationKey } from "@/lib/i18n/translations";
-import { fmtLongDate } from "@/lib/format";
-import { BrandMark } from "@/components/ui/BrandMark";
 import { UserContext, useLogo, type User } from "./user-context";
 
-const NAV_ITEMS: { key: TranslationKey; icon: React.ElementType; href: string; module?: string }[] = [
+type NavGroup = "workspace" | "admin";
+
+// Grouped as in the Hiqbah operations design: day-to-day work first, then finance and
+// administration. Text only — the label is the link's whole accessible name.
+const NAV_ITEMS: { key: TranslationKey; href: string; module?: string; group: NavGroup }[] = [
   // Home reads the same analytics feed as the dashboard, so it carries the same module.
-  { key: "navHome",    icon: Home,            href: "/dashboard/today", module: "dashboard" },
-  { key: "dashboard",  icon: LayoutDashboard, href: "/dashboard" },
-  { key: "inventory",  icon: Package,         href: "/dashboard/inventory" },
-  { key: "purchases",  icon: ShoppingBag,     href: "/dashboard/purchases", module: "inventory" },
-  { key: "productsNav", icon: Package,        href: "/dashboard/products", module: "inventory" },
-  { key: "orders",     icon: ShoppingCart,    href: "/dashboard/orders" },
-  { key: "workstationPreparation", icon: PackageCheck, href: "/dashboard/workstation/preparation", module: "orders" },
-  { key: "production", icon: Factory,         href: "/dashboard/production" },
-  { key: "productionOrdersNav", icon: ClipboardList, href: "/dashboard/production-orders", module: "production" },
-  { key: "qc",         icon: ClipboardCheck,  href: "/dashboard/qc" },
-  { key: "packaging",  icon: Box,             href: "/dashboard/packaging" },
-  { key: "dispatch",   icon: Truck,           href: "/dashboard/dispatch" },
-  { key: "history",    icon: History,         href: "/dashboard/history" },
-  { key: "analytics",  icon: TrendingUp,      href: "/dashboard/analytics" },
-  { key: "labels",     icon: Tag,             href: "/dashboard/labels" },
-  { key: "employees",  icon: Users,           href: "/dashboard/employees" },
-  { key: "cupping",    icon: FlaskConical,    href: "/dashboard/cupping" },
-  { key: "customers",  icon: Users2,          href: "/dashboard/customers" },
-  { key: "accounting", icon: Wallet,          href: "/dashboard/accounting" },
-  { key: "settings",   icon: Settings,        href: "/dashboard/settings" },
+  { key: "navHome",    href: "/dashboard/today", module: "dashboard", group: "workspace" },
+  { key: "dashboard",  href: "/dashboard", group: "workspace" },
+  { key: "orders",     href: "/dashboard/orders", group: "workspace" },
+  { key: "workstationPreparation", href: "/dashboard/workstation/preparation", module: "orders", group: "workspace" },
+  { key: "customers",  href: "/dashboard/customers", group: "workspace" },
+  { key: "productsNav", href: "/dashboard/products", module: "inventory", group: "workspace" },
+  { key: "inventory",  href: "/dashboard/inventory", group: "workspace" },
+  { key: "purchases",  href: "/dashboard/purchases", module: "inventory", group: "workspace" },
+  { key: "production", href: "/dashboard/production", group: "workspace" },
+  { key: "productionOrdersNav", href: "/dashboard/production-orders", module: "production", group: "workspace" },
+  { key: "qc",         href: "/dashboard/qc", group: "workspace" },
+  { key: "packaging",  href: "/dashboard/packaging", group: "workspace" },
+  { key: "dispatch",   href: "/dashboard/dispatch", group: "workspace" },
+  { key: "cupping",    href: "/dashboard/cupping", group: "workspace" },
+  { key: "labels",     href: "/dashboard/labels", group: "workspace" },
+  { key: "accounting", href: "/dashboard/accounting", group: "admin" },
+  { key: "analytics",  href: "/dashboard/analytics", group: "admin" },
+  { key: "history",    href: "/dashboard/history", group: "admin" },
+  { key: "employees",  href: "/dashboard/employees", group: "admin" },
+  { key: "settings",   href: "/dashboard/settings", group: "admin" },
 ];
+
+const GROUP_LABEL: Record<NavGroup, TranslationKey> = { workspace: "navGroupWorkspace", admin: "navGroupAdmin" };
 
 function isActive(pathname: string, href: string) {
   // Compared on whole path segments, not raw prefixes: a bare startsWith makes
@@ -69,80 +68,87 @@ function SidebarNav({
     return hasModuleAccess(user.permissions, item.module ?? (item.key as string));
   });
 
+  const groups = (["workspace", "admin"] as const)
+    .map((g) => ({ g, items: filteredNav.filter((i) => i.group === g) }))
+    .filter((x) => x.items.length > 0);
+
   return (
     <aside
       id="app-sidebar"
-      className={`fixed lg:static top-0 h-[100dvh] z-[50] w-[240px] flex-shrink-0 bg-hq-neutral border-e border-hq-line text-hq-ink transform transition-transform duration-200 ease-out flex flex-col ltr:left-0 rtl:right-0 overflow-y-auto ${
+      className={`fixed lg:static top-0 h-[100dvh] z-[50] w-[240px] flex-shrink-0 bg-white border-e border-hq-line text-hq-ink transform transition-transform duration-200 ease-out flex flex-col ltr:left-0 rtl:right-0 overflow-y-auto ${
         sidebarOpen ? "translate-x-0" : "max-lg:ltr:-translate-x-full max-lg:rtl:translate-x-full"
       }`}
       style={{ WebkitOverflowScrolling: "touch" }}
     >
-      {/* Workspace */}
-      <div className="flex items-center justify-between gap-2 px-4 h-16 border-b border-hq-line flex-shrink-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <BrandMark logo={logoBase64} />
-          <div className="min-w-0">
-            <p className="text-sm leading-6 font-semibold tracking-wide">HIQBAH</p>
-            <p className="text-xs leading-5 truncate">مقهى و محمصة حقبة</p>
-          </div>
+      {/* Wordmark — the uploaded logo when there is one */}
+      <div className="flex items-start justify-between gap-2 px-6 pt-6 pb-4 flex-shrink-0">
+        <div className="min-w-0">
+          {logoBase64 ? (
+            <img src={logoBase64} alt="حقبة" className="h-10 w-auto object-contain" />
+          ) : (
+            <p className="text-[26px] leading-10 font-bold text-hq-primary">حقبة</p>
+          )}
+          <p dir="ltr" className="text-[11px] leading-4 tracking-wide text-hq-muted text-end">COFFEE ROASTERS / ERP</p>
         </div>
         <button
           type="button"
           onClick={() => setSidebarOpen(false)}
           aria-label={t("closeMenu")}
-          className="lg:hidden w-9 h-9 rounded-md flex items-center justify-center hover:bg-hq-neutral-strong"
+          className="lg:hidden w-9 h-9 rounded-md flex items-center justify-center hover:bg-hq-bg"
         >
           <X size={20} aria-hidden="true" />
         </button>
       </div>
 
-      {/* Signed-in user — opens the profile */}
-      <div className="px-4 py-3 border-b border-hq-line">
+      {/* Navigation. One <nav>, each module once, link name = the module name. */}
+      <nav aria-label={t("mainNavigation")} className="flex-1 overflow-y-auto px-4 pb-4">
+        {groups.map(({ g, items }) => (
+          <div key={g} className="pt-4 first:pt-2">
+            <p className="px-3 pb-2 text-xs leading-5 text-hq-muted">{t(GROUP_LABEL[g])}</p>
+            <ul className="space-y-0.5">
+              {items.map((item) => {
+                const active = isActive(pathname, item.href);
+                return (
+                  <li key={item.key}>
+                    <a
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setSidebarOpen(false)}
+                      className={`flex items-center px-3 h-10 rounded-md text-sm transition-colors duration-150 ${
+                        active ? "bg-hq-primary-soft text-hq-ink font-bold" : "text-hq-ink hover:bg-hq-bg"
+                      }`}
+                    >
+                      {t(item.key)}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      {/* Signed-in user and sign out */}
+      <div className="px-4 py-4 border-t border-hq-line space-y-1">
         <button
           type="button"
           onClick={() => { router.push("/dashboard/profile"); setSidebarOpen(false); }}
-          className="flex items-center gap-2 w-full text-start rounded-md p-1 -m-1 hover:bg-hq-neutral-strong transition-colors"
+          className="flex items-center gap-3 w-full text-start rounded-md px-2 py-2 hover:bg-hq-bg transition-colors"
         >
-          <span className="w-9 h-9 rounded-full bg-hq-primary-soft flex items-center justify-center flex-shrink-0">
-            <span className="text-hq-primary text-sm font-semibold">{user.name.charAt(0)}</span>
+          <span className="w-9 h-9 rounded-md bg-hq-primary-soft flex items-center justify-center flex-shrink-0">
+            <span className="text-hq-primary text-sm font-bold">{user.name.charAt(0)}</span>
           </span>
           <span className="flex-1 min-w-0">
             <span className="block text-sm leading-6 font-semibold truncate">{user.name}</span>
-            <span className="block text-xs leading-5 truncate">{ROLE_LABELS[user.role] || user.role}</span>
+            <span className="block text-xs leading-5 text-hq-muted truncate">{ROLE_LABELS[user.role] || user.role}</span>
           </span>
         </button>
-      </div>
-
-      {/* Navigation. One <nav>, each module once, link name = the module name. */}
-      <nav aria-label={t("mainNavigation")} className="flex-1 overflow-y-auto px-4 py-3 space-y-0.5">
-        {filteredNav.map((item) => {
-          const active = isActive(pathname, item.href);
-          return (
-            <a
-              key={item.key}
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-2 px-3 h-10 rounded-md text-sm font-semibold transition-colors duration-150 ${
-                active ? "bg-hq-primary text-white" : "text-hq-ink hover:bg-hq-neutral-strong"
-              }`}
-            >
-              <item.icon size={20} strokeWidth={active ? 2.25 : 1.75} aria-hidden="true" className="flex-shrink-0" />
-              <span className="flex-1 truncate">{t(item.key)}</span>
-              {active && <ChevronRight size={16} aria-hidden="true" className="opacity-80 rtl:rotate-180 flex-shrink-0" />}
-            </a>
-          );
-        })}
-      </nav>
-
-      {/* Sign out */}
-      <div className="px-4 py-3 border-t border-hq-line">
         <button
           type="button"
           onClick={onLogout}
-          className="flex items-center gap-2 px-3 h-10 rounded-md w-full text-sm font-semibold text-hq-ink hover:bg-hq-danger-soft hover:text-hq-danger transition-colors duration-150"
+          className="flex items-center gap-2 px-3 h-9 rounded-md w-full text-sm text-hq-ink hover:bg-hq-danger-soft hover:text-hq-danger transition-colors duration-150"
         >
-          <LogOut size={20} strokeWidth={1.75} aria-hidden="true" />
+          <LogOut size={16} aria-hidden="true" />
           {t("signOut")}
         </button>
       </div>
@@ -166,7 +172,7 @@ function requiredModuleFor(pathname: string): string | null {
 
 function DashboardShell({ user, children }: { user: User; children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { lang, t } = useI18n();
+  const { t } = useI18n();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -215,7 +221,7 @@ function DashboardShell({ user, children }: { user: User; children: React.ReactN
       />
 
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-16 bg-white border-b border-hq-line px-5 lg:px-8 flex items-center gap-4 z-30 flex-shrink-0">
+        <header className="h-16 bg-hq-bg px-5 lg:px-8 flex items-center gap-4 z-30 flex-shrink-0">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
@@ -228,9 +234,6 @@ function DashboardShell({ user, children }: { user: User; children: React.ReactN
           </button>
           <p className="flex-1 min-w-0 text-base leading-[26px] font-bold text-hq-ink truncate">
             {section ? t(section.key) : ""}
-          </p>
-          <p className="text-xs leading-5 text-hq-muted hidden sm:block">
-            {fmtLongDate(new Date(), lang)}
           </p>
         </header>
 
