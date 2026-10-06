@@ -1,0 +1,305 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>Operations dashboard</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Markazi+Text:wght@400;500;600;700&display=swap"><style>/* Hiqbah ERP · Direction II — "the quiet ledger".
+   Layout concept: one warm-neutral canvas holds the sidebar; the work sits on a single
+   white sheet inset from it. Inside the sheet there are no cards: hierarchy comes from a
+   Naskh display face, large light numerals, hairlines and space. */
+:root{
+  --canvas:#F4F4F0; --sheet:#FFFFFF; --subtle:#F8F8F5; --hover:#F6F6F2;
+  --line:#ECEDE7; --line-2:#E0E2DB; --ctl:#8A928C;
+  --ink:#1C2420; --ink-2:#4A544E; --muted:#646D67; --faint:#9AA19B;
+  --brand:#3D5A48; --brand-2:#7E9886; --brand-3:#B9C8BC; --brand-tint:#EBF0EA;
+  --sand:#C9AE84; --sand-2:#E4D5BC; --sand-text:#866639; --sand-tint:#F5EFE5;
+  --ember:#D9572B;
+  --warn:#8E6118; --warn-tint:#FAF1E2; --danger:#B0412E; --danger-tint:#FBECE8;
+  --info:#3F6383; --info-tint:#EBF0F5;
+  --shadow-sheet:0 0 0 1px rgb(28 36 32 / .05), 0 1px 2px rgb(28 36 32 / .04);
+  --shadow-pop:0 0 0 1px rgb(28 36 32 / .06), 0 12px 32px -8px rgb(28 36 32 / .18);
+  --page:#E9E9E3; --page-ink:#1C2420; --page-muted:#5A635D; --page-line:#D6D8D0;
+  --f-display:"Markazi Text","Noto Naskh Arabic","Amiri",serif;
+  --f-ui:"IBM Plex Sans Arabic","Noto Sans Arabic",system-ui,sans-serif;
+  --f-num:"Geist","IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"Geist Mono","IBM Plex Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --canvas:#141816; --sheet:#1A1F1C; --subtle:#1E2420; --hover:#212824;
+  --line:#272E2A; --line-2:#323A35; --ctl:#6F7972;
+  --ink:#E9ECE9; --ink-2:#C3CAC5; --muted:#9BA49E; --faint:#6F7972;
+  --brand:#9CC2A9; --brand-2:#6F927C; --brand-3:#3D5446; --brand-tint:#23302A;
+  --sand:#C9AE84; --sand-2:#5E5240; --sand-text:#D6BC92; --sand-tint:#2C271F;
+  --ember:#EC7A52; --warn:#E2B261; --warn-tint:#2F2819; --danger:#EE8F7C; --danger-tint:#352220;
+  --info:#8EB3D4; --info-tint:#1E2A35;
+  --shadow-sheet:0 0 0 1px rgb(255 255 255 / .05); --shadow-pop:0 0 0 1px rgb(255 255 255 / .08), 0 16px 40px -8px rgb(0 0 0 / .6);
+  --page:#0F1210; --page-ink:#E9ECE9; --page-muted:#9BA49E; --page-line:#2A312D;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --canvas:#141816; --sheet:#1A1F1C; --subtle:#1E2420; --hover:#212824;
+  --line:#272E2A; --line-2:#323A35; --ctl:#6F7972;
+  --ink:#E9ECE9; --ink-2:#C3CAC5; --muted:#9BA49E; --faint:#6F7972;
+  --brand:#9CC2A9; --brand-2:#6F927C; --brand-3:#3D5446; --brand-tint:#23302A;
+  --sand:#C9AE84; --sand-2:#5E5240; --sand-text:#D6BC92; --sand-tint:#2C271F;
+  --ember:#EC7A52; --warn:#E2B261; --warn-tint:#2F2819; --danger:#EE8F7C; --danger-tint:#352220;
+  --info:#8EB3D4; --info-tint:#1E2A35;
+  --shadow-sheet:0 0 0 1px rgb(255 255 255 / .05); --shadow-pop:0 0 0 1px rgb(255 255 255 / .08), 0 16px 40px -8px rgb(0 0 0 / .6);
+  --page:#0F1210; --page-ink:#E9ECE9; --page-muted:#9BA49E; --page-line:#2A312D;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--page-ink);font-family:var(--f-ui);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+
+/* ── Presentation chrome (English, LTR) ─────────────────────────────── */
+.doc{max-width:1360px;margin:0 auto;padding-inline:24px;padding-block:56px 120px}
+.doc-h{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:end;padding-bottom:40px;border-bottom:1px solid var(--page-line)}
+.kicker{font:500 12px/1 var(--f-num);letter-spacing:.14em;text-transform:uppercase;color:var(--page-muted);margin:0 0 18px}
+.doc h1{font:400 56px/1.02 var(--f-num);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.doc h1 .ar{font:600 64px/1 var(--f-display);letter-spacing:0;display:block;margin-top:10px;color:var(--brand);text-align:left}
+.doc-lede{font-size:17px;line-height:1.65;color:var(--page-muted);margin:0;max-width:60ch}
+.sec{padding-block:72px 8px}
+.sec>h2{font:500 30px/1.15 var(--f-num);letter-spacing:-.02em;margin:0 0 8px;text-wrap:balance}
+.sec>.sub{color:var(--page-muted);margin:0 0 28px;max-width:72ch;line-height:1.6}
+.num-h{font:500 12px/1 var(--f-mono);color:var(--page-muted);display:block;margin-bottom:14px;letter-spacing:.04em}
+.crit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1px solid var(--page-line)}
+.crit>div{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:18px 0;border-bottom:1px solid var(--page-line);font-size:14.5px;line-height:1.6}
+.crit b{font-weight:600}
+.crit .i{font:500 12px/1.9 var(--f-mono);color:var(--page-muted)}
+.crit .fix{grid-column:2;color:var(--page-muted)}
+.crit .fix::before{content:"→ ";color:var(--ember)}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 40px;margin-top:8px}
+.rules h4{margin:0 0 6px;font:600 15px/1.4 var(--f-ui)}
+.rules p{margin:0;color:var(--page-muted);font-size:14px;line-height:1.6}
+.spec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:40px;padding-top:32px;border-top:1px solid var(--page-line)}
+.swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.swatches div{font-size:11.5px;line-height:1.45;color:var(--page-muted)}
+.swatches i{display:block;height:52px;border-radius:8px;margin-bottom:8px;box-shadow:inset 0 0 0 1px rgb(0 0 0 / .06)}
+.swatches b{display:block;color:var(--page-ink);font-weight:600;font-size:12px}
+.typespec{display:grid;gap:14px}
+.typespec>div{display:grid;grid-template-columns:110px minmax(0,1fr);align-items:baseline;gap:16px;border-bottom:1px solid var(--page-line);padding-bottom:12px}
+.typespec small{font:500 11.5px/1.4 var(--f-mono);color:var(--page-muted)}
+.shot-h{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:0 0 6px}
+.shot-h h3{font:500 22px/1.2 var(--f-num);letter-spacing:-.01em;margin:0}
+.shot-h .ar{font:600 22px/1 var(--f-display);color:var(--brand)}
+.shot-intent{color:var(--page-muted);margin:0 0 20px;max-width:80ch;line-height:1.6;font-size:14.5px}
+.stage{position:relative;overflow:hidden;border-radius:14px;box-shadow:0 0 0 1px var(--page-line),0 30px 60px -30px rgb(28 36 32 / .35);background:var(--canvas)}
+.stage>.screen{position:absolute;top:0;left:0;transform-origin:0 0;width:1440px}
+.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:24px}
+.notes div{font-size:13.5px;line-height:1.6;color:var(--page-muted);border-top:2px solid var(--page-line);padding-top:12px}
+.notes b{display:block;color:var(--page-ink);font-weight:600;margin-bottom:2px}
+.review{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1px solid var(--page-line)}
+.review>div{padding:16px 0;border-bottom:1px solid var(--page-line);font-size:14px;line-height:1.6}
+.review .was{color:var(--page-muted)}
+.review .now{margin-top:6px}
+.review .now::before{content:"Round 2  ";font:600 11px/1 var(--f-mono);color:var(--brand);letter-spacing:.06em}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.tblw{overflow-x:auto}
+.tbl th{text-align:start;font-weight:600;font-size:12px;color:var(--page-muted);padding:10px 12px 10px 0;border-bottom:1px solid var(--page-line)}
+.tbl td{padding:12px 12px 12px 0;border-bottom:1px solid var(--page-line);vertical-align:top;line-height:1.55}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.ok{color:var(--brand);font-weight:600}.part{color:var(--warn);font-weight:600}
+@media (max-width:980px){.doc-h,.crit,.spec,.review{grid-template-columns:minmax(0,1fr)}.rules,.notes{grid-template-columns:repeat(2,minmax(0,1fr))}.doc h1{font-size:40px}.doc h1 .ar{font-size:48px}}
+@media (max-width:560px){.rules,.notes,.swatches{grid-template-columns:minmax(0,1fr)}.swatches{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ── Product UI (Arabic, RTL) ───────────────────────────────────────── */
+.screen{font-family:var(--f-ui);font-size:14px;line-height:22px;color:var(--ink);background:var(--canvas)}
+.n{font-family:var(--f-num);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.id{font-family:var(--f-mono);font-size:12.5px;letter-spacing:-.01em;direction:ltr;unicode-bidi:isolate;color:var(--muted)}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ico.s{width:16px;height:16px}
+.app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:960px}
+.side{padding:22px 14px 16px;display:flex;flex-direction:column;gap:2px}
+.wm{padding:0 10px 22px}
+.wm b{font:600 31px/.9 var(--f-display);color:var(--ink);position:relative;letter-spacing:0}
+.wm b::after{content:"";position:absolute;inset-inline-start:2px;bottom:-9px;width:14px;height:3px;border-radius:2px;background:var(--ember)}
+.wm span{display:block;font-size:11.5px;color:var(--muted);margin-top:16px}
+.ws{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;color:var(--ink-2);font-size:13px;margin-bottom:6px}
+.ws .dot{width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;display:grid;place-items:center;font:600 11px/1 var(--f-ui)}
+.ws .ico{margin-inline-start:auto;color:var(--muted)}
+.find{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:9px;color:var(--muted);font-size:13.5px;margin-bottom:12px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.kbd{margin-inline-start:auto;font:500 11px/1 var(--f-num);color:var(--muted);padding:3px 5px;border-radius:5px;box-shadow:inset 0 0 0 1px var(--line-2);direction:ltr}
+.grp{font-size:11.5px;font-weight:500;color:var(--muted);padding:16px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:9px;color:var(--ink-2);font-size:14px;transition:background-color .15s var(--ease)}
+.nav .ico{color:var(--muted)}
+.nav .c{margin-inline-start:auto;font:500 11.5px/1 var(--f-num);color:var(--muted)}
+.nav .c.hot{color:var(--sheet);background:var(--ember);border-radius:9px;padding:3px 6px}
+.nav.on{background:var(--sheet);color:var(--ink);font-weight:600;box-shadow:var(--shadow-sheet)}
+.nav.on .ico{color:var(--brand)}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 10px 0;border-top:1px solid var(--line-2);font-size:13px}
+.av{width:28px;height:28px;border-radius:50%;background:var(--brand-tint);color:var(--brand);display:grid;place-items:center;font:600 12px/1 var(--f-ui);flex:none}
+.av.s{width:22px;height:22px;font-size:11px}
+.me small{display:block;color:var(--muted);font-size:11.5px;line-height:1.3}
+.main{padding:8px 0 8px 8px;min-width:0}
+.sheet{background:var(--sheet);border-radius:14px;box-shadow:var(--shadow-sheet);min-height:944px;position:relative;overflow:hidden}
+.top{display:flex;align-items:center;gap:10px;height:52px;padding:0 28px;color:var(--muted);font-size:13px}
+.top .crumb{display:flex;align-items:center;gap:6px}
+.top .crumb b{color:var(--ink);font-weight:500}
+.top .sp{flex:1}
+.ib{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2);position:relative}
+.ib .pip{position:absolute;top:7px;inset-inline-end:7px;width:6px;height:6px;border-radius:50%;background:var(--ember);box-shadow:0 0 0 2px var(--sheet)}
+.pg{padding:20px 48px 48px}
+.ph{display:flex;align-items:flex-end;gap:24px;margin-bottom:28px}
+.ph h1{font:600 40px/1.1 var(--f-display);margin:0;letter-spacing:0}
+.ph .meta{color:var(--muted);font-size:13.5px;margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ph .meta i{width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.ph .act{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:9px;font:500 13.5px/1 var(--f-ui);color:var(--ink);background:var(--sheet);box-shadow:inset 0 0 0 1px var(--line-2);white-space:nowrap;transition:transform .12s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.p{background:var(--brand);color:#fff;box-shadow:none}
+.btn.g{box-shadow:none;color:var(--ink-2)}
+.btn.sm{height:28px;padding:0 10px;font-size:12.5px;border-radius:7px}
+.seg{display:inline-flex;padding:3px;border-radius:10px;background:var(--subtle);box-shadow:inset 0 0 0 1px var(--line)}
+.seg span{padding:5px 12px;border-radius:7px;font-size:13px;color:var(--muted)}
+.seg span.on{background:var(--sheet);color:var(--ink);font-weight:500;box-shadow:var(--shadow-sheet)}
+.lede{font:400 21px/1.55 var(--f-display);color:var(--ink-2);max-width:56ch;margin:0}
+.lede b{font-weight:600;color:var(--ink)}
+.hr{height:1px;background:var(--line);margin:36px 0}
+.bt{font:600 21px/1.2 var(--f-display);margin:0;color:var(--ink)}
+.bh{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.bh .sub{color:var(--muted);font-size:13px}
+.bh .lk{margin-inline-start:auto;font-size:13px;color:var(--brand);font-weight:500;display:flex;align-items:center;gap:4px}
+.lbl{font-size:12.5px;color:var(--muted);font-weight:500}
+.big{font:300 56px/1 var(--f-num);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.mid{font:400 28px/1.1 var(--f-num);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.unit{font:500 13px/1 var(--f-ui);color:var(--muted);margin-inline-start:6px;letter-spacing:0}
+.delta{font:500 12.5px/1 var(--f-num);display:inline-flex;align-items:center;gap:3px}
+.delta.up{color:var(--brand)}.delta.dn{color:var(--danger)}
+.metrics{display:grid;gap:0}
+.metrics>div{padding-inline-start:24px;border-inline-start:1px solid var(--line)}
+.metrics>div:first-child{padding-inline-start:0;border-inline-start:0}
+.metrics .mid{margin:8px 0 6px}
+.metrics .d{font-size:12.5px;color:var(--muted)}
+.cols{display:grid;gap:56px}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint)}
+.st.ok::before{background:var(--brand)}.st.in::before{background:var(--info)}
+.st.wa{color:var(--warn)}.st.wa::before{background:var(--warn)}
+.st.er{color:var(--danger)}.st.er::before{background:var(--danger)}
+.st.x{color:var(--muted);text-decoration:line-through}
+.flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--danger);background:var(--danger-tint);padding:2px 7px;border-radius:5px;white-space:nowrap}
+.flag.wa{color:var(--warn);background:var(--warn-tint)}
+.t{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+.t th{font-size:12.5px;font-weight:500;color:var(--muted);text-align:start;height:36px;padding:0 12px;border-bottom:1px solid var(--line-2);white-space:nowrap;background:var(--sheet)}
+.t td{height:48px;padding:0 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.t tr>*:first-child{padding-inline-start:0}.t tr>*:last-child{padding-inline-end:0}
+.t td.num,.t th.num{text-align:end;font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.t tr.on td{background:var(--brand-tint)}
+.t tr.hv td{background:var(--hover)}
+.t .who{font-weight:500;color:var(--ink)}
+.t .sm:not(.btn){font-size:12.5px;color:var(--muted)}
+.t tfoot td{border-bottom:0;color:var(--muted);font-size:13px;height:44px}
+.t.dense td{height:44px}
+.cb{width:15px;height:15px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--ctl);display:inline-block;vertical-align:middle}
+.cb.on{background:var(--brand);box-shadow:none;position:relative}
+.cb.on::after{content:"";position:absolute;inset:3px 4.5px 5px;border:solid #fff;border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:16px;font-size:14px}
+.tabs span{padding:0 0 11px;color:var(--muted);border-bottom:1.5px solid transparent;margin-bottom:-1px;display:flex;gap:7px;align-items:baseline;white-space:nowrap}
+.tabs span.on{color:var(--ink);border-color:var(--ink);font-weight:500}
+.tabs .c{font:500 12px/1 var(--f-num);color:var(--muted)}
+.tool{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.search{display:flex;align-items:center;gap:8px;height:34px;width:220px;white-space:nowrap;padding:0 11px;border-radius:9px;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--muted);font-size:13.5px}
+.chip{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:8px;font-size:13px;color:var(--ink-2);background:var(--subtle)}
+.chip b{font-weight:500;color:var(--ink)}
+.chip.add{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.tool .sp{flex:1}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--brand)}
+.drawer{position:absolute;top:0;bottom:0;inset-inline-end:0;width:440px;background:var(--sheet);box-shadow:var(--shadow-pop);border-start-start-radius:0;display:flex;flex-direction:column}
+.pal{position:absolute;inset-inline-start:50%;top:108px;transform:translateX(50%);width:620px;background:var(--sheet);border-radius:14px;box-shadow:var(--shadow-pop);overflow:hidden}
+.scrim{position:absolute;inset:0;background:rgb(28 36 32 / .14);backdrop-filter:blur(1.5px)}
+.tl{position:relative}
+.tl>div{position:relative;padding:0 0 22px;padding-inline-start:28px}
+.tl>div::before{content:"";position:absolute;inset-inline-start:7px;top:22px;bottom:0;width:1px;background:var(--line-2)}
+.tl>div:last-child::before{display:none}
+.tl .m{position:absolute;inset-inline-start:2px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--sheet);box-shadow:inset 0 0 0 1.5px var(--ctl)}
+.tl .m.b{background:var(--brand);box-shadow:none}
+.tl .when{font-size:12.5px;color:var(--muted)}
+.diff{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2);background:var(--subtle);border-radius:6px;padding:2px 8px;margin-top:6px}
+.props{display:grid;grid-template-columns:118px minmax(0,1fr);gap:11px 12px;font-size:13.5px;margin:0}
+.props dt{color:var(--muted)}.props dd{margin:0;color:var(--ink)}
+.track{display:flex;align-items:flex-start}
+.track>div{flex:1;position:relative;padding-top:18px}
+.track>div::before{content:"";position:absolute;top:5px;inset-inline:0;height:2px;background:var(--line-2)}
+.track>div.done::before{background:var(--brand)}
+.track>div.cur::before{background:linear-gradient(to left,var(--brand) 0 66%,var(--line-2) 66%)}
+.track>div::after{content:"";position:absolute;top:0;inset-inline-start:0;width:12px;height:12px;border-radius:50%;background:var(--sheet);box-shadow:inset 0 0 0 2px var(--line-2)}
+.track>div.done::after{background:var(--brand);box-shadow:none}
+.track>div.cur::after{background:var(--sheet);box-shadow:inset 0 0 0 3px var(--brand),0 0 0 4px var(--brand-tint)}
+.track b{display:block;font-weight:600;font-size:14px;margin-top:4px}
+.track small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.ann{position:absolute;font:500 11px/1.3 var(--f-num);color:var(--ember);letter-spacing:.02em;direction:ltr}
+svg text{font-family:var(--f-num);fill:var(--muted);font-size:11.5px}
+svg .ar{font-family:var(--f-ui)}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) 404px;min-height:892px}
+.split>.pane-d{border-inline-start:1px solid var(--line);display:flex;flex-direction:column;background:var(--sheet)}
+ body{background:var(--canvas)} .screen{width:1440px}</style></head><body><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>التشغيل</span> <span style="color:var(--faint)">/</span> <b>لوحة التشغيل</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph"><div><h1>اليوم</h1><div class="meta"><span>الثلاثاء 6 أكتوبر 2026</span><i></i><span>الخبر الشمالية</span><i></i><span>آخر تحديث 10:42</span></div></div>
+    <div class="act"><span class="btn"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>جدول الأسبوع</span><span class="btn p"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>طلب جديد</span></div></div>
+  <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:var(--subtle);margin-bottom:36px">
+    <span style="width:8px;height:8px;border-radius:50%;background:var(--ember);flex:none"></span>
+    <span style="font-size:14.5px"><b style="font-weight:600">أولوية اليوم:</b> إثيوبيا هامبيلا تكفي 3 أيام، وأقرب توريد بعد 5 أيام. خلطة النخبة تعتمد عليها.</span>
+    <span class="btn sm" style="margin-inline-start:auto">راجع خطة الشراء</span></div>
+  <div class="metrics" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:40px">
+    <div><div class="lbl">مبيعات اليوم · دون الضريبة</div><div class="mid n" style="font-size:34px">8,640<span class="unit">ر.س</span></div><div class="d">12 طلبًا · <span class="delta up">▲ 6%</span> عن الثلاثاء الماضي</div></div>
+    <div><div class="lbl">مُحمّص اليوم</div><div class="mid n" style="font-size:34px">61.2<span class="unit">كغ</span></div><div class="d">3 من 6 دفعات · الفاقد 15.0%</div></div>
+    <div><div class="lbl">تحصيل مستحق اليوم</div><div class="mid n" style="font-size:34px">12,400<span class="unit">ر.س</span></div><div class="d">3 فواتير · <span style="color:var(--danger)">1 متأخرة</span></div></div>
+  </div>
+  <div class="bh"><h2 class="bt">مسار الطلبات</h2><span class="sub">19 طلبًا مفتوحًا</span></div>
+  <div style="display:flex;margin-bottom:44px;border-block:1px solid var(--line);padding-block:8px"><div style="flex:1;padding:16px 20px 18px;">
+<div class="mid n" style="font-size:30px;">1</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">بانتظار الاعتماد</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">3</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">قيد التحميص</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);background:var(--warn-tint);border-radius:10px;">
+<div class="mid n" style="font-size:30px;color:var(--warn)">3</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">بانتظار الجودة</div>
+<div style="font-size:12px;color:var(--warn);margin-top:2px">أطول انتظار 19 ساعة</div></div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">2</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">قيد التعبئة</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">4</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">جاهز للشحن</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">6</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">سُلّم اليوم</div>
+</div></div>
+  <div class="bh"><h2 class="bt">المحمصة اليوم</h2><span class="sub">6 دفعات · 3 مكتملة · الدفعة الرابعة جارية</span><a class="lk">جدول الإنتاج <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+  <div style="position:relative;padding-top:4px">
+<div style="display:grid;grid-template-columns:120px minmax(0,1fr);row-gap:10px;align-items:center">
+ <div style="font-size:13px;font-weight:500">Giesen W30<div style="font-size:11.5px;color:var(--muted);font-weight:400">محمصة الإنتاج</div></div><div style="position:relative;height:56px;background:var(--subtle);border-radius:9px"><div style="position:absolute;top:6px;bottom:6px;right:8.33%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">يرغاتشيفي<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:19.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:30.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:40.83%;width:calc(12.50% - 4px);border-radius:7px;background:repeating-linear-gradient(135deg,transparent 0 5px,var(--line) 5px 6px);color:var(--muted);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">فحص وتنظيف المدخنة</div><div style="position:absolute;top:6px;bottom:6px;right:55.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand);color:#fff;font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.85'>جارية</span></div><div style="position:absolute;top:6px;bottom:6px;right:66.67%;width:calc(8.33% - 4px);border-radius:7px;background:var(--sheet);color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">هويلا<br><span style='opacity:.75'>11:00</span></div><div style="position:absolute;top:6px;bottom:6px;right:77.83%;width:calc(8.33% - 4px);border-radius:7px;background:var(--sheet);color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">سيرادو<br><span style='opacity:.75'>11:40</span></div></div>
+ <div style="font-size:13px;font-weight:500">Ikawa Pro<div style="font-size:11.5px;color:var(--muted);font-weight:400">عيّنات وتذوق</div></div><div style="position:relative;height:56px;background:var(--subtle);border-radius:9px"><div style="position:absolute;top:6px;bottom:6px;right:33.33%;width:calc(12.50% - 4px);border-radius:7px;background:var(--sand-tint);color:var(--sand-text);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">عيّنات عملاء · 6<br><span style='opacity:.8'>تمت</span></div><div style="position:absolute;top:6px;bottom:6px;right:75.00%;width:calc(16.67% - 4px);border-radius:7px;background:var(--sand-tint);color:var(--sand-text);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">جلسة تذوق · 3 دفعات<br><span style='opacity:.8'>سلمان الشهري</span></div></div>
+ <div></div><div style="position:relative;height:16px;font:11.5px/16px var(--f-num);color:var(--muted)"><span style="position:absolute;right:0.00%;transform:translateX(50%);">7:00</span><span style="position:absolute;right:16.67%;transform:translateX(50%);">8:00</span><span style="position:absolute;right:33.33%;transform:translateX(50%);">9:00</span><span style="position:absolute;right:50.00%;transform:translateX(50%);">10:00</span><span style="position:absolute;right:66.67%;transform:translateX(50%);">11:00</span><span style="position:absolute;right:83.33%;transform:translateX(50%);">12:00</span><span style="position:absolute;right:100.00%;transform:translateX(50%);">13:00</span></div>
+</div>
+<div style="position:absolute;top:0;bottom:22px;right:calc(120px + (100% - 120px) * 0.6167);width:1.5px;background:var(--ember)"><span style="position:absolute;top:-16px;transform:translateX(50%);right:0;font:600 11px/1 var(--f-num);color:var(--ember);white-space:nowrap">10:42</span></div>
+</div>
+  <div class="hr" style="margin:40px 0 36px"></div>
+  <div class="cols" style="grid-template-columns:7fr 5fr;gap:56px">
+    <div><div class="bh"><h2 class="bt">تحتاج إجراء</h2><span class="sub">حسب موعد التسليم</span><a class="lk">كل الطلبات <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+      <table class="t"><thead><tr><th>الطلب</th><th>العميل</th><th class="num">كغ</th><th class="num">ر.س</th><th>التسليم</th><th>الحالة</th><th></th></tr></thead><tbody><tr><td class="id" style="width:64px">#1048</td><td class="who">مقهى رواف</td><td class="num">50</td><td class="num">4,200</td><td class="sm">اليوم 14:00</td><td><span class="st ok">جاهز للشحن</span></td><td style="text-align:end"><span class="btn sm">تأكيد الشحن</span></td></tr><tr><td class="id" style="width:64px">#1047</td><td class="who">مقهى مدار</td><td class="num">30</td><td class="num">2,700</td><td class="sm">اليوم 16:00</td><td><span class="st ok">جاهز للشحن</span></td><td style="text-align:end"><span class="btn sm">تأكيد الشحن</span></td></tr><tr><td class="id" style="width:64px">#1046</td><td class="who">مقهى أثر</td><td class="num">40</td><td class="num">3,600</td><td class="sm">غدًا</td><td><span class="st in">قيد التحميص</span></td><td style="text-align:end"><span class="btn sm">فتح</span></td></tr><tr><td class="id" style="width:64px">#1042</td><td class="who">محمصة النخبة</td><td class="num">60</td><td class="num">31,250</td><td class="sm">أمس</td><td><span class="st er">متأخر · قيد التجهيز</span></td><td style="text-align:end"><span class="btn sm">فتح</span></td></tr><tr><td class="id" style="width:64px">#1044</td><td class="who">مقهى مسار</td><td class="num">20</td><td class="num">1,800</td><td class="sm">1 أكتوبر</td><td><span class="st wa">بانتظار الاعتماد</span></td><td style="text-align:end"><span class="btn sm">مراجعة</span></td></tr></tbody></table></div>
+    <div><div class="bh"><h2 class="bt">استمرارية البن الأخضر</h2><span class="sub">أيام التغطية مقابل مدة التوريد</span></div>
+      <div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">إثيوبيا هامبيلا</span><span class="n" style="color:var(--ink-2);text-align:end">18 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:8.6%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:14.3%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">3</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">اليمن حراز</span><span class="n" style="color:var(--ink-2);text-align:end">8 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:11.4%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:34.3%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">4</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">كولومبيا أليغرو</span><span class="n" style="color:var(--ink-2);text-align:end">31 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:17.1%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:20.0%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">6</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">البرازيل موجيانا</span><span class="n" style="color:var(--ink-2);text-align:end">42 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:22.9%;background:var(--warn);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:17.1%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--warn);font-weight:500"><span class="n">8</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">كولومبيا هويلا</span><span class="n" style="color:var(--ink-2);text-align:end">350 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:88.6%;background:var(--brand);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:20.0%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--ink-2)"><span class="n">31</span> يومًا</span></div>
+      <div style="display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px"><span><i style="display:inline-block;width:1.5px;height:12px;background:var(--ink);opacity:.5;vertical-align:middle;margin-inline-end:6px"></i>مدة توريد المورد</span><span>المقياس حتى 35 يومًا</span></div></div>
+  </div>
+</div>
+  
+</div></div>
+</div></div></body></html>

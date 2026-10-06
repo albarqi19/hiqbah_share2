@@ -1,0 +1,31 @@
+<section class="sec" id="review"><span class="num-h">09</span><h2>Self-review: what still felt generic, and what changed</h2>
+<p class="sub">Each screen was rendered at 1440px and inspected after the first build. These are the faults found and the changes made in round two. All of them are visible in the screens above.</p>
+<div class="review">
+  <div><b>Exec chart read as decline.</b><div class="was">The daily line was jagged (weekend dips) and, with time running right to left, a rising month read as a fall to anyone used to Latin charts. It also ran past the page gutter.</div><div class="now">Cumulative month-to-date against the same days of August, so the gap is the story. Quantitative charts now run left to right, as Saudi banking and market apps do; schedules and process tracks stay right to left. Width fitted to the content column.</div></div>
+  <div><b>The roaster track was a toy.</b><div class="was">Squeezed into a third of the page, its labels clipped to “خلط”, and the batches were an hour long on a W15, which roasts 15&nbsp;kg, not 24.</div><div class="now">It is now a full-width band and the signature of the operations page: a W30, roughly 30-minute cycles on a 07:00–13:00 track, a hatched maintenance slot, and the live 10:42 line. Day figures were corrected to match three finished batches (61.2&nbsp;kg).</div></div>
+  <div><b>The orders table hid under its own drawer.</b><div class="was">An overlay drawer covered the payment column, and filter chips wrapped onto two lines.</div><div class="now">A split view: the list stays fully visible and drops its secondary columns (quantity, city, owner) while the preview is open. A note says the columns come back on close. Chips and search no longer wrap.</div></div>
+  <div><b>Two primary buttons per row.</b><div class="was">“تأكيد الشحن” rendered as a filled button in every ready row, and a class clash greyed its label.</div><div class="now">Row actions are all secondary. The page header keeps the only primary action.</div></div>
+  <div><b>Brand noise in the chrome.</b><div class="was">A floating Latin “ERP” label, a bell with an ember dot that duplicated the inbox count, and an avatar whose “إ” read as “!”.</div><div class="now">The wordmark plus an Arabic descriptor; the bell is gone because the inbox is the notification centre; the avatar uses two initials (إع).</div></div>
+  <div><b>Bidi slips.</b><div class="was">Week ranges in the bar chart rendered as “29–22”, “1 × 750 غ” reordered, and the PO number aligned to the wrong edge above its title.</div><div class="now">Ranges and quantities are LTR-isolated, and IDs are inline isolates rather than block-level LTR.</div></div>
+</div>
+
+<h2 style="font:500 24px/1.2 var(--f-num);margin:56px 0 8px">Checked against the references</h2>
+<div class="tblw"><table class="tbl">
+<thead><tr><th>Reference</th><th>What it asked for</th><th>Where it shows</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Mobbin findings</td><td>Saved views with counts, readable filter chips, a summary footer, a drawer or side panel that keeps context, a command palette, an actionable inbox, activity diffs, a process stepper, stated comparison periods</td><td>Orders (views, chips, footer, split preview), shell (palette, inbox), CRM (diff in timeline), production (track), exec (“compared to the same days of August”)</td><td class="ok">Met</td></tr>
+<tr><td>Figma exploration</td><td>Light ground, sage and sand, large Arabic title, unboxed figures, a single priority line, a calm table, honest-data notes</td><td>All six screens; the ops page keeps the Figma priority line and three day figures</td><td class="ok">Kept and extended</td></tr>
+<tr><td>Design skill v1.0</td><td>Arabic RTL, Latin digits, LTR-isolated IDs, separate fulfilment and payment, “overdue” as a flag, no cards around every group, contrast ≥4.5:1</td><td>Throughout. Muted text is 5.35:1 on white</td><td class="ok">Met</td></tr>
+<tr><td>Design skill: font</td><td>Cairo</td><td>Replaced by Markazi Text (display) and IBM Plex Sans Arabic (UI)</td><td class="part">Deviation, needs your sign-off</td></tr>
+<tr><td>Brand guideline PDF</td><td>Official logo, colours and type</td><td>Not read. The file is on your PC (<code>C:\Users\mtmbk\Downloads</code>), outside this cloud session, and not in Drive. Brand cues came from the Figma wordmark and the repo's <code>logo.svg</code> (Naskh ح, ember dash)</td><td class="part">Unverified</td></tr>
+<tr><td>Emil Kowalski / Impeccable / Taste skills</td><td>Restrained motion, no nested cards, tinted neutrals, no default fonts or purple gradients, deliberate composition</td><td>Not installed in this session, so they were applied from their published principles: ease-out 120–220ms, press scale .97, two surfaces, green-tinted neutrals, a non-default type pairing</td><td class="part">Applied from memory</td></tr>
+</tbody></table></div>
+
+<h2 style="font:500 24px/1.2 var(--f-num);margin:56px 0 8px">Still weak, honestly</h2>
+<div class="review">
+  <div><b>The sidebar is conventional.</b><div class="was">Seventeen items with icons is the Linear/Attio pattern. It is calm, but not distinctive.</div><div class="now" style="color:var(--page-muted)">Next step: role-scoped navigation, so a roaster sees about 6 items and the owner sees everything, plus pinned views.</div></div>
+  <div><b>The paired cash bars are generic.</b><div class="was">They are honest and readable, but any SaaS product could have drawn them.</div><div class="now" style="color:var(--page-muted)">Candidate: a cash-gap view that shows days of sales not yet collected per week, which ties back to the 11-day lag in the lede.</div></div>
+  <div><b>Only desktop at 1440px.</b><div class="was">Tablet (the floor) and phone (reps, approvals) are not drawn in this direction yet.</div><div class="now" style="color:var(--page-muted)">The production page and the ops roaster band should be drawn next at 1024px with touch density.</div></div>
+  <div><b>Dark mode is only defined.</b><div class="was">Tokens exist for dark, but no screen has been reviewed in it.</div><div class="now" style="color:var(--page-muted)">Light ships first; dark needs its own review pass.</div></div>
+</div>
+</section>

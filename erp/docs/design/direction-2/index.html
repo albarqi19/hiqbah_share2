@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hiqbah ERP Direction Two</title>
+<meta name="description" content="A second, more restrained design direction for the Hiqbah ERP: shell, dashboards, orders, CRM and production, in Arabic RTL.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Markazi+Text:wght@400;500;600;700&display=swap">
+<style>/* Hiqbah ERP · Direction II — "the quiet ledger".
+   Layout concept: one warm-neutral canvas holds the sidebar; the work sits on a single
+   white sheet inset from it. Inside the sheet there are no cards: hierarchy comes from a
+   Naskh display face, large light numerals, hairlines and space. */
+:root{
+  --canvas:#F4F4F0; --sheet:#FFFFFF; --subtle:#F8F8F5; --hover:#F6F6F2;
+  --line:#ECEDE7; --line-2:#E0E2DB; --ctl:#8A928C;
+  --ink:#1C2420; --ink-2:#4A544E; --muted:#646D67; --faint:#9AA19B;
+  --brand:#3D5A48; --brand-2:#7E9886; --brand-3:#B9C8BC; --brand-tint:#EBF0EA;
+  --sand:#C9AE84; --sand-2:#E4D5BC; --sand-text:#866639; --sand-tint:#F5EFE5;
+  --ember:#D9572B;
+  --warn:#8E6118; --warn-tint:#FAF1E2; --danger:#B0412E; --danger-tint:#FBECE8;
+  --info:#3F6383; --info-tint:#EBF0F5;
+  --shadow-sheet:0 0 0 1px rgb(28 36 32 / .05), 0 1px 2px rgb(28 36 32 / .04);
+  --shadow-pop:0 0 0 1px rgb(28 36 32 / .06), 0 12px 32px -8px rgb(28 36 32 / .18);
+  --page:#E9E9E3; --page-ink:#1C2420; --page-muted:#5A635D; --page-line:#D6D8D0;
+  --f-display:"Markazi Text","Noto Naskh Arabic","Amiri",serif;
+  --f-ui:"IBM Plex Sans Arabic","Noto Sans Arabic",system-ui,sans-serif;
+  --f-num:"Geist","IBM Plex Sans",system-ui,sans-serif;
+  --f-mono:"Geist Mono","IBM Plex Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --canvas:#141816; --sheet:#1A1F1C; --subtle:#1E2420; --hover:#212824;
+  --line:#272E2A; --line-2:#323A35; --ctl:#6F7972;
+  --ink:#E9ECE9; --ink-2:#C3CAC5; --muted:#9BA49E; --faint:#6F7972;
+  --brand:#9CC2A9; --brand-2:#6F927C; --brand-3:#3D5446; --brand-tint:#23302A;
+  --sand:#C9AE84; --sand-2:#5E5240; --sand-text:#D6BC92; --sand-tint:#2C271F;
+  --ember:#EC7A52; --warn:#E2B261; --warn-tint:#2F2819; --danger:#EE8F7C; --danger-tint:#352220;
+  --info:#8EB3D4; --info-tint:#1E2A35;
+  --shadow-sheet:0 0 0 1px rgb(255 255 255 / .05); --shadow-pop:0 0 0 1px rgb(255 255 255 / .08), 0 16px 40px -8px rgb(0 0 0 / .6);
+  --page:#0F1210; --page-ink:#E9ECE9; --page-muted:#9BA49E; --page-line:#2A312D;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --canvas:#141816; --sheet:#1A1F1C; --subtle:#1E2420; --hover:#212824;
+  --line:#272E2A; --line-2:#323A35; --ctl:#6F7972;
+  --ink:#E9ECE9; --ink-2:#C3CAC5; --muted:#9BA49E; --faint:#6F7972;
+  --brand:#9CC2A9; --brand-2:#6F927C; --brand-3:#3D5446; --brand-tint:#23302A;
+  --sand:#C9AE84; --sand-2:#5E5240; --sand-text:#D6BC92; --sand-tint:#2C271F;
+  --ember:#EC7A52; --warn:#E2B261; --warn-tint:#2F2819; --danger:#EE8F7C; --danger-tint:#352220;
+  --info:#8EB3D4; --info-tint:#1E2A35;
+  --shadow-sheet:0 0 0 1px rgb(255 255 255 / .05); --shadow-pop:0 0 0 1px rgb(255 255 255 / .08), 0 16px 40px -8px rgb(0 0 0 / .6);
+  --page:#0F1210; --page-ink:#E9ECE9; --page-muted:#9BA49E; --page-line:#2A312D;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--page-ink);font-family:var(--f-ui);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+
+/* ── Presentation chrome (English, LTR) ─────────────────────────────── */
+.doc{max-width:1360px;margin:0 auto;padding-inline:24px;padding-block:56px 120px}
+.doc-h{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:end;padding-bottom:40px;border-bottom:1px solid var(--page-line)}
+.kicker{font:500 12px/1 var(--f-num);letter-spacing:.14em;text-transform:uppercase;color:var(--page-muted);margin:0 0 18px}
+.doc h1{font:400 56px/1.02 var(--f-num);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.doc h1 .ar{font:600 64px/1 var(--f-display);letter-spacing:0;display:block;margin-top:10px;color:var(--brand);text-align:left}
+.doc-lede{font-size:17px;line-height:1.65;color:var(--page-muted);margin:0;max-width:60ch}
+.sec{padding-block:72px 8px}
+.sec>h2{font:500 30px/1.15 var(--f-num);letter-spacing:-.02em;margin:0 0 8px;text-wrap:balance}
+.sec>.sub{color:var(--page-muted);margin:0 0 28px;max-width:72ch;line-height:1.6}
+.num-h{font:500 12px/1 var(--f-mono);color:var(--page-muted);display:block;margin-bottom:14px;letter-spacing:.04em}
+.crit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1px solid var(--page-line)}
+.crit>div{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:18px 0;border-bottom:1px solid var(--page-line);font-size:14.5px;line-height:1.6}
+.crit b{font-weight:600}
+.crit .i{font:500 12px/1.9 var(--f-mono);color:var(--page-muted)}
+.crit .fix{grid-column:2;color:var(--page-muted)}
+.crit .fix::before{content:"→ ";color:var(--ember)}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 40px;margin-top:8px}
+.rules h4{margin:0 0 6px;font:600 15px/1.4 var(--f-ui)}
+.rules p{margin:0;color:var(--page-muted);font-size:14px;line-height:1.6}
+.spec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:40px;padding-top:32px;border-top:1px solid var(--page-line)}
+.swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.swatches div{font-size:11.5px;line-height:1.45;color:var(--page-muted)}
+.swatches i{display:block;height:52px;border-radius:8px;margin-bottom:8px;box-shadow:inset 0 0 0 1px rgb(0 0 0 / .06)}
+.swatches b{display:block;color:var(--page-ink);font-weight:600;font-size:12px}
+.typespec{display:grid;gap:14px}
+.typespec>div{display:grid;grid-template-columns:110px minmax(0,1fr);align-items:baseline;gap:16px;border-bottom:1px solid var(--page-line);padding-bottom:12px}
+.typespec small{font:500 11.5px/1.4 var(--f-mono);color:var(--page-muted)}
+.shot-h{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin:0 0 6px}
+.shot-h h3{font:500 22px/1.2 var(--f-num);letter-spacing:-.01em;margin:0}
+.shot-h .ar{font:600 22px/1 var(--f-display);color:var(--brand)}
+.shot-intent{color:var(--page-muted);margin:0 0 20px;max-width:80ch;line-height:1.6;font-size:14.5px}
+.stage{position:relative;overflow:hidden;border-radius:14px;box-shadow:0 0 0 1px var(--page-line),0 30px 60px -30px rgb(28 36 32 / .35);background:var(--canvas)}
+.stage>.screen{position:absolute;top:0;left:0;transform-origin:0 0;width:1440px}
+.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:24px}
+.notes div{font-size:13.5px;line-height:1.6;color:var(--page-muted);border-top:2px solid var(--page-line);padding-top:12px}
+.notes b{display:block;color:var(--page-ink);font-weight:600;margin-bottom:2px}
+.review{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1px solid var(--page-line)}
+.review>div{padding:16px 0;border-bottom:1px solid var(--page-line);font-size:14px;line-height:1.6}
+.review .was{color:var(--page-muted)}
+.review .now{margin-top:6px}
+.review .now::before{content:"Round 2  ";font:600 11px/1 var(--f-mono);color:var(--brand);letter-spacing:.06em}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.tblw{overflow-x:auto}
+.tbl th{text-align:start;font-weight:600;font-size:12px;color:var(--page-muted);padding:10px 12px 10px 0;border-bottom:1px solid var(--page-line)}
+.tbl td{padding:12px 12px 12px 0;border-bottom:1px solid var(--page-line);vertical-align:top;line-height:1.55}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.ok{color:var(--brand);font-weight:600}.part{color:var(--warn);font-weight:600}
+@media (max-width:980px){.doc-h,.crit,.spec,.review{grid-template-columns:minmax(0,1fr)}.rules,.notes{grid-template-columns:repeat(2,minmax(0,1fr))}.doc h1{font-size:40px}.doc h1 .ar{font-size:48px}}
+@media (max-width:560px){.rules,.notes,.swatches{grid-template-columns:minmax(0,1fr)}.swatches{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ── Product UI (Arabic, RTL) ───────────────────────────────────────── */
+.screen{font-family:var(--f-ui);font-size:14px;line-height:22px;color:var(--ink);background:var(--canvas)}
+.n{font-family:var(--f-num);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.id{font-family:var(--f-mono);font-size:12.5px;letter-spacing:-.01em;direction:ltr;unicode-bidi:isolate;color:var(--muted)}
+.ico{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ico.s{width:16px;height:16px}
+.app{display:grid;grid-template-columns:244px minmax(0,1fr);min-height:960px}
+.side{padding:22px 14px 16px;display:flex;flex-direction:column;gap:2px}
+.wm{padding:0 10px 22px}
+.wm b{font:600 31px/.9 var(--f-display);color:var(--ink);position:relative;letter-spacing:0}
+.wm b::after{content:"";position:absolute;inset-inline-start:2px;bottom:-9px;width:14px;height:3px;border-radius:2px;background:var(--ember)}
+.wm span{display:block;font-size:11.5px;color:var(--muted);margin-top:16px}
+.ws{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;color:var(--ink-2);font-size:13px;margin-bottom:6px}
+.ws .dot{width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;display:grid;place-items:center;font:600 11px/1 var(--f-ui)}
+.ws .ico{margin-inline-start:auto;color:var(--muted)}
+.find{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:9px;color:var(--muted);font-size:13.5px;margin-bottom:12px;box-shadow:inset 0 0 0 1px var(--line-2)}
+.kbd{margin-inline-start:auto;font:500 11px/1 var(--f-num);color:var(--muted);padding:3px 5px;border-radius:5px;box-shadow:inset 0 0 0 1px var(--line-2);direction:ltr}
+.grp{font-size:11.5px;font-weight:500;color:var(--muted);padding:16px 10px 6px}
+.nav{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:9px;color:var(--ink-2);font-size:14px;transition:background-color .15s var(--ease)}
+.nav .ico{color:var(--muted)}
+.nav .c{margin-inline-start:auto;font:500 11.5px/1 var(--f-num);color:var(--muted)}
+.nav .c.hot{color:var(--sheet);background:var(--ember);border-radius:9px;padding:3px 6px}
+.nav.on{background:var(--sheet);color:var(--ink);font-weight:600;box-shadow:var(--shadow-sheet)}
+.nav.on .ico{color:var(--brand)}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 10px 0;border-top:1px solid var(--line-2);font-size:13px}
+.av{width:28px;height:28px;border-radius:50%;background:var(--brand-tint);color:var(--brand);display:grid;place-items:center;font:600 12px/1 var(--f-ui);flex:none}
+.av.s{width:22px;height:22px;font-size:11px}
+.me small{display:block;color:var(--muted);font-size:11.5px;line-height:1.3}
+.main{padding:8px 0 8px 8px;min-width:0}
+.sheet{background:var(--sheet);border-radius:14px;box-shadow:var(--shadow-sheet);min-height:944px;position:relative;overflow:hidden}
+.top{display:flex;align-items:center;gap:10px;height:52px;padding:0 28px;color:var(--muted);font-size:13px}
+.top .crumb{display:flex;align-items:center;gap:6px}
+.top .crumb b{color:var(--ink);font-weight:500}
+.top .sp{flex:1}
+.ib{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2);position:relative}
+.ib .pip{position:absolute;top:7px;inset-inline-end:7px;width:6px;height:6px;border-radius:50%;background:var(--ember);box-shadow:0 0 0 2px var(--sheet)}
+.pg{padding:20px 48px 48px}
+.ph{display:flex;align-items:flex-end;gap:24px;margin-bottom:28px}
+.ph h1{font:600 40px/1.1 var(--f-display);margin:0;letter-spacing:0}
+.ph .meta{color:var(--muted);font-size:13.5px;margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ph .meta i{width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.ph .act{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:9px;font:500 13.5px/1 var(--f-ui);color:var(--ink);background:var(--sheet);box-shadow:inset 0 0 0 1px var(--line-2);white-space:nowrap;transition:transform .12s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.p{background:var(--brand);color:#fff;box-shadow:none}
+.btn.g{box-shadow:none;color:var(--ink-2)}
+.btn.sm{height:28px;padding:0 10px;font-size:12.5px;border-radius:7px}
+.seg{display:inline-flex;padding:3px;border-radius:10px;background:var(--subtle);box-shadow:inset 0 0 0 1px var(--line)}
+.seg span{padding:5px 12px;border-radius:7px;font-size:13px;color:var(--muted)}
+.seg span.on{background:var(--sheet);color:var(--ink);font-weight:500;box-shadow:var(--shadow-sheet)}
+.lede{font:400 21px/1.55 var(--f-display);color:var(--ink-2);max-width:56ch;margin:0}
+.lede b{font-weight:600;color:var(--ink)}
+.hr{height:1px;background:var(--line);margin:36px 0}
+.bt{font:600 21px/1.2 var(--f-display);margin:0;color:var(--ink)}
+.bh{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.bh .sub{color:var(--muted);font-size:13px}
+.bh .lk{margin-inline-start:auto;font-size:13px;color:var(--brand);font-weight:500;display:flex;align-items:center;gap:4px}
+.lbl{font-size:12.5px;color:var(--muted);font-weight:500}
+.big{font:300 56px/1 var(--f-num);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.mid{font:400 28px/1.1 var(--f-num);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.unit{font:500 13px/1 var(--f-ui);color:var(--muted);margin-inline-start:6px;letter-spacing:0}
+.delta{font:500 12.5px/1 var(--f-num);display:inline-flex;align-items:center;gap:3px}
+.delta.up{color:var(--brand)}.delta.dn{color:var(--danger)}
+.metrics{display:grid;gap:0}
+.metrics>div{padding-inline-start:24px;border-inline-start:1px solid var(--line)}
+.metrics>div:first-child{padding-inline-start:0;border-inline-start:0}
+.metrics .mid{margin:8px 0 6px}
+.metrics .d{font-size:12.5px;color:var(--muted)}
+.cols{display:grid;gap:56px}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint)}
+.st.ok::before{background:var(--brand)}.st.in::before{background:var(--info)}
+.st.wa{color:var(--warn)}.st.wa::before{background:var(--warn)}
+.st.er{color:var(--danger)}.st.er::before{background:var(--danger)}
+.st.x{color:var(--muted);text-decoration:line-through}
+.flag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--danger);background:var(--danger-tint);padding:2px 7px;border-radius:5px;white-space:nowrap}
+.flag.wa{color:var(--warn);background:var(--warn-tint)}
+.t{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+.t th{font-size:12.5px;font-weight:500;color:var(--muted);text-align:start;height:36px;padding:0 12px;border-bottom:1px solid var(--line-2);white-space:nowrap;background:var(--sheet)}
+.t td{height:48px;padding:0 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.t tr>*:first-child{padding-inline-start:0}.t tr>*:last-child{padding-inline-end:0}
+.t td.num,.t th.num{text-align:end;font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.t tr.on td{background:var(--brand-tint)}
+.t tr.hv td{background:var(--hover)}
+.t .who{font-weight:500;color:var(--ink)}
+.t .sm:not(.btn){font-size:12.5px;color:var(--muted)}
+.t tfoot td{border-bottom:0;color:var(--muted);font-size:13px;height:44px}
+.t.dense td{height:44px}
+.cb{width:15px;height:15px;border-radius:4px;box-shadow:inset 0 0 0 1.5px var(--ctl);display:inline-block;vertical-align:middle}
+.cb.on{background:var(--brand);box-shadow:none;position:relative}
+.cb.on::after{content:"";position:absolute;inset:3px 4.5px 5px;border:solid #fff;border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.tabs{display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:16px;font-size:14px}
+.tabs span{padding:0 0 11px;color:var(--muted);border-bottom:1.5px solid transparent;margin-bottom:-1px;display:flex;gap:7px;align-items:baseline;white-space:nowrap}
+.tabs span.on{color:var(--ink);border-color:var(--ink);font-weight:500}
+.tabs .c{font:500 12px/1 var(--f-num);color:var(--muted)}
+.tool{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.search{display:flex;align-items:center;gap:8px;height:34px;width:220px;white-space:nowrap;padding:0 11px;border-radius:9px;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--muted);font-size:13.5px}
+.chip{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:8px;font-size:13px;color:var(--ink-2);background:var(--subtle)}
+.chip b{font-weight:500;color:var(--ink)}
+.chip.add{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.tool .sp{flex:1}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--brand)}
+.drawer{position:absolute;top:0;bottom:0;inset-inline-end:0;width:440px;background:var(--sheet);box-shadow:var(--shadow-pop);border-start-start-radius:0;display:flex;flex-direction:column}
+.pal{position:absolute;inset-inline-start:50%;top:108px;transform:translateX(50%);width:620px;background:var(--sheet);border-radius:14px;box-shadow:var(--shadow-pop);overflow:hidden}
+.scrim{position:absolute;inset:0;background:rgb(28 36 32 / .14);backdrop-filter:blur(1.5px)}
+.tl{position:relative}
+.tl>div{position:relative;padding:0 0 22px;padding-inline-start:28px}
+.tl>div::before{content:"";position:absolute;inset-inline-start:7px;top:22px;bottom:0;width:1px;background:var(--line-2)}
+.tl>div:last-child::before{display:none}
+.tl .m{position:absolute;inset-inline-start:2px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--sheet);box-shadow:inset 0 0 0 1.5px var(--ctl)}
+.tl .m.b{background:var(--brand);box-shadow:none}
+.tl .when{font-size:12.5px;color:var(--muted)}
+.diff{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2);background:var(--subtle);border-radius:6px;padding:2px 8px;margin-top:6px}
+.props{display:grid;grid-template-columns:118px minmax(0,1fr);gap:11px 12px;font-size:13.5px;margin:0}
+.props dt{color:var(--muted)}.props dd{margin:0;color:var(--ink)}
+.track{display:flex;align-items:flex-start}
+.track>div{flex:1;position:relative;padding-top:18px}
+.track>div::before{content:"";position:absolute;top:5px;inset-inline:0;height:2px;background:var(--line-2)}
+.track>div.done::before{background:var(--brand)}
+.track>div.cur::before{background:linear-gradient(to left,var(--brand) 0 66%,var(--line-2) 66%)}
+.track>div::after{content:"";position:absolute;top:0;inset-inline-start:0;width:12px;height:12px;border-radius:50%;background:var(--sheet);box-shadow:inset 0 0 0 2px var(--line-2)}
+.track>div.done::after{background:var(--brand);box-shadow:none}
+.track>div.cur::after{background:var(--sheet);box-shadow:inset 0 0 0 3px var(--brand),0 0 0 4px var(--brand-tint)}
+.track b{display:block;font-weight:600;font-size:14px;margin-top:4px}
+.track small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.ann{position:absolute;font:500 11px/1.3 var(--f-num);color:var(--ember);letter-spacing:.02em;direction:ltr}
+svg text{font-family:var(--f-num);fill:var(--muted);font-size:11.5px}
+svg .ar{font-family:var(--f-ui)}
+
+.split{display:grid;grid-template-columns:minmax(0,1fr) 404px;min-height:892px}
+.split>.pane-d{border-inline-start:1px solid var(--line);display:flex;flex-direction:column;background:var(--sheet)}
+</style>
+</head>
+<body>
+<div class="doc">
+<header class="doc-h">
+  <div><p class="kicker">Hiqbah ERP · Direction II · 6 Oct 2026</p><h1>The quiet ledger<span class="ar" dir="rtl" lang="ar">سجلّ هادئ</span></h1></div>
+  <p class="doc-lede">A second direction for the roastery's ERP. One canvas, one sheet, a Naskh voice for titles, light numerals for figures, and visuals that only a roastery would have. Business logic, permissions and data are untouched; every screen below is real HTML at 1440px, in Arabic, right to left, with illustrative data.</p>
+</header>
+
+<section class="sec" id="critique"><span class="num-h">01</span><h2>What was wrong with the first direction</h2>
+<p class="sub">Read against the Figma exploration, the brand mark in the repository and the craft principles you asked for, the first redesign failed in eight ways.</p>
+<div class="crit"><div><span class="i">01</span><div><b>It was a document about a product, not a product.</b> The screens were small wireframes inside a 17-section report. Nothing was composed at real size, so nothing could feel premium.</div><div class="fix">Six full 1440px screens, composed and checked at native size; the explanation is short and sits around them.</div></div><div><span class="i">02</span><div><b>Box grammar survived.</b> Panes with borders, a boxed metric strip, grey kanban columns, a bordered table frame. Same template DNA as before, only paler.</div><div class="fix">Two surfaces only: the canvas and one white sheet. Inside the sheet, hairlines and space do the grouping.</div></div><div><span class="i">03</span><div><b>Typography had no voice.</b> One family at 12–15px for everything; page titles at 20–22px; numbers in the text face. Flat, technical, generic.</div><div class="fix">A Naskh display face for titles and section heads, light Geist numerals for figures, Plex Arabic for the working UI.</div></div><div><span class="i">04</span><div><b>The brand was missing.</b> Espresso-green buttons and a generic tag palette ignored the Figma sage-and-sand direction and the logo's Naskh ح with its ember dash.</div><div class="fix">Sage for action and selection, sand for comparison, ember only for the mark and the live “now” line.</div></div><div><span class="i">05</span><div><b>Status was noisy.</b> Every status was a tinted tag with a dot, so a 12-row table carried 24 coloured shapes.</div><div class="fix">Status is a dot and a word. Tint is reserved for the few states that need a person: overdue, blocked, bottleneck.</div></div><div><span class="i">06</span><div><b>Dashboards were still a grid of panes.</b> Metric strip, a queue in a pane, charts in panes: the shape of every admin template.</div><div class="fix">A sentence first, one hero figure, then bands on hairlines. Each band answers one question.</div></div><div><span class="i">07</span><div><b>Generic visuals.</b> Line and bar charts that could belong to any SaaS product.</div><div class="fix">Roastery-native visuals: the roaster's hour track, green-coffee cover against supplier lead time, loss on the blend's band, gram reconciliation.</div></div><div><span class="i">08</span><div><b>Density tuned for a spec, not for eight hours.</b> 40px rows, 13px cells, 12px meta everywhere: efficient, but tiring and cramped.</div><div class="fix">14px text, 48px rows, 48px gutters by default; compact 40px density stays available for ledgers and movements.</div></div></div></section>
+
+<section class="sec" id="principles"><span class="num-h">02</span><h2>Direction II in six rules</h2>
+<p class="sub">Kept from the Figma exploration: the light ground, sage and sand, large Arabic titles, unboxed figures, the single priority line. Changed: the shell, the type system, density, status, charts and every page composition.</p>
+<div class="rules"><div><h4>Two surfaces</h4><p>Canvas for navigation, one white sheet for work. Overlays (drawer, palette, popover) are the only other layer.</p></div><div><h4>Type carries hierarchy</h4><p>Markazi Text for page and section titles; IBM Plex Sans Arabic 14px for the UI; Geist for numbers, light at large sizes.</p></div><div><h4>Say it first</h4><p>Dashboards open with a one-sentence reading. Numbers support the sentence, not the other way round.</p></div><div><h4>Colour is a signal</h4><p>Neutral by default. Sage = action and selection. Sand = comparison. Ember = brand mark and “now”. Red only for overdue or failure.</p></div><div><h4>Native to a roastery</h4><p>Batches, lots, grams, cover days and roaster hours get their own visual forms instead of generic widgets.</p></div><div><h4>Calm motion</h4><p>120–220ms, ease-out (.23,1,.32,1), presses scale to .97, drawers slide from the end side, nothing bounces, all off under reduced motion.</p></div></div>
+<div class="spec"><div><span class="num-h">Colour</span><div class="swatches"><div><i style="background:#F4F4F0"></i><b>canvas</b>#F4F4F0<br>Sidebar, page ground</div><div><i style="background:#FFFFFF"></i><b>sheet</b>#FFFFFF<br>The work surface</div><div><i style="background:#ECEDE7"></i><b>line</b>#ECEDE7<br>Hairlines</div><div><i style="background:#1C2420"></i><b>ink</b>#1C2420<br>Text · 15.9:1</div><div><i style="background:#646D67"></i><b>muted</b>#646D67<br>Meta · 5.35:1</div><div><i style="background:#3D5A48"></i><b>sage</b>#3D5A48<br>Action, selection · 7.6:1</div><div><i style="background:#C9AE84"></i><b>sand</b>#C9AE84<br>Comparison series</div><div><i style="background:#D9572B"></i><b>ember</b>#D9572B<br>Brand mark, now-line</div><div><i style="background:#8E6118"></i><b>warn</b>#8E6118<br>Waiting · 5.4:1</div><div><i style="background:#B0412E"></i><b>danger</b>#B0412E<br>Overdue, failed · 5.8:1</div><div><i style="background:#3F6383"></i><b>info</b>#3F6383<br>In progress dot</div><div><i style="background:#EBF0EA"></i><b>sage tint</b>#EBF0EA<br>Selected row, area fill</div></div></div><div><span class="num-h">Type</span><div class="typespec">
+<div><small>Display · Markazi Text 600 · 40/44</small><span style="font:600 40px/1.1 var(--f-display)" dir="rtl" lang="ar">خلطة النخبة الخاصة</span></div>
+<div><small>Section · Markazi Text 600 · 21</small><span style="font:600 21px/1.2 var(--f-display)" dir="rtl" lang="ar">استمرارية البن الأخضر</span></div>
+<div><small>Reading · Markazi Text 400 · 21/32</small><span style="font:400 21px/1.5 var(--f-display);color:var(--page-muted)" dir="rtl" lang="ar">التحصيل يتأخر عن المبيعات بمتوسط 11 يومًا.</span></div>
+<div><small>UI · Plex Sans Arabic 400 · 14/22</small><span style="font:400 14px/22px var(--f-ui)" dir="rtl" lang="ar">تحديث موعد التسليم · بانتظار الاعتماد · 3 فواتير</span></div>
+<div><small>Figures · Geist 300 · 56</small><span style="font:300 56px/1 var(--f-num);letter-spacing:-.03em">184,250</span></div>
+</div></div></div>
+</section>
+
+<span class="num-h" style="margin-top:72px">03 · App shell</span><section class="sec" style="padding-top:0" id="shell">
+<div class="shot-h"><h3>App shell</h3><span class="ar" dir="rtl" lang="ar">الهيكل</span></div>
+<p class="shot-intent">Sidebar on the canvas, work on one white sheet, the inbox as home for everything that needs a person, and a command palette that understands Arabic spelling.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><b>الوارد</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph"><div><h1>الوارد</h1><div class="meta"><span>ما يحتاج قرارك أو عملك، من كل الأقسام</span></div></div>
+  <div class="act"><div class="seg"><span class="on">الكل 7</span><span>اعتمادات 2</span><span>مهامي 3</span><span>تنبيهات 2</span></div></div></div>
+  <table class="t" style="margin-top:8px"><thead><tr><th></th><th>النوع</th><th>العنصر</th><th>الوقت</th><th></th></tr></thead><tbody><tr class="hv"><td style="width:28px"><span class="st er" style="font-size:0"></span></td>
+<td style="width:90px" class="sm">اعتماد</td><td><div class="who">3 فواتير موردين مستحقة غدًا</div><div class="sm" style="line-height:18px">مستودع بن الشرق · 48,200 ر.س</div></td>
+<td class="sm" style="width:90px">منذ ساعة</td><td style="width:120px;text-align:end"><span class="btn sm">اعتماد</span></td></tr><tr><td style="width:28px"><span class="st er" style="font-size:0"></span></td>
+<td style="width:90px" class="sm">تأخير</td><td><div class="who">الطلب <span class='id'>#1042</span> تجاوز موعد التسليم</div><div class="sm" style="line-height:18px">محمصة النخبة · قيد التجهيز منذ يومين</div></td>
+<td class="sm" style="width:90px">09:10</td><td style="width:120px;text-align:end"><span class="btn sm">فتح</span></td></tr><tr><td style="width:28px"><span class="st wa" style="font-size:0"></span></td>
+<td style="width:90px" class="sm">مخزون</td><td><div class="who">إثيوبيا هامبيلا تكفي 3 أيام</div><div class="sm" style="line-height:18px">المورد يحتاج 5 أيام · المتاح 18 كغ</div></td>
+<td class="sm" style="width:90px">08:00</td><td style="width:120px;text-align:end"><span class="btn sm">طلب شراء</span></td></tr><tr><td style="width:28px"><span class="st in" style="font-size:0"></span></td>
+<td style="width:90px" class="sm">جودة</td><td><div class="who">دفعة <span class='id'>B-3317</span> بانتظار التذوق</div><div class="sm" style="line-height:18px">تحميص متوسط · 21.4 كغ · منذ 19 ساعة</div></td>
+<td class="sm" style="width:90px">أمس</td><td style="width:120px;text-align:end"><span class="btn sm">بدء التذوق</span></td></tr><tr><td style="width:28px"><span class="st in" style="font-size:0"></span></td>
+<td style="width:90px" class="sm">خصم</td><td><div class="who">خصم 12% على العرض <span class='id'>OF-1047</span></div><div class="sm" style="line-height:18px">يتجاوز حد المندوب (10%) · فهد العتيبي</div></td>
+<td class="sm" style="width:90px">أمس</td><td style="width:120px;text-align:end"><span class="btn sm">مراجعة</span></td></tr><tr><td style="width:28px"><span class="st " style="font-size:0"></span></td>
+<td style="width:90px" class="sm">مهمة</td><td><div class="who">زيارة مقهى ذوّاقة لتذوق العيّنة</div><div class="sm" style="line-height:18px">اليوم 16:00 · مرتبطة بصفقة تعاقد سنوي</div></td>
+<td class="sm" style="width:90px">أمس</td><td style="width:120px;text-align:end"><span class="btn sm">فتح</span></td></tr></tbody></table>
+</div>
+  <div class="scrim"></div><div class="pal">
+  <div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 20px;border-bottom:1px solid var(--line);font-size:17px"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>النخ<span style="display:inline-block;width:1.5px;height:20px;background:var(--brand);vertical-align:middle;margin-inline-start:1px"></span></span><span class="kbd">Esc</span></div>
+  <div style="padding:8px">
+    <div class="grp" style="padding-top:8px">سجلات</div>
+    <div style="display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:9px;background:var(--subtle);"><span style="color:var(--muted)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg></span><div style="flex:1"><div style="font-weight:500">محمصة النخبة</div><div class="sm" style="font-size:12px;color:var(--muted);line-height:16px">عميل · الرياض · رصيد 31,250 ر.س</div></div></div><div style="display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:9px;"><span style="color:var(--muted)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg></span><div style="flex:1"><div style="font-weight:500">محمصة النخبة — خلطة خاصة</div><div class="sm" style="font-size:12px;color:var(--muted);line-height:16px">صفقة · عرض سعر · 90,000 ر.س</div></div></div><div style="display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:9px;"><span style="color:var(--muted)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><div style="flex:1"><div style="font-weight:500"><span class='id' style='color:var(--ink)'>#1042</span></div><div class="sm" style="font-size:12px;color:var(--muted);line-height:16px">طلب بيع · محمصة النخبة · قيد التجهيز</div></div></div>
+    <div class="grp">إجراءات</div>
+    <div style="display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:9px;"><span style="color:var(--muted)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg></span><div style="flex:1"><div style="font-weight:500">عرض سعر جديد لـ «محمصة النخبة»</div><div class="sm" style="font-size:12px;color:var(--muted);line-height:16px"></div></div><span class="kbd">Q</span></div><div style="display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border-radius:9px;"><span style="color:var(--muted)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg></span><div style="flex:1"><div style="font-weight:500">تسجيل مكالمة</div><div class="sm" style="font-size:12px;color:var(--muted);line-height:16px"></div></div><span class="kbd">L</span></div>
+  </div>
+  <div style="display:flex;gap:18px;padding:10px 20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)"><span><span class="kbd">↑↓</span> تنقّل</span><span><span class="kbd">↵</span> فتح</span><span><span class="kbd">Ctrl ↵</span> فتح جانبيًا</span><span style="margin-inline-start:auto">«النخ» تطابق «النُّخبة» و«النخبه»</span></div>
+</div>
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>Two surfaces only</b>Canvas holds navigation; the sheet holds work. The selected nav item is a small piece of sheet, so the eye links the two.</div><div><b>Brand in one gesture</b>The Naskh wordmark and the ember dash from the logo. No other decoration in the chrome.</div><div><b>Search lives in the sidebar</b>Frees the top bar for breadcrumb and two icons. Ctrl K from anywhere, bound to the physical key.</div><div><b>Inbox replaces notifications</b>Approvals, overdue work and alerts in one list, each with exactly one action.</div></div></section><span class="num-h" style="margin-top:72px">04 · Executive / analytics dashboard</span><section class="sec" style="padding-top:0" id="exec">
+<div class="shot-h"><h3>Executive / analytics dashboard</h3><span class="ar" dir="rtl" lang="ar">الأداء</span></div>
+<p class="shot-intent">One hero figure and its chart lead the page. A one-sentence reading in the display face states what changed. Everything else is secondary and sits on hairlines, not in cards.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>المالية</span> <span style="color:var(--faint)">/</span> <b>الأداء</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph"><div><h1>الأداء</h1><div class="meta"><span>سبتمبر 2026</span><i></i><span>مقارنةً بأغسطس، الأيام نفسها</span><i></i><span>محدّث 09:42</span></div></div>
+    <div class="act"><div class="seg"><span>7 أيام</span><span class="on">الشهر</span><span>الربع</span><span>السنة</span></div><span class="btn"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>تصدير</span></div></div>
+  <p class="lede">سبتمبر أعلى من أغسطس بـ <b>8%</b>، والجملة تقود النمو. التحصيل يتأخر عن المبيعات بمتوسط <b>11 يومًا</b>، وأكبر رصيد مستحق لدى محمصة النخبة.</p>
+  <div style="display:flex;align-items:flex-end;gap:56px;margin:40px 0 18px">
+    <div><div class="lbl">صافي المبيعات · دون الضريبة</div><div style="margin-top:10px"><span class="big n">184,250</span><span class="unit">ر.س</span></div>
+      <div style="margin-top:10px"><span class="delta up">▲ 8.2%</span> <span class="lbl" style="font-weight:400">عن 170,300 في أغسطس</span></div></div>
+    <div class="metrics" style="grid-template-columns:repeat(4,auto);margin-inline-start:auto;gap:0">
+      <div style="padding-inline:0 32px;border:0"><div class="lbl">التحصيل</div><div class="mid n">171,400</div><div class="d">93% من المبيعات</div></div>
+      <div style="padding-inline:32px"><div class="lbl">هامش إجمالي</div><div class="mid n">41.2%</div><div class="d"><span class="delta dn">▼ 0.6</span> نقطة</div></div>
+      <div style="padding-inline:32px"><div class="lbl">متوسط الطلب</div><div class="mid n">3,860</div><div class="d">48 طلب جملة</div></div>
+      <div style="padding-inline:32px 0"><div class="lbl">النقد المتاح</div><div class="mid n">412,900</div><div class="d">بعد التزامات 14 يومًا 296,400</div></div>
+    </div>
+  </div>
+  <div style="position:relative"><svg viewBox="0 0 1092 220" width="1092" height="220" role="img" aria-label="صافي المبيعات التراكمي في سبتمبر مقارنة بالأيام نفسها من أغسطس"><line x1="8" x2="1048" y1="194.0" y2="194.0" stroke="var(--line)" /><text x="1058" y="198.0">0k</text><line x1="8" x2="1048" y1="102.0" y2="102.0" stroke="var(--line)" /><text x="1058" y="106.0">100k</text><line x1="8" x2="1048" y1="10.0" y2="10.0" stroke="var(--line)" /><text x="1058" y="14.0">200k</text><polygon points="8.0,194 8.0,189.7 45.1,184.3 82.3,179.6 119.4,173.3 156.6,165.9 193.7,162.6 230.9,160.1 268.0,155.0 305.1,148.9 342.3,142.4 379.4,136.7 416.6,128.8 453.7,125.0 490.9,122.0 528.0,115.9 565.1,109.3 602.3,102.2 639.4,94.8 676.6,86.3 713.7,82.3 750.9,79.2 788.0,72.3 825.1,65.0 862.3,58.6 899.4,50.5 936.6,41.6 973.7,37.0 1010.9,33.5 1048.0,24.5 1048.0,194" fill="var(--brand-tint)" opacity=".85"/><polyline points="8.0,189.9 45.1,184.8 82.3,179.5 119.4,174.0 156.6,167.2 193.7,164.0 230.9,161.6 268.0,156.6 305.1,151.1 342.3,145.0 379.4,139.6 416.6,132.7 453.7,129.0 490.9,126.2 528.0,120.5 565.1,114.6 602.3,108.0 639.4,101.5 676.6,93.9 713.7,90.0 750.9,86.9 788.0,80.7 825.1,74.1 862.3,67.7 899.4,60.5 936.6,52.8 973.7,48.5 1010.9,45.1 1048.0,37.3" fill="none" stroke="var(--sand)" stroke-width="2" stroke-dasharray="5 4"/><polyline points="8.0,189.7 45.1,184.3 82.3,179.6 119.4,173.3 156.6,165.9 193.7,162.6 230.9,160.1 268.0,155.0 305.1,148.9 342.3,142.4 379.4,136.7 416.6,128.8 453.7,125.0 490.9,122.0 528.0,115.9 565.1,109.3 602.3,102.2 639.4,94.8 676.6,86.3 713.7,82.3 750.9,79.2 788.0,72.3 825.1,65.0 862.3,58.6 899.4,50.5 936.6,41.6 973.7,37.0 1010.9,33.5 1048.0,24.5" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round"/><text class="ar" x="8.0" y="214" text-anchor="start">1 سبتمبر</text><text class="ar" x="268.0" y="214" text-anchor="middle">8</text><text class="ar" x="528.0" y="214" text-anchor="middle">15</text><text class="ar" x="788.0" y="214" text-anchor="middle">22</text><text class="ar" x="1048.0" y="214" text-anchor="end">29</text><line x1="1048.0" x2="1048.0" y1="10" y2="194" stroke="var(--ink)" stroke-opacity=".18"/><circle cx="1048.0" cy="24.5" r="4.5" fill="var(--sheet)" stroke="var(--brand)" stroke-width="2"/></svg>
+    <div style="position:absolute;top:60px;right:70px;background:var(--sheet);box-shadow:var(--shadow-pop);border-radius:10px;padding:8px 12px;font-size:12.5px;line-height:19px"><div style="color:var(--muted)">حتى 29 سبتمبر</div><div><b class="n">184,250</b> ر.س <span style="color:var(--muted)">· أغسطس <span class="n">170,300</span></span></div></div>
+  </div>
+  <div style="display:flex;gap:20px;font-size:12.5px;color:var(--muted);margin-top:6px"><span style="color:var(--ink-2)">تراكمي منذ بداية الشهر · ألف ر.س</span><span><i style="display:inline-block;width:14px;height:2px;background:var(--brand);vertical-align:middle;margin-inline-end:6px"></i>سبتمبر</span><span><i style="display:inline-block;width:14px;border-top:1.5px dashed var(--sand);vertical-align:middle;margin-inline-end:6px"></i>أغسطس</span></div>
+  <div class="hr"></div>
+  <div class="cols" style="grid-template-columns:5fr 6fr">
+    <div><div class="bh"><h2 class="bt">من أين تأتي المبيعات</h2><span class="sub">حصة القناة من صافي المبيعات</span></div>
+      <div class="bar" style="height:10px;border-radius:5px;gap:2px;background:none;margin:6px 0 14px"><i style="flex:64;background:var(--brand)"></i><i style="flex:26;background:var(--sand)"></i><i style="flex:10;background:var(--brand-3)"></i></div>
+      <table class="t dense"><tbody><tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--brand);margin-inline-end:8px"></span>الجملة · B2B</td><td class="num">117,900</td><td class="num" style="width:56px;color:var(--muted)">64%</td></tr><tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--sand);margin-inline-end:8px"></span>المقهى</td><td class="num">47,900</td><td class="num" style="width:56px;color:var(--muted)">26%</td></tr><tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--brand-3);margin-inline-end:8px"></span>المتجر الإلكتروني</td><td class="num">18,450</td><td class="num" style="width:56px;color:var(--muted)">10%</td></tr></tbody></table></div>
+    <div><div class="bh"><h2 class="bt">التحصيل والمصروفات</h2><span class="sub">ألف ر.س أسبوعيًا</span><span class="lk" style="color:var(--muted);font-weight:400"><i style="width:8px;height:8px;border-radius:2px;background:var(--brand);display:inline-block"></i>تحصيل&nbsp;&nbsp;<i style="width:8px;height:8px;border-radius:2px;background:var(--sand);display:inline-block"></i>مصروفات</span></div><svg viewBox="0 0 600 176" width="100%" role="img" aria-label="التحصيل مقابل المصروفات أسبوعيًا"><line x1="6" x2="564" y1="152.0" y2="152.0" stroke="var(--line)"/><text x="572" y="156.0">0k</text><line x1="6" x2="564" y1="80.0" y2="80.0" stroke="var(--line)"/><text x="572" y="84.0">25k</text><line x1="6" x2="564" y1="8.0" y2="8.0" stroke="var(--line)"/><text x="572" y="12.0">50k</text><rect x="62.8" y="42.0" width="12" height="110.0" rx="2" fill="var(--brand)"/><rect x="76.8" y="62.7" width="12" height="89.3" rx="2" fill="var(--sand)"/><text x="75.8" y="172" text-anchor="middle" direction="ltr">1–7</text><rect x="202.2" y="25.0" width="12" height="127.0" rx="2" fill="var(--brand)"/><rect x="216.2" y="67.3" width="12" height="84.7" rx="2" fill="var(--sand)"/><text x="215.2" y="172" text-anchor="middle" direction="ltr">8–14</text><rect x="341.8" y="33.1" width="12" height="118.9" rx="2" fill="var(--brand)"/><rect x="355.8" y="47.7" width="12" height="104.3" rx="2" fill="var(--sand)"/><text x="354.8" y="172" text-anchor="middle" direction="ltr">15–21</text><rect x="481.2" y="14.3" width="12" height="137.7" rx="2" fill="var(--brand)"/><rect x="495.2" y="60.1" width="12" height="91.9" rx="2" fill="var(--sand)"/><text x="494.2" y="172" text-anchor="middle" direction="ltr">22–29</text></svg></div>
+  </div>
+  <div class="hr"></div>
+  <div class="bh"><h2 class="bt">أكبر العملاء</h2><span class="sub">سبتمبر · حسب صافي المبيعات</span><a class="lk">كل العملاء <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+  <table class="t"><thead><tr><th>العميل</th><th class="num">الطلبات</th><th class="num">المبيعات (ر.س)</th><th>الحصة</th><th class="num">الرصيد المستحق</th></tr></thead><tbody><tr><td class="who">محمصة النخبة</td><td class="num">9</td><td class="num">42,300</td><td style="width:150px"><div class="bar"><i style="width:78.2%"></i></div></td><td class="num" style="color:var(--warn)">31,250</td></tr><tr><td class="who">مقهى ذوّاقة</td><td class="num">7</td><td class="num">28,900</td><td style="width:150px"><div class="bar"><i style="width:54.4%"></i></div></td><td class="num" style="color:var(--ink-2)">—</td></tr><tr><td class="who">بن الشرق</td><td class="num">4</td><td class="num">21,600</td><td style="width:150px"><div class="bar"><i style="width:40.8%"></i></div></td><td class="num" style="color:var(--ink-2)">9,800</td></tr><tr><td class="who">كافيه 21</td><td class="num">6</td><td class="num">14,200</td><td style="width:150px"><div class="bar"><i style="width:27.2%"></i></div></td><td class="num" style="color:var(--ink-2)">—</td></tr><tr><td class="who">مطعم السدرة</td><td class="num">3</td><td class="num">8,700</td><td style="width:150px"><div class="bar"><i style="width:17.0%"></i></div></td><td class="num" style="color:var(--ink-2)">4,300</td></tr></tbody></table>
+</div>
+  
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>A sentence before the numbers</b>The lede answers the owner's question in words, then the figures support it.</div><div><b>Light numerals, big</b>Geist 300 at 56px for the hero; 28px for the four secondary metrics, divided by hairlines.</div><div><b>Honest comparison</b>August shown as a dashed sand line on the same days; the delta names its base value.</div><div><b>No donut</b>Channel mix is one stacked bar with exact values beside it.</div></div></section><span class="num-h" style="margin-top:72px">05 · Operations dashboard</span><section class="sec" style="padding-top:0" id="ops">
+<div class="shot-h"><h3>Operations dashboard</h3><span class="ar" dir="rtl" lang="ar">اليوم</span></div>
+<p class="shot-intent">The day on one page: the priority, three day metrics, where every open order sits, what needs action, what the roaster is doing now, and which green coffee will run out before it can be replaced.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>التشغيل</span> <span style="color:var(--faint)">/</span> <b>لوحة التشغيل</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph"><div><h1>اليوم</h1><div class="meta"><span>الثلاثاء 6 أكتوبر 2026</span><i></i><span>الخبر الشمالية</span><i></i><span>آخر تحديث 10:42</span></div></div>
+    <div class="act"><span class="btn"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>جدول الأسبوع</span><span class="btn p"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>طلب جديد</span></div></div>
+  <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:var(--subtle);margin-bottom:36px">
+    <span style="width:8px;height:8px;border-radius:50%;background:var(--ember);flex:none"></span>
+    <span style="font-size:14.5px"><b style="font-weight:600">أولوية اليوم:</b> إثيوبيا هامبيلا تكفي 3 أيام، وأقرب توريد بعد 5 أيام. خلطة النخبة تعتمد عليها.</span>
+    <span class="btn sm" style="margin-inline-start:auto">راجع خطة الشراء</span></div>
+  <div class="metrics" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:40px">
+    <div><div class="lbl">مبيعات اليوم · دون الضريبة</div><div class="mid n" style="font-size:34px">8,640<span class="unit">ر.س</span></div><div class="d">12 طلبًا · <span class="delta up">▲ 6%</span> عن الثلاثاء الماضي</div></div>
+    <div><div class="lbl">مُحمّص اليوم</div><div class="mid n" style="font-size:34px">61.2<span class="unit">كغ</span></div><div class="d">3 من 6 دفعات · الفاقد 15.0%</div></div>
+    <div><div class="lbl">تحصيل مستحق اليوم</div><div class="mid n" style="font-size:34px">12,400<span class="unit">ر.س</span></div><div class="d">3 فواتير · <span style="color:var(--danger)">1 متأخرة</span></div></div>
+  </div>
+  <div class="bh"><h2 class="bt">مسار الطلبات</h2><span class="sub">19 طلبًا مفتوحًا</span></div>
+  <div style="display:flex;margin-bottom:44px;border-block:1px solid var(--line);padding-block:8px"><div style="flex:1;padding:16px 20px 18px;">
+<div class="mid n" style="font-size:30px;">1</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">بانتظار الاعتماد</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">3</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">قيد التحميص</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);background:var(--warn-tint);border-radius:10px;">
+<div class="mid n" style="font-size:30px;color:var(--warn)">3</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">بانتظار الجودة</div>
+<div style="font-size:12px;color:var(--warn);margin-top:2px">أطول انتظار 19 ساعة</div></div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">2</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">قيد التعبئة</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">4</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">جاهز للشحن</div>
+</div><div style="flex:1;padding:16px 20px 18px;border-inline-start:1px solid var(--line);">
+<div class="mid n" style="font-size:30px;">6</div><div style="margin-top:6px;font-size:13.5px;color:var(--ink-2)">سُلّم اليوم</div>
+</div></div>
+  <div class="bh"><h2 class="bt">المحمصة اليوم</h2><span class="sub">6 دفعات · 3 مكتملة · الدفعة الرابعة جارية</span><a class="lk">جدول الإنتاج <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+  <div style="position:relative;padding-top:4px">
+<div style="display:grid;grid-template-columns:120px minmax(0,1fr);row-gap:10px;align-items:center">
+ <div style="font-size:13px;font-weight:500">Giesen W30<div style="font-size:11.5px;color:var(--muted);font-weight:400">محمصة الإنتاج</div></div><div style="position:relative;height:56px;background:var(--subtle);border-radius:9px"><div style="position:absolute;top:6px;bottom:6px;right:8.33%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">يرغاتشيفي<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:19.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:30.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand-tint);color:var(--brand);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.75'>تم</span></div><div style="position:absolute;top:6px;bottom:6px;right:40.83%;width:calc(12.50% - 4px);border-radius:7px;background:repeating-linear-gradient(135deg,transparent 0 5px,var(--line) 5px 6px);color:var(--muted);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">فحص وتنظيف المدخنة</div><div style="position:absolute;top:6px;bottom:6px;right:55.50%;width:calc(8.33% - 4px);border-radius:7px;background:var(--brand);color:#fff;font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">النخبة<br><span style='opacity:.85'>جارية</span></div><div style="position:absolute;top:6px;bottom:6px;right:66.67%;width:calc(8.33% - 4px);border-radius:7px;background:var(--sheet);color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">هويلا<br><span style='opacity:.75'>11:00</span></div><div style="position:absolute;top:6px;bottom:6px;right:77.83%;width:calc(8.33% - 4px);border-radius:7px;background:var(--sheet);color:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line-2);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">سيرادو<br><span style='opacity:.75'>11:40</span></div></div>
+ <div style="font-size:13px;font-weight:500">Ikawa Pro<div style="font-size:11.5px;color:var(--muted);font-weight:400">عيّنات وتذوق</div></div><div style="position:relative;height:56px;background:var(--subtle);border-radius:9px"><div style="position:absolute;top:6px;bottom:6px;right:33.33%;width:calc(12.50% - 4px);border-radius:7px;background:var(--sand-tint);color:var(--sand-text);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">عيّنات عملاء · 6<br><span style='opacity:.8'>تمت</span></div><div style="position:absolute;top:6px;bottom:6px;right:75.00%;width:calc(16.67% - 4px);border-radius:7px;background:var(--sand-tint);color:var(--sand-text);font-size:12px;line-height:16px;padding:6px 9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">جلسة تذوق · 3 دفعات<br><span style='opacity:.8'>سلمان الشهري</span></div></div>
+ <div></div><div style="position:relative;height:16px;font:11.5px/16px var(--f-num);color:var(--muted)"><span style="position:absolute;right:0.00%;transform:translateX(50%);">7:00</span><span style="position:absolute;right:16.67%;transform:translateX(50%);">8:00</span><span style="position:absolute;right:33.33%;transform:translateX(50%);">9:00</span><span style="position:absolute;right:50.00%;transform:translateX(50%);">10:00</span><span style="position:absolute;right:66.67%;transform:translateX(50%);">11:00</span><span style="position:absolute;right:83.33%;transform:translateX(50%);">12:00</span><span style="position:absolute;right:100.00%;transform:translateX(50%);">13:00</span></div>
+</div>
+<div style="position:absolute;top:0;bottom:22px;right:calc(120px + (100% - 120px) * 0.6167);width:1.5px;background:var(--ember)"><span style="position:absolute;top:-16px;transform:translateX(50%);right:0;font:600 11px/1 var(--f-num);color:var(--ember);white-space:nowrap">10:42</span></div>
+</div>
+  <div class="hr" style="margin:40px 0 36px"></div>
+  <div class="cols" style="grid-template-columns:7fr 5fr;gap:56px">
+    <div><div class="bh"><h2 class="bt">تحتاج إجراء</h2><span class="sub">حسب موعد التسليم</span><a class="lk">كل الطلبات <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+      <table class="t"><thead><tr><th>الطلب</th><th>العميل</th><th class="num">كغ</th><th class="num">ر.س</th><th>التسليم</th><th>الحالة</th><th></th></tr></thead><tbody><tr><td class="id" style="width:64px">#1048</td><td class="who">مقهى رواف</td><td class="num">50</td><td class="num">4,200</td><td class="sm">اليوم 14:00</td><td><span class="st ok">جاهز للشحن</span></td><td style="text-align:end"><span class="btn sm">تأكيد الشحن</span></td></tr><tr><td class="id" style="width:64px">#1047</td><td class="who">مقهى مدار</td><td class="num">30</td><td class="num">2,700</td><td class="sm">اليوم 16:00</td><td><span class="st ok">جاهز للشحن</span></td><td style="text-align:end"><span class="btn sm">تأكيد الشحن</span></td></tr><tr><td class="id" style="width:64px">#1046</td><td class="who">مقهى أثر</td><td class="num">40</td><td class="num">3,600</td><td class="sm">غدًا</td><td><span class="st in">قيد التحميص</span></td><td style="text-align:end"><span class="btn sm">فتح</span></td></tr><tr><td class="id" style="width:64px">#1042</td><td class="who">محمصة النخبة</td><td class="num">60</td><td class="num">31,250</td><td class="sm">أمس</td><td><span class="st er">متأخر · قيد التجهيز</span></td><td style="text-align:end"><span class="btn sm">فتح</span></td></tr><tr><td class="id" style="width:64px">#1044</td><td class="who">مقهى مسار</td><td class="num">20</td><td class="num">1,800</td><td class="sm">1 أكتوبر</td><td><span class="st wa">بانتظار الاعتماد</span></td><td style="text-align:end"><span class="btn sm">مراجعة</span></td></tr></tbody></table></div>
+    <div><div class="bh"><h2 class="bt">استمرارية البن الأخضر</h2><span class="sub">أيام التغطية مقابل مدة التوريد</span></div>
+      <div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">إثيوبيا هامبيلا</span><span class="n" style="color:var(--ink-2);text-align:end">18 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:8.6%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:14.3%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">3</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">اليمن حراز</span><span class="n" style="color:var(--ink-2);text-align:end">8 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:11.4%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:34.3%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">4</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">كولومبيا أليغرو</span><span class="n" style="color:var(--ink-2);text-align:end">31 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:17.1%;background:var(--danger);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:20.0%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--danger);font-weight:500"><span class="n">6</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">البرازيل موجيانا</span><span class="n" style="color:var(--ink-2);text-align:end">42 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:22.9%;background:var(--warn);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:17.1%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--warn);font-weight:500"><span class="n">8</span> يومًا</span></div><div style="display:grid;grid-template-columns:150px 70px minmax(0,1fr) 92px;gap:16px;align-items:center;height:44px;border-bottom:1px solid var(--line)">
+<span class="who" style="font-weight:500">كولومبيا هويلا</span><span class="n" style="color:var(--ink-2);text-align:end">350 كغ</span>
+<div style="position:relative;height:6px;background:var(--line);border-radius:3px"><i style="position:absolute;inset-block:0;right:0;width:88.6%;background:var(--brand);border-radius:3px"></i><i style="position:absolute;top:-5px;height:16px;width:1.5px;background:var(--ink);opacity:.5;right:20.0%"></i></div>
+<span style="text-align:end;font-size:13px;color:var(--ink-2)"><span class="n">31</span> يومًا</span></div>
+      <div style="display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px"><span><i style="display:inline-block;width:1.5px;height:12px;background:var(--ink);opacity:.5;vertical-align:middle;margin-inline-end:6px"></i>مدة توريد المورد</span><span>المقياس حتى 35 يومًا</span></div></div>
+  </div>
+</div>
+  
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>One priority, in words</b>A single line with the ember dot; never a stack of banners.</div><div><b>Order flow as a strip</b>Six stage counts on one row. The bottleneck is the only tinted cell.</div><div><b>Roaster schedule</b>Batches as blocks on an hour track with a live 10:42 marker. Specific to a roastery, not a template.</div><div><b>Coverage vs lead time</b>Bar = days of stock, tick = supplier lead time. If the bar stops before the tick, the row turns red.</div></div></section><span class="num-h" style="margin-top:72px">06 · Table-heavy page: orders</span><section class="sec" style="padding-top:0" id="table">
+<div class="shot-h"><h3>Table-heavy page: orders</h3><span class="ar" dir="rtl" lang="ar">الطلبات</span></div>
+<p class="shot-intent">Saved views as tabs with counts, readable filter chips, a calm 48px table with fulfilment and payment as two columns, totals in the footer, and a preview drawer that keeps the list in place.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>التشغيل</span> <span style="color:var(--faint)">/</span> <b>الطلبات</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="split"><div class="pg" style="padding-inline:40px 32px">
+  <div class="ph" style="margin-bottom:20px"><div><h1>الطلبات</h1></div><div class="act"><span class="btn g"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>تصدير</span><span class="btn p"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>طلب جديد</span></div></div>
+  <div class="tabs"><span class="on">الكل <span class="c">214</span></span><span>بانتظار الاعتماد <span class="c">6</span></span><span>قيد التجهيز <span class="c">18</span></span><span>جاهزة للشحن <span class="c">9</span></span><span style="color:var(--danger)">متأخرة <span class="c" style="color:var(--danger)">4</span></span><span><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></div>
+  <div class="tool"><div class="search"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>رقم الطلب أو العميل</div><span class="chip">الفترة: <b>أكتوبر</b><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span><span class="chip">الفريق: <b>الجملة</b><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span><span class="chip add"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>تصفية</span><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M10 5v14M15 5v14"/></svg></span><span class="btn g sm">التسليم ↑</span></div>
+  <table class="t"><thead><tr><th><span class="cb"></span></th><th>الطلب</th><th>العميل</th><th class="num">القيمة · ر.س</th><th>التسليم</th><th>التجهيز</th><th>الدفع</th></tr></thead>
+  <tbody><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1048</td>
+<td><span class="who">مقهى رواف</span></td><td class="num">4,200.00</td><td class="sm" style="color:var(--ink-2)">اليوم 14:00</td>
+<td><span class="st ok">جاهز للشحن</span></td><td><span class="st ok">مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1047</td>
+<td><span class="who">مقهى مدار</span></td><td class="num">2,700.00</td><td class="sm" style="color:var(--ink-2)">اليوم 16:00</td>
+<td><span class="st ok">جاهز للشحن</span></td><td><span class="st wa">جزئي</span></td></tr><tr class="hv"><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1046</td>
+<td><span class="who">مقهى أثر</span></td><td class="num">3,600.00</td><td class="sm" style="color:var(--ink-2)">غدًا</td>
+<td><span class="st in">قيد التحميص</span></td><td><span class="st ">غير مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1045</td>
+<td><span class="who">مقهى الساحة</span></td><td class="num">2,250.00</td><td class="sm" style="color:var(--ink-2)">غدًا</td>
+<td><span class="st in">قيد التعبئة</span></td><td><span class="st ok">مدفوع</span></td></tr><tr class="on"><td style="width:28px"><span class="cb on"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1042</td>
+<td><span class="who">محمصة النخبة</span></td><td class="num">31,250.00</td><td class="sm" style="color:var(--ink-2)">5 أكتوبر <span class="flag">متأخر يوم</span></td>
+<td><span class="st in">قيد التجهيز</span></td><td><span class="st wa">جزئي</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1041</td>
+<td><span class="who">مقهى ذوّاقة</span></td><td class="num">6,480.00</td><td class="sm" style="color:var(--ink-2)">9 أكتوبر</td>
+<td><span class="st in">قيد التجهيز</span></td><td><span class="st ok">مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1039</td>
+<td><span class="who">كافيه 21 — العليا</span></td><td class="num">14,880.00</td><td class="sm" style="color:var(--ink-2)">12 أكتوبر</td>
+<td><span class="st wa">بانتظار الاعتماد</span></td><td><span class="st ">غير مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1036</td>
+<td><span class="who">بن الشرق</span></td><td class="num">58,500.00</td><td class="sm" style="color:var(--ink-2)">5 أكتوبر</td>
+<td><span class="st wa">تسليم جزئي · 2/3</span></td><td><span class="st ok">مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1035</td>
+<td><span class="who">مقهى رواف</span></td><td class="num">3,360.00</td><td class="sm" style="color:var(--ink-2)">3 أكتوبر</td>
+<td><span class="st ok">مُسلَّم</span></td><td><span class="st ok">مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1034</td>
+<td><span class="who">مقهى مسار</span></td><td class="num">1,800.00</td><td class="sm" style="color:var(--ink-2)">2 أكتوبر</td>
+<td><span class="st ok">مُسلَّم</span></td><td><span class="st ">غير مدفوع</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1033</td>
+<td><span class="who">مطعم السدرة</span></td><td class="num">3,900.00</td><td class="sm" style="color:var(--ink-2)">—</td>
+<td><span class="st x">ملغى</span></td><td><span class="st ">مسترد</span></td></tr><tr><td style="width:28px"><span class="cb"></span></td><td class="id" style="width:62px;color:var(--ink-2)">#1031</td>
+<td><span class="who">مقهى أثر</span></td><td class="num">3,150.00</td><td class="sm" style="color:var(--ink-2)">30 سبتمبر</td>
+<td><span class="st ok">مُسلَّم</span></td><td><span class="st ok">مدفوع</span></td></tr></tbody>
+  <tfoot><tr><td></td><td colspan="2">48 طلبًا · <span class="n">3,912.50</span> كغ</td><td class="num" style="color:var(--ink);font-weight:500">468,215.00</td><td colspan="3" style="text-align:end"><span class="n">1–25</span> من 48 &nbsp; <span class="btn sm">السابق</span> <span class="btn sm">التالي</span></td></tr></tfoot></table>
+<div style="font-size:12px;color:var(--muted);margin-top:10px">مع فتح المعاينة تُخفى الأعمدة الثانوية (الكمية، المدينة، المسؤول) وتعود عند الإغلاق.</div>
+</div><aside class="pane-d">
+  <div style="display:flex;align-items:center;gap:8px;height:52px;padding:0 24px;border-bottom:1px solid var(--line)"><span class="id" style="color:var(--ink)">#1042</span><span class="sp" style="flex:1"></span><span class="btn sm g">فتح الصفحة <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="ib"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span></div>
+  <div style="padding:22px 24px;overflow:hidden;flex:1">
+    <div style="font:600 26px/1.15 var(--f-display)">محمصة النخبة</div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:8px"><span class="st in">قيد التجهيز</span><span class="flag">متأخر يوم</span><span class="sm" style="color:var(--muted);font-size:12.5px">الدفع: <span class="st wa" style="font-size:12.5px">جزئي</span></span></div>
+    <div class="track" style="margin:26px 0 22px;font-size:12.5px">
+      <div class="done"><b style="font-size:12.5px">اعتماد</b><small>3 أكتوبر</small></div><div class="cur"><b style="font-size:12.5px">تجهيز</b><small>1 من 2 بنود</small></div><div><b style="font-size:12.5px;color:var(--muted);font-weight:500">شحن</b></div><div style="flex:.25"><b style="font-size:12.5px;color:var(--muted);font-weight:500">تسليم</b></div></div>
+    <div class="lbl" style="margin-bottom:6px">البنود</div>
+    <table class="t dense" style="font-size:13.5px"><tbody>
+      <tr><td><div class="who">خلطة النخبة الخاصة · 1 كغ</div><div class="sm">200 كيس · تحميص متوسط</div></td><td class="num">200.00 كغ</td><td><span class="st in">قيد التحميص</span></td></tr>
+      <tr><td><div class="who">إثيوبيا يرغاتشيفي · 1 كغ</div><div class="sm">50 كيس · تحميص فاتح</div></td><td class="num">50.00 كغ</td><td><span class="st ok">جاهز</span></td></tr>
+    </tbody></table>
+    <dl class="props" style="margin-top:20px"><dt>الإجمالي</dt><dd><span class="n">31,250.00</span> ر.س <span class="sm" style="color:var(--muted)">شامل الضريبة</span></dd>
+      <dt>المدفوع</dt><dd><span class="n">15,000.00</span> ر.س · المتبقي <span class="n">16,250.00</span></dd>
+      <dt>موعد التسليم</dt><dd>الأحد 5 أكتوبر، 10:00</dd><dt>أمر الإنتاج</dt><dd><span class="id" style="color:var(--brand)">PO-2026-118</span></dd><dt>المسؤول</dt><dd>فهد العتيبي</dd></dl>
+    <div class="lbl" style="margin:24px 0 10px">آخر نشاط</div>
+    <div class="tl" style="font-size:13px"><div><span class="m b"></span>بدأت دفعة التحميص الثانية <div class="when">اليوم 09:42 · نورة السبيعي</div></div><div><span class="m"></span>تأجيل التسليم بطلب العميل <div class="when">أمس 16:10 · فهد العتيبي</div></div></div>
+  </div>
+  <div style="display:flex;gap:8px;padding:14px 24px;border-top:1px solid var(--line)"><span class="btn p" style="flex:1;justify-content:center">تحديث موعد التسليم</span><span class="btn">تسجيل دفعة</span><span class="btn" style="width:34px;padding:0;justify-content:center"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></span></div>
+</aside></div>
+  
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>Quiet rows</b>No zebra, no fills; hairlines and 48px rows. Status is a dot and a word.</div><div><b>Two states, two columns</b>Fulfilment and payment never merge into one badge.</div><div><b>Drawer, not page</b>Preview and quick actions over the list; filters, scroll and selection survive.</div><div><b>Overdue is a flag</b>The one red chip on the page, next to the date it is about.</div></div></section><span class="num-h" style="margin-top:72px">07 · CRM: customer account</span><section class="sec" style="padding-top:0" id="crm">
+<div class="shot-h"><h3>CRM: customer account</h3><span class="ar" dir="rtl" lang="ar">العميل</span></div>
+<p class="shot-intent">A customer page that joins sales, finance and operations: what they buy, what they owe, the open deal and its overdue next step, then one activity history.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>المبيعات</span> <span style="color:var(--faint)">/</span> <span>العملاء</span> <span style="color:var(--faint)">/</span> <b>محمصة النخبة</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph" style="align-items:flex-start"><div>
+    <h1>محمصة النخبة</h1>
+    <div class="meta"><span>عميل جملة منذ مارس 2025</span><i></i><span>الرياض</span><i></i><span>المسؤول فهد العتيبي</span><i></i><span class="id">CR-1010587342</span></div></div>
+    <div class="act"><span class="btn"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>تسجيل نشاط</span><span class="btn p"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>عرض سعر</span><span class="btn" style="width:34px;padding:0;justify-content:center"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18.5" cy="12" r="1"/></svg></span></div></div>
+  <div class="metrics" style="grid-template-columns:repeat(5,minmax(0,1fr));margin:8px 0 36px">
+    <div><div class="lbl">مبيعات 12 شهرًا</div><div class="mid n">386,400</div><div class="d">ر.س · <span class="delta up">▲ 22%</span></div></div>
+    <div><div class="lbl">الرصيد المستحق</div><div class="mid n" style="color:var(--warn)">31,250</div><div class="d">فاتورة متأخرة 4 أيام</div></div>
+    <div><div class="lbl">آخر طلب</div><div class="mid n">6<span class="unit">أيام</span></div><div class="d">يطلب كل 14 يومًا تقريبًا</div></div>
+    <div><div class="lbl">الكمية الشهرية</div><div style="margin-top:8px"><svg viewBox="0 0 180 38" width="100%" height="38" role="img" aria-label="الكميات الشهرية"><rect x="0.0" y="21.0" width="11.3" height="17.0" rx="1.5" fill="var(--brand-3)"/><rect x="15.3" y="18.6" width="11.3" height="19.4" rx="1.5" fill="var(--brand-3)"/><rect x="30.7" y="19.8" width="11.3" height="18.2" rx="1.5" fill="var(--brand-3)"/><rect x="46.0" y="14.9" width="11.3" height="23.1" rx="1.5" fill="var(--brand-3)"/><rect x="61.3" y="12.5" width="11.3" height="25.5" rx="1.5" fill="var(--brand-3)"/><rect x="76.7" y="16.1" width="11.3" height="21.9" rx="1.5" fill="var(--brand-3)"/><rect x="92.0" y="10.1" width="11.3" height="27.9" rx="1.5" fill="var(--brand-3)"/><rect x="107.3" y="8.9" width="11.3" height="29.1" rx="1.5" fill="var(--brand-3)"/><rect x="122.7" y="11.3" width="11.3" height="26.7" rx="1.5" fill="var(--brand-3)"/><rect x="138.0" y="6.4" width="11.3" height="31.6" rx="1.5" fill="var(--brand-3)"/><rect x="153.3" y="7.6" width="11.3" height="30.4" rx="1.5" fill="var(--brand-3)"/><rect x="168.7" y="4.0" width="11.3" height="34.0" rx="1.5" fill="var(--brand)"/></svg></div><div class="d">280 كغ في سبتمبر</div></div>
+    <div><div class="lbl">شروط الدفع</div><div class="mid" style="font-size:22px;font-family:var(--f-ui);font-weight:500;margin-top:12px">30 يومًا</div><div class="d">حد ائتمان 60,000 ر.س</div></div>
+  </div>
+  <div class="tabs"><span class="on">نظرة عامة</span><span>الطلبات <span class="c">42</span></span><span>الفواتير <span class="c">38</span></span><span>الصفقات <span class="c">3</span></span><span>العينات <span class="c">5</span></span><span>الأسعار الخاصة</span><span>الملفات</span></div>
+  <div class="cols" style="grid-template-columns:minmax(0,1fr) 320px;gap:64px;margin-top:28px">
+    <div>
+      <div class="bh"><h2 class="bt">الصفقة المفتوحة</h2><span class="sub">خلطة خاصة · تعاقد سنوي</span><a class="lk">فتح الصفقة <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+      <div style="display:flex;align-items:flex-end;gap:40px;margin-bottom:22px"><div><span class="mid n" style="font-size:34px">90,000</span><span class="unit">ر.س</span><div class="d" style="font-size:12.5px;color:var(--muted);margin-top:6px">احتمال 40% · إغلاق متوقع 15 أكتوبر</div></div>
+        <div style="flex:1;max-width:460px;margin-inline-start:auto" class="track"><div class="done"><b>تأهيل</b><small>8 سبتمبر</small></div><div class="cur"><b>عرض سعر</b><small>منذ 22 يومًا</small></div><div><b style="color:var(--muted);font-weight:500">تفاوض</b></div><div style="flex:.3"><b style="color:var(--muted);font-weight:500">إغلاق</b></div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;background:var(--danger-tint);margin-bottom:36px;font-size:14px">
+        <span class="flag" style="background:var(--sheet)">متأخرة يومين</span><span><b style="font-weight:600">الخطوة التالية:</b> مكالمة لتأكيد الكميات · كانت مستحقة 4 أكتوبر 12:00</span><span class="btn sm" style="margin-inline-start:auto">إكمال</span></div>
+      <div class="bh"><h2 class="bt">النشاط</h2><span class="sub">مكالمات، عروض، طلبات، مدفوعات</span></div>
+      <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line-2);color:var(--muted);margin-bottom:24px"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v12l-4 4H5z"/><path d="M15 20v-4h4"/></svg>اكتب ملاحظة أو سجّل مكالمة…<span class="kbd">N</span></div>
+      <div class="tl"><div><span class="m b"></span><div style="display:flex;gap:12px;align-items:baseline"><span><b>فهد العتيبي</b> سجّل مكالمة</span><span class="when" style="margin-inline-start:auto">اليوم 11:20</span></div><div style='color:var(--ink-2);margin-top:4px;max-width:60ch'>اتفاق مبدئي على 250 كغ شهريًا، ويطلبون عيّنة تحميص متوسط قبل التوقيع.</div></div><div><span class="m "></span><div style="display:flex;gap:12px;align-items:baseline"><span><b>فهد العتيبي</b> غيّر مرحلة الصفقة</span><span class="when" style="margin-inline-start:auto">قبل يومين</span></div><span class='diff'>المرحلة: تأهيل ← عرض سعر</span></div><div><span class="m "></span><div style="display:flex;gap:12px;align-items:baseline"><span>أُصدر العرض <span class='id' style='color:var(--ink)'>OF-1042</span> (النسخة 2) بقيمة <span class='n'>90,000.00</span> ر.س</span><span class="when" style="margin-inline-start:auto">14 سبتمبر</span></div></div><div><span class="m "></span><div style="display:flex;gap:12px;align-items:baseline"><span>سُلّم الطلب <span class='id' style='color:var(--ink)'>#1036</span> · 40 كغ</span><span class="when" style="margin-inline-start:auto">12 سبتمبر</span></div></div><div><span class="m "></span><div style="display:flex;gap:12px;align-items:baseline"><span>دفعة مستلمة <span class='n'>9,800.00</span> ر.س · تحويل بنكي</span><span class="when" style="margin-inline-start:auto">8 سبتمبر</span></div></div></div>
+    </div>
+    <div>
+      <div class="lbl" style="margin-bottom:12px">جهات الاتصال</div>
+      <div style="display:grid;gap:14px;margin-bottom:28px">
+        <div style="display:flex;gap:10px;align-items:center"><span class="av">ع</span><div><div style="font-weight:500">عبدالله الدوسري</div><div class="n" style="font-size:12.5px;color:var(--muted)">+966 50 771 3402</div></div><span style="margin-inline-start:auto;font-size:12px;color:var(--muted)">مدير المشتريات</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="av">ر</span><div><div style="font-weight:500">ريم القحطاني</div><div class="n" style="font-size:12.5px;color:var(--muted)">reem@nokhba.sa</div></div><span style="margin-inline-start:auto;font-size:12px;color:var(--muted)">المالية</span></div>
+      </div>
+      <div style="height:1px;background:var(--line);margin-bottom:24px"></div>
+      <div class="lbl" style="margin-bottom:12px">الأصناف المعتادة</div>
+      <table class="t dense" style="font-size:13.5px;margin-bottom:28px"><tbody>
+        <tr><td>خلطة النخبة الخاصة</td><td class="num">180 كغ/شهر</td></tr><tr><td>إثيوبيا يرغاتشيفي</td><td class="num">60 كغ/شهر</td></tr><tr><td>كولومبيا هويلا</td><td class="num">40 كغ/شهر</td></tr></tbody></table>
+      <div class="lbl" style="margin-bottom:12px">التفاصيل</div>
+      <dl class="props"><dt>الرقم الضريبي</dt><dd class="n" style="text-align:end">300456789100003</dd><dt>قائمة الأسعار</dt><dd>جملة · فئة أ</dd><dt>التوصيل</dt><dd>مستودع حي السلي</dd><dt>المصدر</dt><dd>معرض القهوة 2025</dd></dl>
+    </div>
+  </div>
+</div>
+  
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>Facts row, not cards</b>Five figures that answer "how is this account" at a glance, one of them a 12-month sparkline.</div><div><b>Next step is the alert</b>The overdue follow-up is the only tinted block, with its action.</div><div><b>One timeline</b>Calls, quotes, stage changes, deliveries and payments in a single feed with diffs.</div><div><b>Reference on the end side</b>Contacts, usual products and details sit in a narrow column at the left.</div></div></section><span class="num-h" style="margin-top:72px">08 · Production order</span><section class="sec" style="padding-top:0" id="prod">
+<div class="shot-h"><h3>Production order</h3><span class="ar" dir="rtl" lang="ar">الإنتاج</span></div>
+<p class="shot-intent">A production order as a process: the track, roasted versus required, every batch with its loss against the blend's expected band, and the four-way gram reconciliation as the page's signature.</p>
+<div class="stage"><div class="screen" dir="rtl" lang="ar"><div class="app">
+<aside class="side">
+  <div class="wm"><b>حِقبة</b><span>محمصة ومقهى · نظام التشغيل</span></div>
+  <div class="ws"><span class="dot">خ</span>الخبر الشمالية<svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></div>
+  <div class="find"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><span>بحث أو انتقال</span><span class="kbd">Ctrl K</span></div>
+  <div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.5h4.6l1.2-2.5H20"/></svg><span>الوارد</span><span class="c hot">7</span></div><div class="grp">التشغيل</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg><span>لوحة التشغيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>الطلبات</span></div><div class="nav on"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg><span>الإنتاج والتحميص</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3L14 9V3"/><path d="M7.5 14h9"/></svg><span>الجودة والتذوق</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span>المخزون</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3.5V16h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span>المشتريات</span></div><div class="grp">المبيعات</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><path d="M15.5 5.2a3.5 3.5 0 0 1 0 6.6M17.5 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><span>العملاء</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M4 12h16"/></svg><span>الصفقات</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4"/></svg><span>عروض الأسعار</span></div><div class="grp">المالية</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2-2h11v4"/><path d="M4 7v11a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><path d="M16.5 14.5h.01"/></svg><span>النقد والبنوك</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>الفواتير والتحصيل</span></div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg><span>الأداء</span></div><div class="grp">الفريق</div><div class="nav"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg><span>المهام</span><span class="c">3</span></div>
+  <div class="me"><span class="av">إع</span><div>إبراهيم عبدالله<small>مدير المنشأة</small></div><span style="margin-inline-start:auto;color:var(--muted)"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg></span></div>
+</aside>
+<div class="main"><div class="sheet">
+  <div class="top"><div class="crumb"><span>التشغيل</span> <span style="color:var(--faint)">/</span> <span>الإنتاج</span> <span style="color:var(--faint)">/</span> <b>PO-2026-118</b></div><span class="sp"></span><span class="btn g sm"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>جديد</span><span class="kbd" style="margin:0">C</span></div>
+  <div class="pg">
+  <div class="ph" style="align-items:flex-start"><div>
+    <div style="margin-bottom:6px"><span class="id" style="font-size:13px">PO-2026-118</span></div><h1>خلطة النخبة الخاصة</h1>
+    <div class="meta"><span>لطلب <span class="id">#1042</span> · محمصة النخبة</span><i></i><span>مطلوب 60.00 كغ محمّص</span><i></i><span>الموعد الأربعاء 7 أكتوبر 12:00</span></div></div>
+    <div class="act"><span class="btn"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v12l-4 4H5z"/><path d="M15 20v-4h4"/></svg>ملصقات</span><span class="btn p"><svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4 0-6.5-2.6-6.5-6 0-3.6 3-5.6 3.5-9 2 1.4 3 3 3 4.5 1-1 1.6-2.2 1.7-3.6C16.5 9 18.5 11.6 18.5 15c0 3.4-2.5 6-6.5 6z"/></svg>بدء الدفعة الرابعة</span></div></div>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:64px;align-items:end;margin:12px 0 40px">
+    <div class="track"><div class="done"><b>مخطط</b><small>5 أكتوبر · 3 دفعات</small></div><div class="cur"><b>التحميص</b><small>2 من 3 مكتملة · 40.82 كغ</small></div><div><b style="color:var(--muted);font-weight:500">الجودة</b><small>1 مقبولة</small></div><div><b style="color:var(--muted);font-weight:500">التعبئة</b><small>16 كيس</small></div><div style="flex:.3"><b style="color:var(--muted);font-weight:500">جاهز</b></div></div>
+    <div><div class="lbl">المُحمّص مقابل المطلوب</div><div style="margin:8px 0"><span class="mid n" style="font-size:34px">40.82</span><span class="unit">/ 60.00 كغ</span></div><div class="bar" style="height:8px;border-radius:4px"><i style="width:68%;border-radius:4px"></i></div></div>
+  </div>
+  <div class="bh"><h2 class="bt">الدفعات</h2><span class="sub">نطاق الفاقد المتوقع للخلطة 14.0–16.5%</span></div>
+  <table class="t"><thead><tr><th>الدفعة</th><th>اللوت الأخضر</th><th class="num">داخل · كغ</th><th class="num">خارج · كغ</th><th class="num">الفاقد</th><th>الجودة</th><th class="num">البدء</th></tr></thead><tbody><tr class='on'><td class="id" style="color:var(--ink-2)">B-20261006-4821</td><td class="sm" style="color:var(--ink-2)">GB-014 · يرغاتشيفي + سيرادو</td><td class="num">24.00</td><td class="num">20.30</td><td class="num" style="width:170px"><div style="display:flex;align-items:center;gap:10px;justify-content:flex-end"><span class="n">15.4%</span><div style="position:relative;width:96px;height:6px;background:var(--line);border-radius:3px">
+<i style="position:absolute;inset-block:0;right:33%;width:42%;background:var(--brand-3);border-radius:3px"></i><i style="position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 2px var(--sheet);right:calc(57% - 6px)"></i></div></div></td><td><span class="st ok">مقبول · 84.5</span></td><td class="sm num">07:32</td></tr><tr><td class="id" style="color:var(--ink-2)">B-20261006-4822</td><td class="sm" style="color:var(--ink-2)">GB-014 · يرغاتشيفي + سيرادو</td><td class="num">24.00</td><td class="num">20.52</td><td class="num" style="width:170px"><div style="display:flex;align-items:center;gap:10px;justify-content:flex-end"><span class="n">14.5%</span><div style="position:relative;width:96px;height:6px;background:var(--line);border-radius:3px">
+<i style="position:absolute;inset-block:0;right:33%;width:42%;background:var(--brand-3);border-radius:3px"></i><i style="position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 2px var(--sheet);right:calc(42% - 6px)"></i></div></div></td><td><span class="st in">بانتظار التذوق</span></td><td class="sm num">08:41</td></tr><tr><td class="id" style="color:var(--ink-2)">B-20261006-4823</td><td class="sm" style="color:var(--ink-2)">GB-019 · يرغاتشيفي + سيرادو</td><td class="num">24.00</td><td class="num">—</td><td class="num" style="width:170px"><span class="sm">—</span></td><td><span class="st in">قيد التحميص</span></td><td class="sm num">09:58</td></tr></tbody>
+  <tfoot><tr><td colspan="2">الإجمالي حتى الآن</td><td class="num" style="color:var(--ink);font-weight:500">72.00</td><td class="num" style="color:var(--ink);font-weight:500">40.82</td><td class="num" style="color:var(--ink);font-weight:500">15.0%</td><td colspan="2"></td></tr></tfoot></table>
+  <div class="cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:44px">
+    <div><div class="bh"><h2 class="bt">مطابقة الدفعة <span class="id" style="font-size:15px;color:var(--ink-2)">4821</span></h2><span class="sub">كل غرام في مكان واحد</span></div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span class="mid n">20.30</span><span class="unit">كغ مُحمّص</span><span style="margin-inline-start:auto;font-size:13px;color:var(--brand);font-weight:500">مطابقة كاملة ✓</span></div>
+      <div class="bar" style="height:14px;border-radius:4px;gap:2px;background:none"><i style="flex:16.0;background:var(--brand)"></i><i style="flex:2.75;background:var(--sand)"></i><i style="flex:0.3;background:var(--danger)"></i><i style="flex:1.25;background:var(--line-2)"></i></div>
+      <div style="margin-top:10px"><div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)"><i style="width:9px;height:9px;border-radius:2px;background:var(--brand);"></i><div>عبوات كاملة<div class="sm" style="font-size:12px;color:var(--muted)"><span class='n'>16 × 1</span> كغ</div></div><span class="n" style="font-weight:500">16.00<span class="unit">كغ</span></span></div><div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)"><i style="width:9px;height:9px;border-radius:2px;background:var(--sand);"></i><div>عبوات جزئية<div class="sm" style="font-size:12px;color:var(--muted)">عبوة واحدة <span class='n'>750</span> غ</div></div><span class="n" style="font-weight:500">2.75<span class="unit">كغ</span></span></div><div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)"><i style="width:9px;height:9px;border-radius:2px;background:var(--danger);"></i><div>فاقد مُعلن<div class="sm" style="font-size:12px;color:var(--muted)">انسكاب أثناء التفريغ</div></div><span class="n" style="font-weight:500">0.30<span class="unit">كغ</span></span></div><div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)"><i style="width:9px;height:9px;border-radius:2px;background:var(--line-2);box-shadow:inset 0 0 0 1px var(--ctl);"></i><div>غير معبأ<div class="sm" style="font-size:12px;color:var(--muted)">في الحاوية H-2</div></div><span class="n" style="font-weight:500">1.25<span class="unit">كغ</span></span></div></div>
+      <div style="display:flex;justify-content:space-between;padding-top:10px;font-size:13px;color:var(--muted)"><span>المجموع</span><span class="n" style="color:var(--ink);font-weight:600">20.30 كغ = 20.30 كغ</span></div></div>
+    <div><div class="bh"><h2 class="bt">مصدر البن</h2><span class="sub">تتبع اللوتات الخضراء</span></div>
+      <table class="t dense"><thead><tr><th>اللوت</th><th class="num">قبل الأمر</th><th class="num">مستهلك</th><th class="num">المتبقي</th></tr></thead><tbody>
+      <tr><td><span class="id" style="color:var(--ink)">GB-014</span> <span class="sm">إثيوبيا يرغاتشيفي</span></td><td class="num">120.40</td><td class="num">−28.80</td><td class="num">91.60</td></tr>
+      <tr><td><span class="id" style="color:var(--ink)">GB-011</span> <span class="sm">البرازيل سيرادو</span></td><td class="num">688.20</td><td class="num">−33.60</td><td class="num">654.60</td></tr>
+      <tr><td><span class="id" style="color:var(--ink)">GB-019</span> <span class="sm">إثيوبيا يرغاتشيفي</span></td><td class="num">44.00</td><td class="num">−9.60</td><td class="num">34.40</td></tr></tbody></table>
+      <div class="lbl" style="margin:28px 0 12px">سجل الأمر</div>
+      <div class="tl" style="font-size:13.5px"><div><span class="m b"></span>بدأت الدفعة <span class="id">4823</span> على Giesen W30<div class="when">09:58 · نورة السبيعي</div></div><div><span class="m"></span>قبول الجودة للدفعة <span class="id">4821</span> · 84.5 نقطة<div class="when">09:20 · سلمان الشهري</div></div></div></div>
+  </div>
+</div>
+  
+</div></div>
+</div></div></div>
+<div class="notes"><div><b>Process track</b>Where the order is, with real quantities under each step.</div><div><b>Loss in context</b>Each batch's loss is a dot on the blend's expected band, so outliers need no colour.</div><div><b>Every gram reconciles</b>Complete, partial, declared loss and unpacked always sum to the roasted weight.</div><div><b>Traceability</b>Green lots consumed by this order, with before, used and remaining.</div></div></section>
+
+<section class="sec" id="review"><span class="num-h">09</span><h2>Self-review: what still felt generic, and what changed</h2>
+<p class="sub">Each screen was rendered at 1440px and inspected after the first build. These are the faults found and the changes made in round two. All of them are visible in the screens above.</p>
+<div class="review">
+  <div><b>Exec chart read as decline.</b><div class="was">The daily line was jagged (weekend dips) and, with time running right to left, a rising month read as a fall to anyone used to Latin charts. It also ran past the page gutter.</div><div class="now">Cumulative month-to-date against the same days of August, so the gap is the story. Quantitative charts now run left to right, as Saudi banking and market apps do; schedules and process tracks stay right to left. Width fitted to the content column.</div></div>
+  <div><b>The roaster track was a toy.</b><div class="was">Squeezed into a third of the page, its labels clipped to “خلط”, and the batches were an hour long on a W15, which roasts 15&nbsp;kg, not 24.</div><div class="now">It is now a full-width band and the signature of the operations page: a W30, roughly 30-minute cycles on a 07:00–13:00 track, a hatched maintenance slot, and the live 10:42 line. Day figures were corrected to match three finished batches (61.2&nbsp;kg).</div></div>
+  <div><b>The orders table hid under its own drawer.</b><div class="was">An overlay drawer covered the payment column, and filter chips wrapped onto two lines.</div><div class="now">A split view: the list stays fully visible and drops its secondary columns (quantity, city, owner) while the preview is open. A note says the columns come back on close. Chips and search no longer wrap.</div></div>
+  <div><b>Two primary buttons per row.</b><div class="was">“تأكيد الشحن” rendered as a filled button in every ready row, and a class clash greyed its label.</div><div class="now">Row actions are all secondary. The page header keeps the only primary action.</div></div>
+  <div><b>Brand noise in the chrome.</b><div class="was">A floating Latin “ERP” label, a bell with an ember dot that duplicated the inbox count, and an avatar whose “إ” read as “!”.</div><div class="now">The wordmark plus an Arabic descriptor; the bell is gone because the inbox is the notification centre; the avatar uses two initials (إع).</div></div>
+  <div><b>Bidi slips.</b><div class="was">Week ranges in the bar chart rendered as “29–22”, “1 × 750 غ” reordered, and the PO number aligned to the wrong edge above its title.</div><div class="now">Ranges and quantities are LTR-isolated, and IDs are inline isolates rather than block-level LTR.</div></div>
+</div>
+
+<h2 style="font:500 24px/1.2 var(--f-num);margin:56px 0 8px">Checked against the references</h2>
+<div class="tblw"><table class="tbl">
+<thead><tr><th>Reference</th><th>What it asked for</th><th>Where it shows</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Mobbin findings</td><td>Saved views with counts, readable filter chips, a summary footer, a drawer or side panel that keeps context, a command palette, an actionable inbox, activity diffs, a process stepper, stated comparison periods</td><td>Orders (views, chips, footer, split preview), shell (palette, inbox), CRM (diff in timeline), production (track), exec (“compared to the same days of August”)</td><td class="ok">Met</td></tr>
+<tr><td>Figma exploration</td><td>Light ground, sage and sand, large Arabic title, unboxed figures, a single priority line, a calm table, honest-data notes</td><td>All six screens; the ops page keeps the Figma priority line and three day figures</td><td class="ok">Kept and extended</td></tr>
+<tr><td>Design skill v1.0</td><td>Arabic RTL, Latin digits, LTR-isolated IDs, separate fulfilment and payment, “overdue” as a flag, no cards around every group, contrast ≥4.5:1</td><td>Throughout. Muted text is 5.35:1 on white</td><td class="ok">Met</td></tr>
+<tr><td>Design skill: font</td><td>Cairo</td><td>Replaced by Markazi Text (display) and IBM Plex Sans Arabic (UI)</td><td class="part">Deviation, needs your sign-off</td></tr>
+<tr><td>Brand guideline PDF</td><td>Official logo, colours and type</td><td>Not read. The file is on your PC (<code>C:\Users\mtmbk\Downloads</code>), outside this cloud session, and not in Drive. Brand cues came from the Figma wordmark and the repo's <code>logo.svg</code> (Naskh ح, ember dash)</td><td class="part">Unverified</td></tr>
+<tr><td>Emil Kowalski / Impeccable / Taste skills</td><td>Restrained motion, no nested cards, tinted neutrals, no default fonts or purple gradients, deliberate composition</td><td>Not installed in this session, so they were applied from their published principles: ease-out 120–220ms, press scale .97, two surfaces, green-tinted neutrals, a non-default type pairing</td><td class="part">Applied from memory</td></tr>
+</tbody></table></div>
+
+<h2 style="font:500 24px/1.2 var(--f-num);margin:56px 0 8px">Still weak, honestly</h2>
+<div class="review">
+  <div><b>The sidebar is conventional.</b><div class="was">Seventeen items with icons is the Linear/Attio pattern. It is calm, but not distinctive.</div><div class="now" style="color:var(--page-muted)">Next step: role-scoped navigation, so a roaster sees about 6 items and the owner sees everything, plus pinned views.</div></div>
+  <div><b>The paired cash bars are generic.</b><div class="was">They are honest and readable, but any SaaS product could have drawn them.</div><div class="now" style="color:var(--page-muted)">Candidate: a cash-gap view that shows days of sales not yet collected per week, which ties back to the 11-day lag in the lede.</div></div>
+  <div><b>Only desktop at 1440px.</b><div class="was">Tablet (the floor) and phone (reps, approvals) are not drawn in this direction yet.</div><div class="now" style="color:var(--page-muted)">The production page and the ops roaster band should be drawn next at 1024px with touch density.</div></div>
+  <div><b>Dark mode is only defined.</b><div class="was">Tokens exist for dark, but no screen has been reviewed in it.</div><div class="now" style="color:var(--page-muted)">Light ships first; dark needs its own review pass.</div></div>
+</div>
+</section>
+
+</div>
+<script>
+(function(){
+  function fit(){
+    document.querySelectorAll('.stage').forEach(function(st){
+      var sc = st.firstElementChild; if(!sc) return;
+      var s = st.clientWidth / 1440;
+      sc.style.transform = 'scale(' + s + ')';
+      st.style.height = Math.ceil(sc.offsetHeight * s) + 'px';
+    });
+  }
+  fit(); window.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+})();
+</script>
+</body>
+</html>
