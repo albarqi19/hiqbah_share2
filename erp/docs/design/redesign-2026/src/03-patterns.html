@@ -1,0 +1,279 @@
+<section class="sec" id="patterns">
+  <p class="eyebrow">04</p>
+  <h2>Pattern library</h2>
+  <p>Thirty-three patterns, each answered on the same five points: who does it well, why it works, the principle behind it, whether it fits Hiqbah, and how to adapt it. Fit is marked <span class="tag fit-yes">Adopt</span>, <span class="tag fit-adapt">Adapt</span> or <span class="tag fit-no">Avoid</span>. Click a heading to collapse it.</p>
+
+  <h3>Navigation and shell</h3>
+
+  <details class="pattern" open><summary><span class="pn">01</span><span class="pt">Light, grouped sidebar with favourites and recents</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/297adfeb-8312-496b-8acf-41839a6cf775">Attio</a>, <a href="https://mobbin.com/screens/fc208a44-dbf9-4f79-b9b0-db57f9840964">Linear</a>, <a href="https://mobbin.com/screens/d9deb551-88bf-4c93-91b3-43ef6659ccef">Shopify</a>, <a href="https://mobbin.com/screens/668f28bb-5ee6-45d3-885e-fa94cc4c3651">Twenty</a></p></div>
+    <div><h5>Why it works</h5><p>The sidebar shares the canvas tone, so content is the brightest surface on screen. Sections are labelled in small grey text; selection is a tint plus weight, not a saturated pill.</p></div>
+    <div><h5>Principle</h5><p>Figure–ground: chrome recedes, work advances. Recognition over recall via favourites and recents.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. The current dark <code>#1F2937</code> sidebar with a violet active pill is the loudest element on every page.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Sidebar on the right (RTL start), 232px, canvas background, a 2px brand-green inner rule on the <i>start</i> edge of the active item. Two levels maximum. Section order: favourites, then modules. Counts only for queues a person must clear (approvals, overdue tasks), never totals.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">02</span><span class="pt">Top bar with breadcrumb, global search and quick create</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/fb3596aa-f981-487b-996b-b30230e8b771">Zoho CRM</a>, <a href="https://mobbin.com/screens/fedd9c09-b271-46a7-819c-956f51723a30">HubSpot</a>, <a href="https://mobbin.com/screens/d7179a06-0195-4f94-97a9-19e781e3f50e">Xero</a>, <a href="https://mobbin.com/screens/f00cc4fb-4083-43fc-a0fb-703a6c4ef771">Linear</a></p></div>
+    <div><h5>Why it works</h5><p>The same three things are in the same place on every page: where am I, find anything, make something. Breadcrumb doubles as a back stack.</p></div>
+    <div><h5>Principle</h5><p>Consistency and spatial memory; global actions are global.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. Today the top bar holds a breadcrumb and a long-form date (<span class="ar">الأحد 27 سبتمبر 2026</span>) that nobody needs on every page.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>44px bar. Start side: breadcrumb. Centre: search field reading <span class="ar">ابحث أو انتقل…</span> with <span class="kbd">Ctrl K</span>. End side: <span class="ar">+ جديد</span> menu, approvals inbox with count, avatar. Drop the date; show it only on dashboards and reports where the period matters.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">03</span><span class="pt">Command palette</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/593d7acd-2e16-4365-bcd6-02ce52f48f3b">Vapi</a>, <a href="https://mobbin.com/screens/2af813bf-0129-45d1-81ed-069edee76e16">Juicebox</a>, <a href="https://mobbin.com/screens/14ceb943-f04a-460f-b4f5-2ebd78d74aff">Magnific</a>, <a href="https://mobbin.com/screens/5f353fc3-d9ce-4d1c-be9b-cc1b4ad07578">v0</a></p></div>
+    <div><h5>Why it works</h5><p>One input reaches records, pages and actions. Sections (Actions, Recent, Pages) and a key legend teach the shortcut while it is used.</p></div>
+    <div><h5>Principle</h5><p>Flexibility and efficiency of use: novices click, experts type.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes, and it is the single biggest speed gain for staff who know an order number or a lot code.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Arabic-aware matching: normalise <span class="ar">أ إ آ → ا</span>, <span class="ar">ة → ه</span>, <span class="ar">ى → ي</span>, strip tashkeel and tatweel, treat Arabic-Indic and Latin digits as equal. Typed patterns jump directly: <code>#1042</code> → order, <code>GB-014</code> → green lot, <code>B-20260930</code> → roast batch, <code>OF-1042</code> → quote. Bind shortcuts to <code>event.code</code> (physical key), not <code>event.key</code>, so they work on an Arabic keyboard layout.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">04</span><span class="pt">Saved views as tabs, with counts</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/e2205dbe-6e99-4b94-b47c-0be070a76fe1">Xero bills</a>, <a href="https://mobbin.com/screens/fedd9c09-b271-46a7-819c-956f51723a30">HubSpot</a>, <a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote</a>, <a href="https://mobbin.com/screens/defd2114-8885-46fd-964e-796e112c3212">Plain</a></p></div>
+    <div><h5>Why it works</h5><p>Xero's <i>Draft 13 · Awaiting approval 1 · Awaiting payment 6</i> answers "what needs me" before the table loads. The tab is a filter people already understand.</p></div>
+    <div><h5>Principle</h5><p>Visibility of system status; progressive disclosure of filters.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes, for every list with a workflow: orders, quotes, bills, production orders, tasks, collections.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>First tab is always <span class="ar">الكل</span>; then one tab per actionable state; counts in a muted chip; a personal view is created from the current filters with <span class="ar">حفظ كعرض</span> and marked personal or shared. Maximum six visible tabs; the rest go into <span class="ar">المزيد</span>.</p></div>
+  </div></details>
+
+  <h3>Data display</h3>
+
+  <details class="pattern" open><summary><span class="pn">05</span><span class="pt">Dense data table with sticky header and pinned identifier</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/668f28bb-5ee6-45d3-885e-fa94cc4c3651">Twenty</a>, <a href="https://mobbin.com/screens/46a43a9c-a04e-4e29-9ab4-2749c81067aa">Airtable</a>, <a href="https://mobbin.com/screens/d9deb551-88bf-4c93-91b3-43ef6659ccef">Shopify inventory</a>, <a href="https://mobbin.com/screens/926541e1-1d12-4677-8faf-54193a709b17">Neon</a></p></div>
+    <div><h5>Why it works</h5><p>Rows of 32–40px with hairline dividers fit 15–20 records above the fold. The first column stays put while numbers scroll, so a row never loses its name.</p></div>
+    <div><h5>Principle</h5><p>Information density with low visual noise (data-ink ratio).</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. Full spec in <a href="#tables">§11</a>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>In RTL the pinned column sits on the right. Numeric columns align to the end (left) with tabular figures; text aligns to the start (right). Below 1024px keep the table and scroll horizontally behind the pinned column rather than converting rows to cards.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">06</span><span class="pt">Filter chips plus an "add filter" field picker</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/668f28bb-5ee6-45d3-885e-fa94cc4c3651">Twenty</a>, <a href="https://mobbin.com/screens/e2205dbe-6e99-4b94-b47c-0be070a76fe1">Xero</a>, <a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote</a>, <a href="https://mobbin.com/screens/926541e1-1d12-4677-8faf-54193a709b17">Neon</a></p></div>
+    <div><h5>Why it works</h5><p>Each active filter is a readable sentence (<i>Created by: Ji Ho Lim ×</i>) that can be removed in one click. The picker searches fields, so 30 filterable fields do not need 30 dropdowns.</p></div>
+    <div><h5>Principle</h5><p>Recognition over recall; reversible actions.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. Current lists offer one status select and a search box.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Chip text: <span class="ar">الحالة: بانتظار الاعتماد ×</span>. Inactive suggested filters render as dashed chips (<span class="ar">المسؤول</span>, <span class="ar">الفترة</span>) so the most common ones are one click away. Filters, sort and view live in the URL query so a filtered list can be shared and survives Back.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">07</span><span class="pt">Floating bulk action bar</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/2b2c6bc8-1991-4cce-8a70-cc056d32facc">Shopify Bill Pay</a>, <a href="https://mobbin.com/screens/412227e3-0cf1-4d07-a31b-315f000268fc">Xero</a>, <a href="https://mobbin.com/screens/3f1181dc-6264-4b7f-921f-9a0824bbe19a">Salesforce</a>, <a href="https://mobbin.com/screens/2146514d-1011-4f03-8b62-cef4040e0c42">Workable</a></p></div>
+    <div><h5>Why it works</h5><p>Actions appear only when there is something to act on, next to the count of what they act on (<i>3 selected · Schedule 3 payments</i>).</p></div>
+    <div><h5>Principle</h5><p>Contextual controls; the verb names the scope.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes: approve bills, assign leads, print labels, move orders to dispatch, export.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Bar floats 16px above the table footer, ink background. Text: <span class="ar">٣ محددة من هذه الصفحة · تحديد كل النتائج (٤٨)</span>. Destructive bulk actions confirm with the count and the entity name and report per-row success or failure afterwards.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">08</span><span class="pt">Summary row and column aggregates</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/19b1e434-a104-48ff-ac86-8194c9f5c875">DoorDash product mix</a>, <a href="https://mobbin.com/screens/5cb8990c-d8b1-46dc-b30f-5b69c1602026">Square category sales</a>, <a href="https://mobbin.com/screens/668f28bb-5ee6-45d3-885e-fa94cc4c3651">Twenty</a>, <a href="https://mobbin.com/screens/46a43a9c-a04e-4e29-9ab4-2749c81067aa">Airtable</a></p></div>
+    <div><h5>Why it works</h5><p>Totals sit where the eye already is, in the column they total. No separate KPI card has to repeat them.</p></div>
+    <div><h5>Principle</h5><p>Proximity; one number, one place.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes: kg on hand, order value, outstanding receivables, roast loss.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Footer row on the sunken surface, sticky at the bottom of the scroll area. Label in the pinned column states the scope: <span class="ar">إجمالي ٤٨ نتيجة (بعد التصفية)</span>. Totals only for additive columns with one unit; never sum mixed units (kg and bags).</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">09</span><span class="pt">Status cells as tinted tags with a dot</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/2b2c6bc8-1991-4cce-8a70-cc056d32facc">Shopify</a>, <a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote</a>, <a href="https://mobbin.com/screens/e2205dbe-6e99-4b94-b47c-0be070a76fe1">Xero</a>, <a href="https://mobbin.com/screens/fc208a44-dbf9-4f79-b9b0-db57f9840964">Linear</a></p></div>
+    <div><h5>Why it works</h5><p>Low-saturation tint plus a dot reads at a glance without the row turning into a colour chart. Text carries the meaning; colour only speeds scanning.</p></div>
+    <div><h5>Principle</h5><p>Redundant encoding (colour + shape + text); WCAG 1.4.1.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. Currently three badge systems with outlined pills of varying radius.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Six tones only, mapped in the registry (<a href="#status">§9</a>). 20px high, 4px radius, no border. Derived risk ("overdue", "low stock") is a separate red flag next to the status, never a replacement for it.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">10</span><span class="pt">Group-by with group subtotals</span><span class="tag fit-adapt">Adapt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/ba8b613b-e6df-4db1-b64d-0f7e20f5440c">Canny</a>, <a href="https://mobbin.com/screens/aaf74c3f-e1df-4376-b05b-cb4a9b290ee2">Monarch</a>, <a href="https://mobbin.com/screens/c619f130-9193-472a-b1e2-1533aa227fd7">Quicken</a></p></div>
+    <div><h5>Why it works</h5><p>The group header row carries its own subtotal, so structure and sum read together.</p></div>
+    <div><h5>Principle</h5><p>Chunking; hierarchy through position rather than boxes.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Adapt: useful for inventory by category or origin and for expenses by account; not for transactional lists where sort order matters more.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Group header 36px, sunken surface, chevron that rotates toward the content (down when open, toward the end side when closed, i.e. pointing left in RTL). Inventory groups: <span class="ar">بن أخضر · مواد تعبئة · منتج نهائي</span>, each with kg or unit subtotal.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">11</span><span class="pt">Metric strip whose items switch the chart</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/d9696f0c-790a-4272-a15e-690eef0d3182">Mintlify</a>, <a href="https://mobbin.com/screens/938ac496-e3f5-4490-9b09-a46b9325f1e3">DoorDash</a>, <a href="https://mobbin.com/screens/d7179a06-0195-4f94-97a9-19e781e3f50e">Xero cash flow</a></p></div>
+    <div><h5>Why it works</h5><p>Five numbers in one bordered strip, divided by hairlines, use a third of the height of five cards. Selecting one re-plots the chart below, so the strip is also navigation.</p></div>
+    <div><h5>Principle</h5><p>Overview first, details on demand (Shneiderman).</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; it replaces the two rows of four KPI cards on Sales reports and the executive dashboard.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Each item: label, value with unit, comparison stated in words (<span class="ar">+٨٪ عن سبتمبر ٢٠٢٥</span>), and a definition tooltip. Comparison only between equal-length periods; a partial month compares to the same days of the previous month.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">12</span><span class="pt">Explicit comparison period next to the date range</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/42f45ba0-07e9-4edc-ba6e-87f7acd9ad3a">Klaviyo</a>, <a href="https://mobbin.com/screens/6e267440-5f3e-470f-b69a-465ba480df46">Square</a>, <a href="https://mobbin.com/screens/1d417c2e-234a-4bf0-a87e-dc65703c2b64">Calendly</a></p></div>
+    <div><h5>Why it works</h5><p>"Jun 22 – Jul 22, compared to previous period" removes the most common misreading of a delta.</p></div>
+    <div><h5>Principle</h5><p>Honest data display; state the denominator.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. Dashboard deltas today do not say what they compare against.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Period control: presets (<span class="ar">اليوم، ٧ أيام، هذا الشهر، الشهر الماضي، هذا الربع، مخصص</span>) plus a comparison select (<span class="ar">الفترة السابقة، نفس الفترة من العام الماضي، بدون</span>). Calendar is always Gregorian, weeks start Sunday.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">13</span><span class="pt">Budget vs actual as bars inside a table</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/7263637d-25a7-4b26-b1c5-58f5e11c379a">Copilot Money</a>, <a href="https://mobbin.com/screens/a1576a19-53f6-498d-80a7-02ece64072d8">QuickBooks</a></p></div>
+    <div><h5>Why it works</h5><p>Spent, Budget and Left as columns with an inline bar give both the exact number and the shape. Overspend turns red and the bar caps at 100% with the excess stated.</p></div>
+    <div><h5>Principle</h5><p>Small multiples; preattentive length comparison.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes, for the monthly cash budget.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Columns: <span class="ar">البند · المعتمد · الفعلي · الملتزم · المتبقي · نسبة الاستهلاك</span>. Bar fill colour by threshold (≤85% brand, 85–100% warning, &gt;100% danger), with the percentage always printed.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">14</span><span class="pt">Cash projection line with an editable driver drawer</span><span class="tag fit-adapt">Adapt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/d7179a06-0195-4f94-97a9-19e781e3f50e">Xero short-term cash flow</a>, <a href="https://mobbin.com/screens/9ee2c231-6dda-49b7-b0c3-4557363d3f9f">HoneyBook</a></p></div>
+    <div><h5>Why it works</h5><p>Three numbers (money in, money out, projected end balance), one line, and a drawer to fix the assumptions (e.g. when overdue bills will be paid) without leaving the chart.</p></div>
+    <div><h5>Principle</h5><p>Direct manipulation of model inputs; keep the result in view.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Adapt: only show projection where the backend has dated obligations; mark the projected part of the line as dashed and label it <span class="ar">متوقع</span>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Never mix "allocated" with "paid": a rent allocation is not a cash outflow until the payment is recorded. The drawer lists obligations with their expected date; changing a date re-plots immediately and is saved as a planning assumption, not a transaction.</p></div>
+  </div></details>
+
+  <h3>Records and workflow</h3>
+
+  <details class="pattern" open><summary><span class="pn">15</span><span class="pt">Record page: header, main column, properties panel</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/297adfeb-8312-496b-8acf-41839a6cf775">Attio</a>, <a href="https://mobbin.com/screens/f00cc4fb-4083-43fc-a0fb-703a6c4ef771">Linear</a>, <a href="https://mobbin.com/screens/edb25210-fb3c-4cd4-8736-85569882b93e">Lightfield</a>, <a href="https://mobbin.com/screens/591c4be5-9288-4c2c-a053-c69e213dd25c">Apollo</a></p></div>
+    <div><h5>Why it works</h5><p>Facts that change rarely sit in a narrow panel; the work (activity, line items, documents) gets the wide column. No card wraps each group.</p></div>
+    <div><h5>Principle</h5><p>Separate reference data from working data; F-pattern scanning.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes, for deals, leads, customers, orders, production orders, bills.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>RTL: main column on the right (start), properties panel 320px on the left (end). Header: title, ID in mono, status tag, owner; one primary action on the end side plus a <span class="ar">⋯</span> menu. Tabs below the header: <span class="ar">النشاط · عروض الأسعار · الطلبات · العينات · الملفات</span>.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">16</span><span class="pt">Activity timeline with attribute diffs and a pinned "next up"</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/297adfeb-8312-496b-8acf-41839a6cf775">Attio</a>, <a href="https://mobbin.com/screens/88631280-beda-4e91-b556-6c4a7630bf4a">Pipedrive (Focus)</a>, <a href="https://mobbin.com/screens/fe7e0ef9-62e6-43d7-8bb6-679f301119c4">Salesforce (Upcoming &amp; Overdue)</a>, <a href="https://mobbin.com/screens/2deef352-1f6b-4757-a4c9-dcce106b0e6a">Toggl</a></p></div>
+    <div><h5>Why it works</h5><p>The overdue follow-up is pinned above history, so the record page answers "what do I do next". History is grouped by day; field changes read as <i>Stage: Prospecting → Meeting</i>.</p></div>
+    <div><h5>Principle</h5><p>Prospective memory support; audit-friendly transparency.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes. The deal page shows activities as boxed cards and history as a separate card.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>One feed, filterable by type (<span class="ar">مكالمات، زيارات، عينات، عروض، تغييرات</span>). Composer at the top. Each entry: actor, verb, object, exact time on hover (<span class="ar">٣٠ سبتمبر ٢٠٢٦، ١٤:٠٥ بتوقيت الرياض</span>), relative time inline. Rail and dots on the start side (right).</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">17</span><span class="pt">Drawer for preview and quick edit, page for real work</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/147163b2-eef8-40be-b199-dae113a33d9c">DoorDash orders</a>, <a href="https://mobbin.com/screens/f0170497-9df6-4b27-9bdc-ab606ee77530">Twenty</a>, <a href="https://mobbin.com/screens/defd2114-8885-46fd-964e-796e112c3212">Plain</a>, <a href="https://mobbin.com/screens/d7179a06-0195-4f94-97a9-19e781e3f50e">Xero</a></p></div>
+    <div><h5>Why it works</h5><p>The list stays visible and keeps its scroll and filters; the drawer has an "Open" escape to the full page.</p></div>
+    <div><h5>Principle</h5><p>Preserve context; match container to task length.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; today 33 hand-built <code>fixed inset-0</code> overlays mix both jobs.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Rule: <b>drawer</b> (480px, slides from the left edge in RTL, i.e. the end side) for preview, quick create of small objects, single-field edits, filters on mobile. <b>Page</b> for anything with line items, more than ~8 fields, approvals or comparisons. <b>Dialog</b> (max 480px) only for a decision: confirm, choose, or a reason (lost reason, rejection reason).</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">18</span><span class="pt">Line-item editor with sticky totals</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/c70df137-fb09-4dda-8c8b-9da3cba51deb">Square invoice</a>, <a href="https://mobbin.com/screens/2d749fed-77f8-4378-af70-5d636fd6025d">Shopify purchase order</a>, <a href="https://mobbin.com/screens/e432b17f-be69-4544-94ee-9d3110bbf90d">Midday</a></p></div>
+    <div><h5>Why it works</h5><p>Lines in a table, settings in a side column, the total always visible. Shopify's "Unsaved changes · Discard · Save" bar makes the dirty state impossible to miss.</p></div>
+    <div><h5>Principle</h5><p>Visibility of system status; error prevention.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes for quotes, sales orders, purchase orders, supplier bills.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Columns: <span class="ar">المنتج/SKU · الوزن · الكمية · سعر الوحدة · الخصم · الضريبة · الإجمالي</span>. Totals panel states VAT inclusion explicitly (<span class="ar">الأسعار غير شاملة ضريبة القيمة المضافة</span>). Keyboard: Enter adds a line, Tab moves across cells. Unsaved bar in the top bar, not a modal.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">19</span><span class="pt">Approvals: status tabs, approve after selection, reason on reject</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/412227e3-0cf1-4d07-a31b-315f000268fc">Xero draft bills</a>, <a href="https://mobbin.com/screens/2b2c6bc8-1991-4cce-8a70-cc056d32facc">Shopify Bill Pay</a>, <a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote</a></p></div>
+    <div><h5>Why it works</h5><p>Approval is a queue. A tab per stage, bulk approve, an undo toast, and a mandatory reason when rejecting.</p></div>
+    <div><h5>Principle</h5><p>Make the queue visible; make reversals cheap; make refusals explain themselves.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes: quotes over discount limit, supplier bills, budget changes, commission periods, collection verification.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>An <span class="ar">الاعتمادات</span> inbox merges every queue the user can act on. On the record, an ApprovalPanel shows stage, approver, decision, reason and time. "Approved" never reads as "paid": a bill shows approval and payment as two separate fields.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">20</span><span class="pt">Pipeline board with stage totals and stall warnings</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/2ff3c977-7902-48b5-8361-0c89710e5c2e">Pipedrive</a>, <a href="https://mobbin.com/screens/fedd9c09-b271-46a7-819c-956f51723a30">HubSpot</a>, <a href="https://mobbin.com/screens/719c5483-f836-4cef-b6cd-da66c60ced13">Zendesk Sell</a>, <a href="https://mobbin.com/screens/e275641a-a3e8-440a-b53e-983bb9cec7c7">Attio</a></p></div>
+    <div><h5>Why it works</h5><p>Cards are small (title, company, value, owner, a stall icon). Stage value and weighted value live in the column header or footer. Moving a card is a drag, not a button.</p></div>
+    <div><h5>Principle</h5><p>Direct manipulation; minimal card content; status at the edge.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; the current card carries four buttons and the board ends with two large outcome panels.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Stages flow right to left (first stage at the right). Drag plus keyboard alternative (focus card, <span class="kbd">M</span> opens <span class="ar">نقل إلى…</span>). Won/Lost are drop zones that appear while dragging and are filtered views, not columns. Lost requires a reason in a dialog.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">21</span><span class="pt">Process stepper with the work list beneath it</span><span class="tag fit-adapt">Adapt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/10bda18e-95a0-4c93-8be9-3b3775477e90">Shopify batch: Pick → Print → Pack → Done</a>, <a href="https://mobbin.com/screens/f6465633-16e9-4618-abbb-9e544c3d6e20">Klaviyo flow preview</a></p></div>
+    <div><h5>Why it works</h5><p>The stepper is the page's spine; the current step expands into the actual list of things to do; a comment timeline sits under it.</p></div>
+    <div><h5>Principle</h5><p>Match the system to the real-world process.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Adapt for production orders: <span class="ar">مخطط → تحميص → جودة → تعبئة → جاهز</span>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Each step shows its own status and quantity (e.g. <span class="ar">تحميص · ٣ دفعات · ٤٢٫٦ كغ</span>). Partial completion is shown as such, never rounded to done. Tablet first for the floor: 48px targets, one primary action per step.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">22</span><span class="pt">Task list with "My tasks / All / Done" and a detail side panel</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/defd2114-8885-46fd-964e-796e112c3212">Plain</a>, <a href="https://mobbin.com/screens/fe8c92bf-f0ef-46a5-a006-3f4b92a7be23">Basecamp</a>, <a href="https://mobbin.com/screens/180250b5-b758-4c51-bff7-90bc419c1e0b">HoneyBook</a>, <a href="https://mobbin.com/screens/f00cc4fb-4083-43fc-a0fb-703a6c4ef771">Linear</a></p></div>
+    <div><h5>Why it works</h5><p>Tasks grouped by due window (overdue, today, this week, later), each row with ID, title, linked record, assignee and due date. Detail opens beside the list.</p></div>
+    <div><h5>Principle</h5><p>Temporal grouping fits how people plan their day.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; specified in <a href="#pages">§12</a>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>"Overdue" is a flag that coexists with <span class="ar">قيد التنفيذ</span>; completion stops the clock and stores the completion time. Manager view adds grouping by assignee with counts of overdue per person.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">23</span><span class="pt">Roles as a permission tree with counts</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/8a478eef-4fda-457e-90ea-77218ede07ef">Shopify</a>, <a href="https://mobbin.com/screens/0a9158f6-3c02-4718-aead-7ad8e7051f85">Klaviyo</a>, <a href="https://mobbin.com/screens/3d8ae5cd-4f87-4b5b-9613-406b993c9e95">Twenty</a></p></div>
+    <div><h5>Why it works</h5><p>Module rows show <i>0/11</i> granted; expanding reveals sub-permissions with indentation (View → View cost). Unsaved bar at the top.</p></div>
+    <div><h5>Principle</h5><p>Progressive disclosure; make dependencies visible.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; maps directly onto <code>module</code> + <code>sub</code> abilities already in <code>registry.ts</code>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Add a "data scope" column per module (<span class="ar">الكل · فرعي · سجلاتي فقط</span>). Show "Users with this role (4)" in the header. Changes are audited with a from → to diff.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">24</span><span class="pt">Audit log with from → to chips and a volume histogram</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/2deef352-1f6b-4757-a4c9-dcce106b0e6a">Toggl</a>, <a href="https://mobbin.com/screens/1f44450b-8a6f-4d19-83e8-24addf2ca0e8">Klaviyo</a>, <a href="https://mobbin.com/screens/673656da-327b-4e01-98fd-8a23f21718a4">Grok</a>, <a href="https://mobbin.com/screens/decad923-b3e9-4e22-8166-7b20e6c22140">Customer.io</a></p></div>
+    <div><h5>Why it works</h5><p>Filters (user, entity, action, time), a small histogram showing when activity spiked, and rows that expand to the full diff.</p></div>
+    <div><h5>Principle</h5><p>Traceability with fast narrowing.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes, extending the current History page; essential for stock adjustments and finance.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Columns: <span class="ar">الوقت · المستخدم · الإجراء · الكيان · التغيير</span>. Kilogram and money diffs show both values and the signed difference (<span class="m-n">48.20 → 45.70 (−2.50 kg)</span>). Export restricted by permission.</p></div>
+  </div></details>
+
+  <h3>Feedback and states</h3>
+
+  <details class="pattern" open><summary><span class="pn">25</span><span class="pt">Notifications as an inbox with inline actions</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/2146514d-1011-4f03-8b62-cef4040e0c42">Workable</a>, <a href="https://mobbin.com/screens/d7f3f613-38ca-49f3-a382-e51c1f1d435c">fal</a>, <a href="https://mobbin.com/screens/dc3adbc9-3ae0-45fd-9f43-c8ab60a19052">Langdock</a></p></div>
+    <div><h5>Why it works</h5><p>Each notification carries the one action it asks for (<i>Sign document</i>, <i>View profile</i>). Type tabs and "Unread only" keep it manageable.</p></div>
+    <div><h5>Principle</h5><p>Actionable notifications; reduce navigation.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes: QC sample due, stock below reorder point, approval requested, task overdue, payment received.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Popover from the top bar (400px) with tabs <span class="ar">الكل · اعتمادات · مهام · مخزون · مالية</span>; full page at <code>/dashboard/inbox</code>. Only events that need a person become notifications; everything else stays in activity feeds.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">26</span><span class="pt">Toast with undo for reversible actions</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote</a>, <a href="https://mobbin.com/screens/412227e3-0cf1-4d07-a31b-315f000268fc">Xero ("Draft bill saved · View")</a>, <a href="https://mobbin.com/screens/fedd9c09-b271-46a7-819c-956f51723a30">HubSpot</a></p></div>
+    <div><h5>Why it works</h5><p>Confirms what happened to which record, with a way back, without blocking.</p></div>
+    <div><h5>Principle</h5><p>Forgiveness over confirmation for reversible actions.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; replaces most of the 9 <code>confirm()</code>/<code>alert()</code> calls.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Bottom-start (bottom-right in RTL), 6s, pauses on hover/focus, <code>role="status"</code>. Text names the entity: <span class="ar">نُقلت الصفقة «محمصة النخبة» إلى تفاوض · تراجع</span>. Save errors are never toast-only; they render inline at the field or form.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">27</span><span class="pt">Skeletons that keep the final geometry</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/09371ef3-f0d0-4fc9-8ab1-607ab3d0e4ab">Square</a>, <a href="https://mobbin.com/screens/f470af91-c889-487f-a2a2-87d69a60a781">DoorDash</a></p></div>
+    <div><h5>Why it works</h5><p>Headers and filters render immediately; only cells shimmer. Nothing jumps when data arrives.</p></div>
+    <div><h5>Principle</h5><p>Perceived performance; stable layout (CLS).</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; Finance collections currently shows a centred spinner on a blank page.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Show the skeleton after 150ms (avoid flicker on fast loads). Table: 8 skeleton rows at the active density. Metric: label real, value skeleton. Never render <span class="m-n">0</span> while loading or after a failed fetch.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">28</span><span class="pt">Empty states that differ from "no results"</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/e432b17f-be69-4544-94ee-9d3110bbf90d">Midday ("No invoices · Create invoice")</a>, <a href="https://mobbin.com/screens/fc208a44-dbf9-4f79-b9b0-db57f9840964">Linear ("1 issue hidden by filters · Clear")</a>, <a href="https://mobbin.com/screens/845ae1bd-e832-40ba-90bf-23d72b31bbf3">v0</a></p></div>
+    <div><h5>Why it works</h5><p>First-use empty explains and offers the first action. Filtered-empty says filters are the cause and offers to clear them.</p></div>
+    <div><h5>Principle</h5><p>Help users recognise, diagnose and recover.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; the leads page shows <span class="ar">لا يوجد عملاء محتملون بعد.</span> with no action inside a 200px white box.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Three variants: <b>first use</b> (one line + primary + secondary like import), <b>no results</b> (<span class="ar">لا نتائج تطابق ٣ عوامل تصفية · مسح التصفية</span>), <b>no permission</b> (what is restricted and who grants it). Max height 240px; icon 24px, no illustrations.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">29</span><span class="pt">Inline alerts sized to their scope</span><span class="tag fit-adapt">Adapt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/830087fe-1ffe-40bf-b406-f277e8c12e0e">Square</a>, <a href="https://mobbin.com/screens/8a478eef-4fda-457e-90ea-77218ede07ef">Shopify (unsaved bar)</a>, <a href="https://mobbin.com/screens/88631280-beda-4e91-b556-6c4a7630bf4a">Pipedrive (OVERDUE tag)</a></p></div>
+    <div><h5>Why it works</h5><p>A page-level problem gets a banner; a row-level problem gets a tag in the row; a field problem gets text under the field.</p></div>
+    <div><h5>Principle</h5><p>Proximity of feedback to cause.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Adapt: the permanent <span class="ar">واجهة مبدئية — في انتظار مراجعة التصميم</span> banner takes about 90px of height on every Sales page and trains people to ignore banners.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Replace it with a small <span class="ar">تجريبي</span> tag beside the page title. Reserve full-width alerts for states that block work (period closed, sync failed, permission missing).</p></div>
+  </div></details>
+
+  <h3>Domain screens</h3>
+
+  <details class="pattern" open><summary><span class="pn">30</span><span class="pt">Inventory: on hand, committed, available, incoming</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/d9deb551-88bf-4c93-91b3-43ef6659ccef">Shopify inventory</a>, <a href="https://mobbin.com/screens/78f2c018-e2c9-440c-8b5c-e631b2539163">Square item library</a>, <a href="https://mobbin.com/screens/11985bd5-233f-4b4e-96e3-7a7911f3afeb">Xero products</a></p></div>
+    <div><h5>Why it works</h5><p>Five numeric columns with the same unit, right next to each other, make shortages arithmetic you can see. Shopify puts "Unavailable" first so the problem is visible.</p></div>
+    <div><h5>Principle</h5><p>Comparison needs adjacency.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes; the current lot table already has Total/Available/Reserved/Free but uses <code>bg-cream</code> headers and 16px padding per cell.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Columns use backend definitions only; do not compute "available" in the UI. Add <span class="ar">يغطي (أيام)</span> where consumption data exists and a reorder-point bar. Lots and expiry open as expandable sub-rows, not duplicate rows.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">31</span><span class="pt">Finance home: balances, "to review" links, money in vs out</span><span class="tag fit-adapt">Adapt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/a1576a19-53f6-498d-80a7-02ece64072d8">QuickBooks</a>, <a href="https://mobbin.com/screens/aaf74c3f-e1df-4376-b05b-cb4a9b290ee2">Monarch</a>, <a href="https://mobbin.com/screens/9ee2c231-6dda-49b7-b0c3-4557363d3f9f">HoneyBook</a>, <a href="https://mobbin.com/screens/83db4774-ef6b-48fd-ab1a-62a0104ef713">Xero analytics</a></p></div>
+    <div><h5>Why it works</h5><p>Each figure links to the work behind it ("3 to review", "759 to review"). Bank balance and book balance are shown side by side.</p></div>
+    <div><h5>Principle</h5><p>Every number is a doorway to its records.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Adapt: drop donuts and widget marketplaces; keep balance pairs and review links.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>Specified in <a href="#pages">§12 Finance</a>. Receivables and payables use ageing buckets (<span class="ar">جارٍ · ١–٣٠ · ٣١–٦٠ · ٦١–٩٠ · +٩٠</span>) as a stacked bar plus a table, never as a donut.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">32</span><span class="pt">Mobile: segmented status filter and grouped list</span><span class="tag fit-yes">Adopt</span></summary><div class="pb">
+    <div><h5>Used well by</h5><p class="refs"><a href="https://mobbin.com/screens/5fd5f93b-46c4-4187-8a06-e8b0e9c96973">Shopify iOS</a>, <a href="https://mobbin.com/screens/0a8866fc-d1b9-4ca0-9a1b-985eff471f55">Copilot iOS</a></p></div>
+    <div><h5>Why it works</h5><p>Search + sort + filter in one row, segmented status, date-grouped rows with the amount at the end. One line of meta per row.</p></div>
+    <div><h5>Principle</h5><p>Thumb reach; one decision per screen.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Yes for the mobile web views and <code>erp-mobile</code>.</p></div>
+    <div class="wide"><h5>Adapt</h5><p>The mobile pipeline becomes a stage segmented control plus a compact list, instead of an accordion of full cards with four buttons each.</p></div>
+  </div></details>
+
+  <details class="pattern" open><summary><span class="pn">33</span><span class="pt">Dashboard as a widget wall</span><span class="tag fit-no">Avoid</span></summary><div class="pb">
+    <div><h5>Seen in</h5><p class="refs"><a href="https://mobbin.com/screens/9cd8cfa8-2ca7-449a-b5b2-9d4a2e8e94ea">Salesforce home</a>, <a href="https://mobbin.com/screens/a1576a19-53f6-498d-80a7-02ece64072d8">QuickBooks</a>, <a href="https://mobbin.com/screens/c619f130-9193-472a-b1e2-1533aa227fd7">Quicken</a></p></div>
+    <div><h5>Why it fails</h5><p>Every box has equal weight, so nothing is urgent. Charts with record counts ("Record Count 0–2") answer no question.</p></div>
+    <div><h5>Principle</h5><p>Hierarchy requires inequality.</p></div>
+    <div><h5>Fit for Hiqbah</h5><p>Avoid. The current executive dashboard is drifting this way (KPI cards, two charts, pipeline pills, three lists in cards).</p></div>
+    <div class="wide"><h5>Instead</h5><p>A command center with three bands: metric strip, "needs attention" queue, two decision charts. See <a href="#pages">§12</a>.</p></div>
+  </div></details>
+</section>

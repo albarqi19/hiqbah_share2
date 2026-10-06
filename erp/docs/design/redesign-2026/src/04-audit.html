@@ -1,0 +1,107 @@
+<section class="sec" id="audit">
+  <p class="eyebrow">05</p>
+  <h2>Audit of the current ERP</h2>
+  <p>Evaluated against the patterns above. Every finding has an ID used in the roadmap, evidence you can re-run, the impact on a person doing the job, and the specific change.</p>
+
+  <h3>What already works, and must survive the redesign</h3>
+  <div class="grid g2">
+    <div class="box"><h4>One navigation registry</h4><p class="small"><code>lib/nav/registry.ts</code> drives sidebar, contextual tabs, breadcrumbs, active state and the route guard from one tree, with <code>requiresAll</code>/<code>unlessAny</code> placement rules. Keep it; change its labels and depth (<a href="#ia">§10</a>), not its mechanism.</p></div>
+    <div class="box"><h4>Domain honesty in the UI copy</h4><p class="small">Won/Lost are outcomes, not stages; "a sample does not move stock"; fulfilment and payment are separate; counts state that they reflect filters. The <i>content</i> is right. The <i>placement</i> (paragraphs above every list) is what changes.</p></div>
+    <div class="box"><h4>Separate order statuses with distinct meaning</h4><p class="small">The <code>--oo-status-*</code> comments distinguish Rejected (order-level) from Blocked (item-level) and keep Cancelled neutral, not red. That thinking becomes the global status registry (<a href="#status">§9</a>).</p></div>
+    <div class="box"><h4>Tabular numerals and logical properties already in use</h4><p class="small">109 <code>tabular-nums</code> and 270 logical-direction utilities show the right instincts. The redesign makes them defaults instead of per-component choices.</p></div>
+    <div class="box"><h4>Lead table "next action" column</h4><p class="small">Each lead row offers the one action its state allows (<span class="ar">تحويل إلى عميل</span>, <span class="ar">تسجيل متابعة</span>, <span class="ar">تحديد موعد متابعة</span>). This is the right model; it should become a row action pattern used across modules.</p></div>
+    <div class="box"><h4>Unsaved-changes guard and stacked tables for the floor</h4><p class="small"><code>useUnsavedGuard</code> and the <code>.stack-table</code> rationale (operators at 1024px losing their row) come from real observation. Keep the intent; change the mechanisms (<a href="#tables">§11</a>).</p></div>
+  </div>
+
+  <h3>Evidence: current screens</h3>
+  <div class="before">
+    <figure><img src="assets/before-leads-shell.jpg" alt="Current leads page at 1440px with dark right sidebar, violet active item, provisional banner, three header buttons and an empty state box" width="1100" height="687" loading="lazy"><figcaption>Leads, desktop 1440 (<code>docs/sales/nav-shots</code>). Shell as shipped.</figcaption></figure>
+    <ol class="findlist">
+      <li>Dark sidebar and violet active pill are the highest-contrast objects on the page; the work area is grey on grey.</li>
+      <li>The active sidebar item is <span class="ar">إدارة العملاء</span>, a container name. "Leads" exists only as a tab, so the sidebar never names the page you are on.</li>
+      <li>A 38px provisional banner with margins (about 90px of height), then the title, then three lines of explanatory text before the first control.</li>
+      <li>Primary button is indigo <code>#4F46E5</code>; active nav is violet <code>#7C3AED</code>. Two brand colours.</li>
+      <li>"Custom Role" and "HIQBAH" in Latin inside an Arabic shell.</li>
+      <li>Empty state has no action; the create button is 600px away.</li>
+    </ol>
+  </div>
+  <div class="before">
+    <figure><img src="assets/before-leads-table.jpg" alt="Current leads table with outlined status pills, an English date Jan 1, 2099 and per-row action buttons of varying widths" width="1100" height="513" loading="lazy"><figcaption>Leads table (<code>tests/harness/shots/leads-AFTER.png</code>).</figcaption></figure>
+    <ol class="findlist">
+      <li><span class="ar">Jan 1, 2099</span>: an English-locale date and what looks like a sentinel value leaking into an Arabic table. <code>lib/utils.ts</code> <code>formatDate()</code> hard-codes <code>"en-US"</code>.</li>
+      <li>Status pills are outlined, 32px tall, with a different icon each; "overdue" and "no next commitment" use the same shape as statuses.</li>
+      <li>Row actions vary from 96px to 180px wide and wrap (<span class="ar">غير مؤهّل — لا تحويل</span> on two lines), so the column edge is ragged.</li>
+      <li>Rows are about 66px tall (CSS px): roughly 9 leads fit on a 1440×900 screen after the header block. At the proposed 40px rows, 15 fit.</li>
+    </ol>
+  </div>
+  <div class="before">
+    <figure><img src="assets/before-pipeline.jpg" alt="Current pipeline board: four stage columns, each card with previous, next, won and lost buttons, and two large outcome panels below" width="1100" height="738" loading="lazy"><figcaption>Pipeline (<code>sales-pipeline.png</code>).</figcaption></figure>
+    <ol class="findlist">
+      <li>Every card carries four buttons (<span class="ar">السابقة، التالية، رابح، خاسر</span>): with 40 open deals that is 160 buttons on one screen.</li>
+      <li>Stage names are prefixed "01 … 04"; the number adds nothing the order does not already say.</li>
+      <li>Stage value sits under the title in grey; there is no weighted value and no stall indicator.</li>
+      <li>Won and Lost occupy half the page as two framed panels, pushing nothing useful.</li>
+      <li>The mobile version labels the same actions <span class="ar">ربح / خسارة</span> instead of <span class="ar">رابح / خاسر</span>.</li>
+    </ol>
+  </div>
+  <div class="before">
+    <figure><img src="assets/before-deal.jpg" alt="Current deal detail page with five header buttons, an info banner, a stage stepper card, and quotes, activities and samples each in their own card" width="1100" height="892" loading="lazy"><figcaption>Deal detail (<code>sales-deal-detail.png</code>).</figcaption></figure>
+    <ol class="findlist">
+      <li>Five header buttons of similar weight; <span class="ar">تعليم خاسر</span> is outlined red next to the primary.</li>
+      <li>The stage stepper lives in its own 170px card with a sub-caption explaining that stages are configurable.</li>
+      <li>Seven separate cards on one page; properties are pushed to a narrow column at the far end with large gaps.</li>
+      <li>Activity entries are boxed cards with icons; history is a separate card that repeats stage changes.</li>
+    </ol>
+  </div>
+  <div class="before">
+    <figure><img src="assets/before-reports.jpg" alt="Current sales reports page with eight KPI cards in two rows and four list cards; the stage bars for 124,000 and 50,000 are the same length" width="1100" height="650" loading="lazy"><figcaption>Sales reports (<code>sales-reports.png</code>).</figcaption></figure>
+    <ol class="findlist">
+      <li><b>The stage bars are scaled by deal count but labelled with value.</b> 124,000 and 50,000 render at the same length because both stages hold 2 deals (<code>sales/reports/page.tsx:98, 223</code>).</li>
+      <li>Eight KPI cards in two rows with no ordering by importance; three-decimal-place percentages (38.10%).</li>
+      <li>Lead sources, loss reasons and cycle length are grey pill lists inside cards rather than a sortable table or bar list.</li>
+    </ol>
+  </div>
+  <div class="grid g2">
+    <figure><img src="assets/before-loading.jpg" alt="Finance collections page showing only a centred spinner on a blank canvas" width="1100" height="687" loading="lazy"><figcaption>Finance collections while loading: a spinner on an empty page.</figcaption></figure>
+    <figure style="max-width:260px"><img src="assets/before-pipeline-mobile.jpg" alt="Mobile pipeline as an accordion of stages, each deal card with four large buttons" width="390" height="1053" loading="lazy"><figcaption>Pipeline at 390px: two deals fill the screen.</figcaption></figure>
+  </div>
+
+  <h3>Findings</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>ID</th><th>Pri.</th><th>Area</th><th>Finding and evidence</th><th>Impact</th><th>Change</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">A1</td><td><span class="tag P0">P0</span></td><td>Tokens</td><td>Two competing token systems and misleading names: <code>--orange</code> is <code>#7C3AED</code> violet, <code>--brown</code> is grey, <code>--oo-action-primary</code> is indigo <code>#4F46E5</code>. 796 raw Tailwind palette classes (<code>bg-blue-50</code>, <code>text-emerald-600</code>…) bypass both.</td><td>Every screen picks its own colours; no change can be made globally.</td><td>One token layer (<a href="#system">§8</a>). Codemod raw palette classes to semantic utilities; lint rule bans <code>-(blue|green|red|amber|…)-[0-9]</code>.</td></tr>
+      <tr><td class="mono">A2</td><td><span class="tag P0">P0</span></td><td>Components</td><td>Three UI kits: <code>sales/_components/ui.tsx</code> (Button, Card, Pill, Money, EmptyState…), <code>finance/_components/ui.tsx</code> (Button, Card, Badge, Kpi, Table, INPUT with <code>border-2 rounded-[10px]</code>), and <code>OrderLifecyclePanel</code> on <code>--oo-*</code>.</td><td>Same control behaves and looks different per module; three places to fix each bug.</td><td>Single <code>src/components/ui/</code>; module kits become thin re-exports, then are deleted.</td></tr>
+      <tr><td class="mono">A3</td><td><span class="tag P0">P0</span></td><td>Typography</td><td>21 distinct font sizes; <code>text-[10px]</code> ×64 and <code>text-[9px]</code> ×2 for Arabic; <code>font-black/extrabold</code> ×170; headings at weight 800. Tajawal is loaded while the draft skill says Cairo.</td><td>Arabic glyphs with dots and marks become illegible below 12px; weight 800 turns every heading into a shout.</td><td>9-step scale, minimum 12px, weights 400/500/600 only, one family (<a href="#system">§8.1</a>).</td></tr>
+      <tr><td class="mono">A4</td><td><span class="tag P0">P0</span></td><td>Dates</td><td><code>formatDate()</code> in <code>lib/utils.ts</code> uses <code>"en-US"</code>; cupping uses <code>"en-GB"</code>; Sales uses its own <code>formatDay</code>. Leads table shows <span class="ar">Jan 1, 2099</span>.</td><td>Mixed-language dates; a placeholder date looks like a real commitment.</td><td>One <code>format.ts</code> (<a href="#rtl">§13</a>). Never render sentinel dates; show <span class="ar">بلا موعد</span>.</td></tr>
+      <tr><td class="mono">A5</td><td><span class="tag P0">P0</span></td><td>Charts</td><td>Pipeline-by-stage bars use <code>count / maxCount</code> width but print the value (<code>sales/reports/page.tsx:98,223</code>). Dashboard chart colours are hard-coded hex (<code>C_ORANGE = "#7C3AED"</code>).</td><td>A manager compares stage value by bar length and is wrong.</td><td>Bar length encodes the printed measure; a toggle switches measure (value / count). Chart colours come from chart tokens.</td></tr>
+      <tr><td class="mono">A6</td><td><span class="tag P0">P0</span></td><td>Contrast</td><td>217 text uses of <code>slate-light</code>/<code>brown-light</code>/<code>oo-text-muted</code> (<code>#9CA3AF</code>, <code>#A1A1AA</code>): 2.54:1 on white. Used for meta text, dates and helper copy.</td><td>Fails WCAG 1.4.3; meta text is unreadable on many office monitors and in sunlight on tablets.</td><td><code>--ink-3</code> <code>#5E6A62</code> (5.65:1) is the lightest text colour. <code>--ink-4</code> only for placeholders and disabled.</td></tr>
+      <tr><td class="mono">A7</td><td><span class="tag P0">P0</span></td><td>Dialogs</td><td>9 native <code>alert()</code>/<code>confirm()</code> calls (e.g. <code>orders/page.tsx:224,247,308</code>, <code>history/page.tsx:83</code> "No data to export" in English) and 33 hand-built <code>fixed inset-0</code> overlays.</td><td>Native dialogs render in browser chrome, LTR, unstyled; custom overlays lack focus trap/return and Esc handling consistency.</td><td>One Dialog and one Drawer primitive (Radix-based or equivalent), confirm-with-entity copy, toast-with-undo for reversible actions.</td></tr>
+      <tr><td class="mono">A8</td><td><span class="tag P0">P0</span></td><td>Tables</td><td>28 hand-rolled <code>&lt;table&gt;</code>s; <code>@tanstack/react-table</code> installed, 0 imports. No sticky header, column visibility, saved views, selection model or summary row anywhere.</td><td>Large lists (inventory movements, ledger) are slow to scan; every list reinvents sorting and empty states.</td><td>One <code>DataTable</code> on TanStack Table (<a href="#tables">§11</a>).</td></tr>
+      <tr><td class="mono">A9</td><td><span class="tag P0">P0</span></td><td>Status</td><td>Three badge systems (<code>.status-*</code> classes, <code>--oo-status-*</code>, per-kit Pills) and inconsistent labels (<span class="ar">رابح/ربح</span>, <span class="ar">خاسر/خسارة</span>). "Overdue" and "no commitment" styled as statuses.</td><td>The same state reads differently across modules; derived risk hides the real status.</td><td>Status registry (<a href="#status">§9</a>) as code: one map, one <code>StatusTag</code>, one <code>RiskFlag</code>.</td></tr>
+      <tr><td class="mono">B1</td><td><span class="tag P1">P1</span></td><td>Shell</td><td>Dark <code>#1F2937</code> sidebar, violet active pill, 64px user block, Latin wordmark. Sidebar shows container names (<span class="ar">إدارة العملاء</span>, <span class="ar">الفرص والمتابعات</span>) rather than destinations.</td><td>Heavy frame; users cannot find "Leads" or "Pipeline" by scanning the sidebar.</td><td>Light shell; leaves listed directly; containers become section labels (<a href="#ia">§10</a>).</td></tr>
+      <tr><td class="mono">B2</td><td><span class="tag P1">P1</span></td><td>Density</td><td>Explanatory paragraphs under titles on leads, pipeline, reports, deal (<span class="ar">العدّادات تشمل الصفوف المعروضة…</span>, <span class="ar">المراحل تُهيّأ من إعدادات المبيعات</span>).</td><td>60–90px of reading before the first control on every visit.</td><td>Move to an <span class="ar">ⓘ</span> tooltip by the count, or to the empty state where it is first relevant.</td></tr>
+      <tr><td class="mono">B3</td><td><span class="tag P1">P1</span></td><td>Banner</td><td><code>ProvisionalBanner</code> on every Sales page (38px plus margins, amber, warning icon).</td><td>Banner blindness: the next real warning will be ignored.</td><td><span class="ar">تجريبي</span> tag in the page header.</td></tr>
+      <tr><td class="mono">B4</td><td><span class="tag P1">P1</span></td><td>Pipeline</td><td>Four buttons per card; no drag; outcome panels below the board.</td><td>Slow updates; visual noise; board shows half as many deals.</td><td>Drag + keyboard "Move to"; card actions in <span class="ar">⋯</span>; won/lost as drop zones and views.</td></tr>
+      <tr><td class="mono">B5</td><td><span class="tag P1">P1</span></td><td>Record pages</td><td>Deal: five header buttons, stepper card, seven cards, separate history.</td><td>No clear next action; long scroll for basic facts.</td><td>Header + main + properties panel (pattern 15) with one timeline.</td></tr>
+      <tr><td class="mono">B6</td><td><span class="tag P1">P1</span></td><td>Loading</td><td>Full-page spinner (<code>Spinner</code>, <code>LoadingState</code>) while the shell is blank.</td><td>Layout jumps; people think the page failed.</td><td>Skeletons per region; header and filters render immediately.</td></tr>
+      <tr><td class="mono">B7</td><td><span class="tag P1">P1</span></td><td>Dashboard</td><td>Executive dashboard is production-only (kg roasted, QC rate, loss), built as KPI cards + bar + pie + three lists. No cash, receivables, sales or tasks.</td><td>The owner cannot answer "are we OK this week" from the home page.</td><td>Command center (<a href="#pages">§12.1</a>), scoped by role.</td></tr>
+      <tr><td class="mono">B8</td><td><span class="tag P1">P1</span></td><td>Tablet tables</td><td><code>.stack-table</code> turns every table into cards below 1280px.</td><td>Comparison across rows (the reason for a table) is lost on the 1024 tablets the floor uses.</td><td>Pinned first column + horizontal scroll + column priority; cards only below 640px.</td></tr>
+      <tr><td class="mono">B9</td><td><span class="tag P1">P1</span></td><td>Money</td><td>Same amount printed as <span class="m-n">90,000</span>, <span class="m-n">90,000.00</span> and <span class="m-n">296,000.00</span> depending on page; currency position varies.</td><td>Hard to compare; decimals add noise in summaries.</td><td>Money rule (<a href="#rtl">§13</a>): 2 decimals in documents and ledgers, 0 in summaries and boards.</td></tr>
+      <tr><td class="mono">B10</td><td><span class="tag P1">P1</span></td><td>Direction</td><td>201 physical-direction utilities (<code>ml-</code>, <code>pr-</code>, <code>text-left</code>, <code>right-</code>…) vs 270 logical.</td><td>The English mode (users can switch <code>preferredLanguage</code>) renders mirrored spacing incorrectly.</td><td>Codemod to logical utilities; lint rule.</td></tr>
+      <tr><td class="mono">B11</td><td><span class="tag P1">P1</span></td><td>Inputs</td><td>Finance <code>INPUT</code> uses a 2px border and 10px radius; Sales inputs 1px/8px; lead search is 44px tall.</td><td>Forms look like three products.</td><td>Input spec (<a href="#system">§8.6</a>).</td></tr>
+      <tr><td class="mono">B12</td><td><span class="tag P1">P1</span></td><td>IA</td><td>Orders appear under Sales or Operations depending on permission (good), but Customers appears either inside Sales or at top level, and "Reports and history" mixes analytics with audit.</td><td>People trained on one role are lost in another.</td><td>Fixed module order and names (<a href="#ia">§10</a>); placement rules stay.</td></tr>
+      <tr><td class="mono">B13</td><td><span class="tag P1">P1</span></td><td>Mobile</td><td>Mobile pipeline: accordion with full cards and four 48px buttons each.</td><td>Two deals per screen.</td><td>Segmented stage + compact list (pattern 32).</td></tr>
+      <tr><td class="mono">C1</td><td><span class="tag P2">P2</span></td><td>Empty states</td><td>No action in empty states; same text for "none yet" and "no results".</td><td>Dead ends.</td><td>Three empty variants (pattern 28).</td></tr>
+      <tr><td class="mono">C2</td><td><span class="tag P2">P2</span></td><td>Language</td><td>"Custom Role", "HIQBAH", "CSV" in buttons, English toasts from <code>alert()</code>.</td><td>Mixed script in an Arabic product.</td><td>Arabic labels; Latin only for codes and proper nouns.</td></tr>
+      <tr><td class="mono">C3</td><td><span class="tag P2">P2</span></td><td>Icons</td><td>Ad-hoc <code>rtl:rotate-180</code> on chevrons; arrows in the stepper (<span class="ar">←</span>) not mirrored consistently.</td><td>Direction cues contradict reading order.</td><td>Icon mirroring list (<a href="#rtl">§13</a>).</td></tr>
+      <tr><td class="mono">C4</td><td><span class="tag P2">P2</span></td><td>Radius and shadow</td><td><code>rounded-2xl</code> ×146, <code>rounded-xl</code> ×413, <code>shadow-*</code> ×160.</td><td>Soft, consumer look; every block is a separate object.</td><td>Radius scale 4/6/8/12; shadows only on overlays.</td></tr>
+      <tr><td class="mono">C5</td><td><span class="tag P2">P2</span></td><td>Percentages</td><td>38.10%, 36.84% in KPIs.</td><td>False precision.</td><td>0 decimals in summaries, 1 in analysis tables.</td></tr>
+      <tr><td class="mono">C6</td><td><span class="tag P2">P2</span></td><td>Top bar date</td><td>Long-form date on every page.</td><td>Space with no task value.</td><td>Remove; period controls where relevant.</td></tr>
+      <tr><td class="mono">C7</td><td><span class="tag P2">P2</span></td><td>Stage numbering</td><td>"01 تأهيل" prefixes on board and stepper.</td><td>Decoration that looks like data.</td><td>Remove.</td></tr>
+      <tr><td class="mono">C8</td><td><span class="tag P2">P2</span></td><td>Print</td><td>Print styles only hide <code>.no-print</code>.</td><td>Quotes and delivery notes rely on page layout.</td><td>Print tokens: black ink, 11pt body, repeated table headers.</td></tr>
+      <tr><td class="mono">C9</td><td><span class="tag P2">P2</span></td><td>Focus</td><td>Focus rings vary (<code>ring-orange/20</code>, browser default).</td><td>Keyboard users lose their place.</td><td>One 2px brand focus ring with 2px offset.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">Counts are <code>grep -ro</code> over <code>erp/src</code> at commit <code>841274f</code>; re-run them after each phase as a regression metric.</p>
+</section>

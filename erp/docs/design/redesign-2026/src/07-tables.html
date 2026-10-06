@@ -1,0 +1,103 @@
+<section class="sec" id="tables">
+  <p class="eyebrow">11</p>
+  <h2>Tables</h2>
+  <p>The table is the product. This section defines one <code>DataTable</code> component (TanStack Table v8 headless + the tokens above) that every list in the ERP uses. Below: the shell and a sales-orders table at desktop width, in Arabic, with real-looking data.</p>
+
+  <div class="mocklabel"><span>App shell + DataTable · sales orders · 1440px · default density</span><span>Scroll horizontally on small screens</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar">
+    <div class="m-app">
+      <aside class="m-side">
+        <div class="m-ws"><span class="glyph">ح</span>حقبة<span class="sub" style="margin-inline-start:auto">⌄</span></div>
+        <div class="m-srch">ابحث أو انتقل…<span class="kbd">Ctrl K</span></div>
+        <div class="m-it"><span class="ico"></span>الرئيسية</div>
+        <div class="m-it"><span class="ico c"></span>الوارد<span class="ct">7</span></div>
+        <div class="m-sec">المفضلة</div>
+        <div class="m-it"><span class="ico c" style="opacity:.4"></span>طلبات متأخرة</div>
+        <div class="m-sec">المبيعات</div>
+        <div class="m-it"><span class="ico"></span>العملاء المحتملون</div>
+        <div class="m-it"><span class="ico"></span>الصفقات</div>
+        <div class="m-it"><span class="ico"></span>العملاء</div>
+        <div class="m-it"><span class="ico"></span>عروض الأسعار</div>
+        <div class="m-it on"><span class="ico"></span>طلبات البيع</div>
+        <div class="m-it"><span class="ico"></span>التحصيلات</div>
+        <div class="m-sec">العمليات</div>
+        <div class="m-it"><span class="ico"></span>أوامر الإنتاج</div>
+        <div class="m-it"><span class="ico"></span>دفعات التحميص</div>
+        <div class="m-sec">المخزون</div>
+        <div class="m-it"><span class="ico"></span>الأرصدة</div>
+      </aside>
+      <div class="m-main">
+        <div class="m-top"><span class="crumb">المبيعات ‹ <b>طلبات البيع</b></span><span class="sp"></span><span class="btn sm">+ جديد</span><span class="btn sm ic" aria-label="التنبيهات">◔</span><span class="av" style="margin:0">ف</span></div>
+        <div class="m-ph"><div><h6>طلبات البيع</h6></div><div class="act"><span class="btn">تصدير</span><span class="btn p">طلب بيع جديد</span></div></div>
+        <div class="m-tabs"><span class="on">الكل <span class="c">214</span></span><span>بانتظار الاعتماد <span class="c">6</span></span><span>قيد التحضير <span class="c">18</span></span><span>جاهز للشحن <span class="c">9</span></span><span>تسليم جزئي <span class="c">3</span></span><span>طلبات متأخرة <span class="c">4</span></span><span>+ عرض</span></div>
+        <div class="m-tool"><span class="inp">⌕ ابحث برقم الطلب أو العميل</span><span class="chip on"><b>الفترة:</b> هذا الشهر ×</span><span class="chip on"><b>المسؤول:</b> فهد العتيبي ×</span><span class="chip">+ القناة</span><span class="chip">+ حالة الدفع</span><span class="sp"></span><span class="btn g sm">ترتيب: التسليم ↑</span><span class="btn g sm">العرض</span></div>
+        <div style="overflow-x:auto">
+        <table class="m-tbl">
+          <thead><tr><th class="pin" style="width:250px"><span class="cb"></span>&nbsp; الطلب</th><th>الحالة</th><th>الدفع</th><th class="n">الكمية (كغ)</th><th class="n">القيمة (ر.س)</th><th>التسليم</th><th>المسؤول</th><th></th></tr></thead>
+          <tbody>
+            <tr class="sel"><td class="pin"><span class="cb on"></span>&nbsp; <span class="m-id">#1042</span> <span class="lnk">محمصة النخبة</span></td><td><span class="st in">قيد التحضير</span></td><td><span class="st wa">مدفوع جزئيًا</span></td><td class="n">250.00</td><td class="n">31,250.00</td><td>8 أكتوبر <span class="flag">متأخر يوم</span></td><td><span class="av">ف</span>فهد العتيبي</td><td><span class="btn g sm ic">⋯</span></td></tr>
+            <tr class="sel"><td class="pin"><span class="cb on"></span>&nbsp; <span class="m-id">#1041</span> <span class="lnk">مقهى ذوّاقة</span></td><td><span class="st ok">جاهز للشحن</span></td><td><span class="st ok">مدفوع</span></td><td class="n">48.00</td><td class="n">6,480.00</td><td>9 أكتوبر</td><td><span class="av">ف</span>فهد العتيبي</td><td><span class="btn g sm ic">⋯</span></td></tr>
+            <tr class="hov"><td class="pin"><span class="cb"></span>&nbsp; <span class="m-id">#1039</span> <span class="lnk">كافيه ٢١ — فرع العليا</span></td><td><span class="st wa">بانتظار الاعتماد</span></td><td><span class="st nu">غير مدفوع</span></td><td class="n">120.00</td><td class="n">14,880.00</td><td>12 أكتوبر</td><td><span class="av">ن</span>نورة السبيعي</td><td><span class="btn sm">اعتماد</span></td></tr>
+            <tr><td class="pin"><span class="cb"></span>&nbsp; <span class="m-id">#1036</span> <span class="lnk">بن الشرق</span></td><td><span class="st wa">تسليم جزئي</span></td><td><span class="st ok">مدفوع</span></td><td class="n">500.00</td><td class="n">58,500.00</td><td>5 أكتوبر <span class="sub">(2 من 3 شحنات)</span></td><td><span class="av">ف</span>فهد العتيبي</td><td><span class="btn g sm ic">⋯</span></td></tr>
+            <tr><td class="pin"><span class="cb"></span>&nbsp; <span class="m-id">#1033</span> <span class="lnk">مطعم السدرة</span></td><td><span class="st x">ملغى</span></td><td><span class="st nu">مسترد</span></td><td class="n">30.00</td><td class="n">3,900.00</td><td>—</td><td><span class="av">ن</span>نورة السبيعي</td><td><span class="btn g sm ic">⋯</span></td></tr>
+          </tbody>
+          <tfoot><tr><td class="pin">إجمالي 48 طلبًا (بعد التصفية)</td><td></td><td></td><td class="n">3,912.50</td><td class="n">468,215.00</td><td colspan="3"></td></tr></tfoot>
+        </table>
+        </div>
+        <div class="m-foot"><span>1–25 من 48</span><span class="sp"></span><span>الكثافة: افتراضية</span><span class="btn sm">السابق</span><span class="btn sm">التالي</span></div>
+        <div style="height:56px"></div>
+        <div class="bulk"><span>2 محددان من هذه الصفحة</span><span style="opacity:.7">·</span><a style="color:inherit">تحديد كل 48</a><span class="btn">نقل إلى التسليم</span><span class="btn">طباعة الملصقات</span><span class="btn">تصدير</span><span class="btn">×</span></div>
+      </div>
+    </div>
+  </div></div>
+
+  <h3>11.1 DataTable specification</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Aspect</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td>Row density</td><td>compact 32 · default 40 · touch 48. Cell padding-inline 10px; 12px on the first and last column. Wrapping allowed only in a designated "primary" column (max 2 lines); everything else truncates with a tooltip.</td></tr>
+      <tr><td>Header</td><td>32px, <code>sunken</code>, 12/500 <code>fg-muted</code>, 1px <code>border</code> top and bottom. Labels include units: <span class="ar">الكمية (كغ)</span>, <span class="ar">القيمة (ر.س)</span>, so cells hold bare numbers.</td></tr>
+      <tr><td>Sticky</td><td>Header sticky within the table's scroll container (not the window). Pinned columns: selection checkbox + identifier column at the start side; optional pinned action column at the end. Pinned edge gets a 1px <code>border</code> shadow-rule when content scrolls under it.</td></tr>
+      <tr><td>Column visibility and order</td><td><span class="ar">العرض › الأعمدة</span>: checklist with drag handles; "reset to default". Each table declares <code>defaultVisible</code>, <code>hideable</code>, and a <code>priority</code> 1–3 used for responsive hiding.</td></tr>
+      <tr><td>Resizing</td><td>Drag handle on the header's end edge (8px hit area), min 64px, double-click to fit. Widths persisted per user per view.</td></tr>
+      <tr><td>Sorting</td><td>Click header: asc → desc → none. Indicator arrow after the label; <code>aria-sort</code> on <code>th</code>. Shift-click adds secondary sort. Every table defines its default sort (e.g. orders: delivery date asc; ledger: date desc).</td></tr>
+      <tr><td>Filters</td><td>Chips in the toolbar (§8.7). Types: enum (multi), person, date range with presets, number range, boolean, text contains. Server-side for anything paginated.</td></tr>
+      <tr><td>Saved views</td><td>Tabs above the toolbar. A view = filters + sort + columns + density + group-by. Personal by default; "share with team" requires a permission. Modified view shows a dot and <span class="ar">حفظ · تجاهل</span>.</td></tr>
+      <tr><td>Search</td><td>Toolbar search matches the table's declared text fields with Arabic normalisation; highlights matches in cells.</td></tr>
+      <tr><td>Selection</td><td>Checkbox column; Shift-click range; header checkbox selects the page and then offers <span class="ar">تحديد كل النتائج (48)</span>. Selected rows: <code>selected</code> bg. Selection survives pagination within the same filter.</td></tr>
+      <tr><td>Bulk actions</td><td>Floating bar (pattern 07). Each action declares eligibility; ineligible rows are counted (<span class="ar">2 من 5 لا يمكن نقلها: بانتظار الاعتماد</span>). Results reported per row.</td></tr>
+      <tr><td>Row actions</td><td>Primary row action as a visible small button when the row's state has a clear next step (<span class="ar">اعتماد</span>, <span class="ar">تأكيد الاستلام</span>); otherwise <span class="ar">⋯</span> menu, visible on hover/focus and always on touch. Row click opens the drawer; Ctrl/⌘-click or middle-click opens the full page.</td></tr>
+      <tr><td>Inline editing</td><td>Only for single-value fields with no side-effects (owner, due date, notes, reorder point). Click or <span class="kbd">E</span> → field in place → Enter saves, Esc cancels; optimistic with rollback and an inline error. Quantities that move stock or money are never inline-edited.</td></tr>
+      <tr><td>Pagination vs infinite</td><td>Pagination (25/50/100) for transactional lists people refer back to (orders, bills, ledger). Virtualised infinite scroll for logs and movements (audit, stock movements, activity) with a "jump to date" control. Never infinite scroll above a footer with totals.</td></tr>
+      <tr><td>Summary row</td><td>Sticky footer row for additive columns with one unit. Label states scope. Totals computed server-side over the full filtered set, not the page.</td></tr>
+      <tr><td>Status cells</td><td><code>StatusTag</code> + optional <code>RiskFlag</code>; two status dimensions get two columns.</td></tr>
+      <tr><td>Numbers</td><td>End-aligned (left in RTL), tabular, fixed decimals per column (kg 2, SAR 2 in transactional tables, 0 in summaries), thousands separators, negatives as <span class="m-n">−1,250.00</span> in danger colour with the minus sign (never parentheses alone).</td></tr>
+      <tr><td>Currency</td><td>Unit in the header; cell holds the number. When a table mixes currencies, a currency code column (<code>SAR</code>, <code>USD</code>) precedes the amount.</td></tr>
+      <tr><td>Dates</td><td>Lists: <span class="ar">8 أكتوبر</span> (year only if not current); tooltip with full datetime and timezone. Relative time (<span class="ar">قبل 3 ساعات</span>) only in activity and audit, with absolute on hover.</td></tr>
+      <tr><td>Hover and focus</td><td>Row hover <code>bg-hover</code>; keyboard focus ring on the row (2px inset brand) with <span class="kbd">J</span>/<span class="kbd">K</span>/arrow navigation; row actions revealed on focus too.</td></tr>
+      <tr><td>Empty / loading / error</td><td>Header and toolbar always render. Loading: 8 skeleton rows. Empty and no-results per pattern 28. Partial failure: rows that loaded stay, an inline alert names what failed.</td></tr>
+      <tr><td>Export</td><td>Exports the current view (filters, columns) as XLSX/CSV with Arabic headers and UTF-8 BOM; permission-gated.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>11.2 Choosing the right view</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Use</th><th>When the task is…</th><th>Hiqbah examples</th><th>Not for</th></tr></thead>
+    <tbody>
+      <tr><td><b>Table</b></td><td>Comparing many records on several attributes, sorting, bulk action</td><td>Orders, inventory balances, bills, ledger, leads, production orders</td><td>Fewer than ~5 records with rich content</td></tr>
+      <tr><td><b>List</b></td><td>Scanning items with one or two attributes, often personal</td><td>My tasks, inbox, notifications, recent activity, mobile views</td><td>Numeric comparison</td></tr>
+      <tr><td><b>Kanban</b></td><td>Moving items through a small number (≤7) of stages; WIP visibility</td><td>Deal pipeline, packaging queue on the floor, QC queue</td><td>Stages with &gt;30 items each (switch to table grouped by stage)</td></tr>
+      <tr><td><b>Cards</b></td><td>Few items, visual identity matters, or mobile</td><td>Roast profiles, cupping sessions, mobile order list</td><td>Desktop lists that need comparison</td></tr>
+      <tr><td><b>Timeline</b></td><td>Order of events matters</td><td>Record activity, lot traceability (green lot → batch → package → delivery), audit log</td><td>Current state</td></tr>
+      <tr><td><b>Chart</b></td><td>A numeric question about trend, comparison or composition</td><td>Sales trend, roast loss by origin, cash projection, AR ageing</td><td>Exact values (pair with a table)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>11.3 Responsive table behaviour</h3>
+  <ul class="small">
+    <li><b>≥1280</b>: all <code>priority ≤ 3</code> columns; sidebar expanded.</li>
+    <li><b>1024–1279</b> (floor tablets): hide priority-3 columns, keep pinned identifier, horizontal scroll for the rest, touch density on coarse pointers. Do not convert to cards; replaces <code>.stack-table</code>.</li>
+    <li><b>640–1023</b>: priority 1 and 2 only; row action column stays pinned at the end.</li>
+    <li><b>&lt;640</b>: list rows: line 1 identifier + status tag, line 2 the two most important values, trailing amount; tap opens the record as a full-screen sheet. Filters in a bottom sheet; bulk select via long-press.</li>
+  </ul>
+</section>

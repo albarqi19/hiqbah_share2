@@ -1,0 +1,288 @@
+<section class="sec" id="pages">
+  <p class="eyebrow">12</p>
+  <h2>Page redesigns</h2>
+  <p>Each page is specified as: who and what for, layout zones, content of each zone, interactions, and states. Mockups use the proposed tokens and sample data (marked as such); amounts and quantities are illustrative, not Hiqbah's figures.</p>
+
+  <!-- ───────────── 12.1 Executive dashboard ───────────── -->
+  <h3>12.1 Executive command center (<span class="ar">الرئيسية</span>)</h3>
+  <dl class="kv">
+    <dt>For</dt><dd>Owner and managers. Question: "Are we on track this week, and what needs me today?"</dd>
+    <dt>Layout</dt><dd>Three bands, no card grid. ① Header with period control and comparison. ② Metric strip (5). ③ Two columns: <b>needs attention</b> queue (start, 5/12) and two decision charts (end, 7/12). ④ Compact tables: today's dispatches and open production orders.</dd>
+    <dt>Role scoping</dt><dd>Same layout, different strip: owner sees cash and margin; sales manager sees pipeline and collections; production lead sees roast plan, QC queue and green cover. Server enforces the scope; the UI only lays it out.</dd>
+  </dl>
+  <div class="mocklabel"><span>Command center · owner role · sample data</span><span>Period: this month vs same days last month</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--canvas)">
+    <div class="m-ph" style="background:var(--canvas);padding-bottom:12px"><div><h6>صباح الخير، إبراهيم</h6><div class="meta">الثلاثاء 6 أكتوبر 2026 · آخر تحديث 09:42</div></div><div class="act"><span class="btn">هذا الشهر ⌄</span><span class="btn g">مقارنة: نفس الأيام من سبتمبر</span></div></div>
+    <div style="padding:0 20px 16px;display:grid;gap:16px">
+      <div class="strip">
+        <div class="metric"><div class="l">صافي المبيعات</div><div class="v">184,250<small>ر.س</small></div><div class="d"><span class="up">▲ 8%</span> عن الفترة المقابلة</div></div>
+        <div class="metric"><div class="l">النقد المتاح</div><div class="v">412,900<small>ر.س</small></div><div class="d">بعد الالتزامات خلال 14 يومًا: <span class="m-n">296,400</span></div></div>
+        <div class="metric"><div class="l">ذمم مدينة متأخرة</div><div class="v">57,300<small>ر.س</small></div><div class="d"><span class="dn">▲ 12,100</span> · 6 عملاء</div></div>
+        <div class="metric"><div class="l">المحمّص هذا الشهر</div><div class="v">1,186<small>كغ</small></div><div class="d">فاقد التحميص 15.2% <span class="sub">(الهدف ≤ 16%)</span></div></div>
+        <div class="metric"><div class="l">تغطية البن الأخضر</div><div class="v">23<small>يومًا</small></div><div class="d"><span class="flag" style="color:var(--warning)">2 أصناف أقل من 10 أيام</span></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:5fr 7fr;gap:16px">
+        <div class="pane"><div class="pane-h">يحتاج انتباهك<span class="sub">9</span><span class="sp"></span><span class="btn g sm">الوارد ‹</span></div>
+          <div class="pane-b list">
+            <div><span class="sev er"></span><div class="sp"><div>3 فواتير موردين مستحقة غدًا</div><div class="sub">48,200 ر.س · بانتظار اعتمادك</div></div><span class="btn sm">مراجعة</span></div>
+            <div><span class="sev er"></span><div class="sp"><div>طلب <span class="m-id">#1042</span> متأخر عن التسليم</div><div class="sub">محمصة النخبة · قيد التحضير منذ يومين</div></div><span class="btn sm">فتح</span></div>
+            <div><span class="sev"></span><div class="sp"><div>إثيوبيا يرغاتشيفي: 6 أيام تغطية</div><div class="sub">المتاح 92.4 كغ · نقطة إعادة الطلب 150 كغ</div></div><span class="btn sm">طلب شراء</span></div>
+            <div><span class="sev"></span><div class="sp"><div>دفعة <span class="m-id">B-20261005-3317</span> بانتظار الجودة</div><div class="sub">تحميص متوسط · 21.4 كغ · منذ 19 ساعة</div></div><span class="btn sm">فتح</span></div>
+            <div><span class="sev in"></span><div class="sp"><div>خصم 12% على عرض <span class="m-id">OF-1047</span></div><div class="sub">يتجاوز حد المندوب (10%)</div></div><span class="btn sm">اعتماد</span></div>
+          </div>
+        </div>
+        <div class="pane"><div class="pane-h">صافي المبيعات أسبوعيًا<span class="sub">ألف ر.س · آخر 12 أسبوعًا</span><span class="sp"></span><span class="row sub"><i style="width:14px;height:2px;background:var(--chart-1);display:inline-block"></i>2026 <i style="width:14px;height:0;border-top:2px dashed var(--chart-5);display:inline-block;margin-inline-start:8px"></i>2025</span></div>
+          <div class="pane-b">{{CHART_SALES}}</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li><b>Attention queue</b> is the heart: server-generated items with severity, one-line reason, absolute value, and one action. Sorted by severity then due time. Empty state: <span class="ar">لا شيء يحتاج انتباهك الآن</span> with the time of the last check. Each item is dismissible only by resolving it or snoozing with a reason.</li>
+    <li><b>Metric strip</b>: each metric links to its source list with the same filters (cash → bank accounts; overdue AR → receivables filtered to overdue). Tooltip: definition (e.g. <span class="ar">صافي المبيعات = الفواتير الصادرة ناقص المرتجعات والخصومات، دون ضريبة القيمة المضافة</span>), source, last update.</li>
+    <li><b>Charts</b>: max two on the home page. Clicking a week opens the sales report filtered to it.</li>
+    <li><b>States</b>: each band loads and fails independently; a failed metric shows <span class="ar">تعذّر التحميل · إعادة المحاولة</span> in place of the value, never 0. Stale data (&gt;15 min) shows the timestamp in warning colour.</li>
+  </ul>
+
+  <!-- ───────────── 12.2 Sales CRM ───────────── -->
+  <h3>12.2 Sales CRM</h3>
+  <h4>Lead list (<span class="ar">العملاء المحتملون</span>)</h4>
+  <ul class="small">
+    <li>Views: <span class="ar">الكل · جديد · تم التواصل · مؤهّل · بلا متابعة · متأخرة</span>. Default sort: next follow-up ascending, nulls last.</li>
+    <li>Columns: <span class="ar">المنشأة</span> (pinned; city · source as subline) · <span class="ar">جهة الاتصال</span> · <span class="ar">الجوال</span> (LTR, click to copy) · <span class="ar">الحالة</span> · <span class="ar">المتابعة القادمة</span> (date + flag) · <span class="ar">المسؤول</span> · <span class="ar">الإجراء التالي</span> (one small button or none) · <span class="ar">⋯</span>.</li>
+    <li>Remove the per-row delete icon from the row; delete lives in <span class="ar">⋯</span> with the existing two-step refusal logic.</li>
+    <li>Bulk: assign owner, set follow-up date, change status, export. Import CSV stays as a secondary header action.</li>
+  </ul>
+  <h4>Lead detail</h4>
+  <p class="small">Drawer from the list (480px) for qualification; full page only after conversion. Drawer: header (name, status, owner, <span class="ar">تحويل إلى عميل</span> primary), properties (contact, phone, city, source, notes), next follow-up composer, activity timeline. Conversion opens a short dialog confirming the customer record that will be created and whether to create a deal.</p>
+
+  <h4>Deal pipeline (<span class="ar">الصفقات · مسار</span>)</h4>
+  <div class="mocklabel"><span>Pipeline board · sample data · stages flow right → left</span><span>Drag, or focus a card and press M</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-ph"><div><h6>الصفقات</h6><div class="meta">4 مفتوحة · 246,000 ر.س · مرجّح 77,600 ر.س</div></div><div class="act"><span class="btn">مسار | قائمة</span><span class="btn p">صفقة جديدة</span></div></div>
+    <div class="m-tool"><span class="chip on"><b>المسؤول:</b> أنا ×</span><span class="chip">+ القيمة</span><span class="chip">+ الإغلاق المتوقع</span><span class="sp"></span><span class="sub">الرابحة والخاسرة: <a href="#pages">عرض</a></span></div>
+    <div class="kan">
+      <div class="col"><div class="col-h">تأهيل<span class="sub m-n">2</span></div>
+        <div class="card"><div class="t">مقهى ذوّاقة — تعاقد سنوي</div><div class="sub">محمصة النخبة</div><div class="row"><span class="m-n" style="font-weight:600">48,000</span><span class="sub">ر.س · 20%</span><span class="av" style="margin-inline-start:auto;margin-inline-end:0">ف</span></div></div>
+        <div class="card"><div class="t">كافيه 21 — توسعة فرعين</div><div class="sub">كافيه 21</div><div class="row"><span class="m-n" style="font-weight:600">76,000</span><span class="sub">ر.س · 20%</span><span class="flag" style="margin-inline-start:auto">بلا متابعة</span></div></div>
+        <div class="col-f"><span>124,000 ر.س</span><span>مرجّح 24,800</span></div></div>
+      <div class="col"><div class="col-h">عرض سعر<span class="sub m-n">1</span></div>
+        <div class="card" style="box-shadow:var(--shadow-1);border-color:var(--brand)"><div class="t">محمصة النخبة — خلطة خاصة</div><div class="sub">عرض <span class="m-id">OF-1042</span> صالح حتى 30 سبتمبر</div><div class="row"><span class="m-n" style="font-weight:600">90,000</span><span class="sub">ر.س · 40%</span><span class="flag" style="margin-inline-start:auto">العرض منتهٍ</span></div></div>
+        <div class="col-f"><span>90,000 ر.س</span><span>مرجّح 36,000</span></div></div>
+      <div class="col"><div class="col-h">تفاوض<span class="sub m-n">1</span></div>
+        <div class="card"><div class="t">بن الشرق — عقد توريد</div><div class="sub">بن الشرق</div><div class="row"><span class="m-n" style="font-weight:600">32,000</span><span class="sub">ر.س · 60%</span><span class="av" style="margin-inline-start:auto;margin-inline-end:0">ف</span></div></div>
+        <div class="col-f"><span>32,000 ر.س</span><span>مرجّح 19,200</span></div></div>
+      <div class="col"><div class="col-h">إغلاق<span class="sub m-n">0</span></div>
+        <div class="card" style="border-style:dashed;color:var(--ink-3);text-align:center">أفلت هنا للإغلاق</div>
+        <div class="row" style="gap:6px"><div class="card" style="flex:1;border:1px dashed var(--success);color:var(--success);text-align:center;background:var(--success-bg)">رابح</div><div class="card" style="flex:1;border:1px dashed var(--danger);color:var(--danger);text-align:center;background:var(--danger-bg)">خاسر</div></div>
+        <div class="col-f"><span>0 ر.س</span><span>تظهر مناطق النتيجة أثناء السحب</span></div></div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li>Card: title (deal name), customer, value + probability, one flag or the owner avatar. No buttons. Click opens the deal drawer; <span class="ar">⋯</span> on hover: move to, mark won, mark lost, open.</li>
+    <li>Column header: stage name + count. Column footer (sticky): total value and weighted value. Stage-level rules (e.g. "cannot win without an accepted quote", already enforced) surface as a toast explaining the block when a drop is refused, and the card animates back.</li>
+    <li>Won and Lost: drop zones appear in the last column only while dragging. <span class="ar">خاسر</span> opens a reason dialog (required, from the configured list + free text). Outcomes are views: <span class="ar">الرابحة</span>, <span class="ar">الخاسرة</span>.</li>
+    <li>List view of the same deals for &gt;30 open deals or for bulk reassignment.</li>
+    <li>Mobile: stage segmented control (scrolls horizontally), list of compact cards; move via the <span class="ar">⋯</span> sheet.</li>
+  </ul>
+
+  <h4>Deal detail</h4>
+  <div class="mocklabel"><span>Deal record page · sample data</span><span>Main column at the start (right), properties at the end (left)</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-top"><span class="crumb">المبيعات ‹ الصفقات ‹ <b>محمصة النخبة — خلطة خاصة</b></span></div>
+    <div class="m-ph" style="padding-bottom:10px"><div><div class="row"><h6>محمصة النخبة — خلطة خاصة</h6><span class="st in">مفتوحة</span></div><div class="meta">محمصة النخبة · المسؤول فهد العتيبي · أُنشئت 8 سبتمبر</div></div><div class="act"><span class="btn ic">⋯</span><span class="btn">تسجيل نشاط</span><span class="btn p">إنشاء عرض سعر</span></div></div>
+    <div style="padding:0 20px 10px"><div class="stepper"><span class="done">تأهيل</span><i></i><span class="cur">عرض سعر</span><i></i><span>تفاوض</span><i></i><span>إغلاق</span></div></div>
+    <div class="m-tabs" style="padding-top:0"><span class="on">النشاط</span><span>عروض الأسعار <span class="c">2</span></span><span>العينات <span class="c">0</span></span><span>الطلبات</span><span>الملفات</span></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px">
+      <div style="padding:14px 20px;border-inline-end:1px solid var(--line-subtle)">
+        <div class="alert wa" style="margin-bottom:12px"><b>متابعة متأخرة:</b>&nbsp;مكالمة لتأكيد الكميات، كانت مستحقة 4 أكتوبر. <span class="btn sm" style="margin-inline-start:auto">إكمال</span></div>
+        <div class="inp" style="width:100%;min-width:0;margin-bottom:14px">اكتب ملاحظة أو سجّل مكالمة…</div>
+        <div class="sub" style="margin-bottom:4px">هذا الأسبوع</div>
+        <div class="tl">
+          <div><b>فهد العتيبي</b> غيّر المرحلة <span class="sub">· قبل يومين</span><br><span class="diff">المرحلة: تأهيل ← عرض سعر</span></div>
+          <div><b>فهد العتيبي</b> أصدر العرض <span class="m-id">OF-1042 r2</span> بقيمة <span class="m-n">90,000.00</span> ر.س <span class="sub">· 14 سبتمبر</span></div>
+          <div><b>فهد العتيبي</b> سجّل مكالمة — مناقشة الكميات <span class="sub">· 12 سبتمبر</span><br><span class="sub">اتفاق مبدئي على 250 كغ شهريًا، يطلبون عيّنة تحميص متوسط.</span></div>
+        </div>
+      </div>
+      <div style="padding:14px 16px">
+        <dl class="props">
+          <dt>القيمة</dt><dd class="m-n">90,000.00 ر.س</dd>
+          <dt>الاحتمال</dt><dd class="m-n">40%</dd>
+          <dt>الإغلاق المتوقع</dt><dd>15 أكتوبر 2026</dd>
+          <dt>المتابعة</dt><dd><span class="flag">4 أكتوبر</span></dd>
+          <dt>العميل</dt><dd><span class="lnk">محمصة النخبة</span></dd>
+          <dt>جهة الاتصال</dt><dd>عبدالله الدوسري</dd>
+          <dt>العمولة</dt><dd>فهد 100%</dd>
+        </dl>
+        <div class="sub" style="margin-top:14px">العرض النشط</div>
+        <div class="row" style="margin-top:4px"><span class="m-id">OF-1042</span><span class="st in">صادر</span><span class="m-n" style="margin-inline-start:auto">90,000</span></div>
+      </div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li>Header: one primary that follows the stage (<span class="ar">إنشاء عرض سعر</span> → <span class="ar">تسجيل قبول العرض</span> → <span class="ar">إنشاء طلب بيع</span>). Mark won/lost, edit, commission split in <span class="ar">⋯</span>.</li>
+    <li>The rule "cannot be won before a quote is accepted" moves from a permanent banner to the disabled-state tooltip on <span class="ar">تعليم رابح</span> and to the drop-refusal toast.</li>
+    <li>Properties panel fields are inline-editable (owner, probability, expected close, follow-up). Value derives from the active quote when one exists and says so.</li>
+  </ul>
+
+  <h4>Follow-ups, quotes, customer history</h4>
+  <ul class="small">
+    <li><b>Follow-ups</b> are tasks linked to a lead, deal or customer: they appear in the record timeline (pinned when due), in the owner's <span class="ar">مهامي</span>, and in the manager's team view. Creating one: <span class="ar">متى؟</span> presets (<span class="ar">غدًا 10:00، بعد 3 أيام، الأسبوع القادم</span>) + type (call, visit, sample, email).</li>
+    <li><b>Quotes</b>: list with views <span class="ar">مسودة · بانتظار الاعتماد · صادر · مقبول · منتهٍ</span>; editor per pattern 18 with revision badge (<span class="m-id">r2</span>), validity date, VAT statement, discount approval inline (<span class="ar">يتطلب اعتماد المدير: الخصم 12% يتجاوز 10%</span>). Print view: A4, Arabic first, bilingual headers optional.</li>
+    <li><b>Customer history</b>: customer page tabs <span class="ar">نظرة عامة · الطلبات · الفواتير والتحصيل · الصفقات · النشاط · الأسعار الخاصة</span>. Overview strip: lifetime value, last order, average order interval, open balance (with ageing), top 3 products by kg.</li>
+  </ul>
+
+  <!-- ───────────── 12.3 Inventory ───────────── -->
+  <h3>12.3 Inventory (<span class="ar">الأرصدة</span>)</h3>
+  <div class="mocklabel"><span>Stock balances · green coffee tab · compact density · sample data</span><span>Lots expand as sub-rows</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-ph"><div><h6>الأرصدة</h6><div class="meta">المستودع الرئيسي · محدّث 09:40</div></div><div class="act"><span class="btn">تحويل مخزون</span><span class="btn">تسوية</span><span class="btn p">طلب شراء</span></div></div>
+    <div class="m-tabs"><span class="on">بن أخضر <span class="c">14</span></span><span>مواد تعبئة <span class="c">22</span></span><span>منتج نهائي <span class="c">38</span></span><span>تحت نقطة الطلب <span class="c">5</span></span><span>الكل</span></div>
+    <div class="m-tool"><span class="inp">⌕ الصنف أو اللوت</span><span class="chip">+ المنشأ</span><span class="chip">+ المعالجة</span><span class="chip">+ الموقع</span><span class="sp"></span><span class="btn g sm">تجميع: المنشأ</span></div>
+    <table class="m-tbl" style="font-size:12.5px">
+      <thead><tr><th class="pin" style="width:230px">الصنف</th><th class="n">الرصيد (كغ)</th><th class="n">محجوز</th><th class="n">حجر جودة</th><th class="n">متاح</th><th class="n">وارد</th><th style="width:150px">مقابل نقطة الطلب</th><th class="n">تغطية</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="pin" style="height:32px">⌄ إثيوبيا يرغاتشيفي <span class="sub">مغسول · G1</span></td><td class="n">164.40</td><td class="n">72.00</td><td class="n">0.00</td><td class="n" style="font-weight:600">92.40</td><td class="n">300.00</td><td><div class="bar wa"><i style="width:62%"></i></div></td><td class="n"><span class="flag" style="color:var(--warning)">6 أيام</span></td><td><span class="btn sm">طلب شراء</span></td></tr>
+        <tr><td class="pin sub" style="height:28px;padding-inline-start:28px"><span class="m-id">GB-014</span> · استلام 2 سبتمبر</td><td class="n sub">120.40</td><td class="n sub">72.00</td><td class="n sub">0.00</td><td class="n sub">48.40</td><td class="n sub">—</td><td></td><td></td><td></td></tr>
+        <tr><td class="pin sub" style="height:28px;padding-inline-start:28px"><span class="m-id">GB-019</span> · استلام 21 سبتمبر</td><td class="n sub">44.00</td><td class="n sub">0.00</td><td class="n sub">0.00</td><td class="n sub">44.00</td><td class="n sub">—</td><td></td><td></td><td></td></tr>
+        <tr><td class="pin" style="height:32px">› كولومبيا هويلا <span class="sub">مغسول</span></td><td class="n">410.00</td><td class="n">60.00</td><td class="n">0.00</td><td class="n" style="font-weight:600">350.00</td><td class="n">0.00</td><td><div class="bar"><i style="width:100%"></i></div></td><td class="n">31 يومًا</td><td><span class="btn g sm ic">⋯</span></td></tr>
+        <tr><td class="pin" style="height:32px">› البرازيل سيرادو <span class="sub">طبيعي</span></td><td class="n">688.20</td><td class="n">120.00</td><td class="n">60.00</td><td class="n" style="font-weight:600">508.20</td><td class="n">0.00</td><td><div class="bar"><i style="width:100%"></i></div></td><td class="n">44 يومًا</td><td><span class="btn g sm ic">⋯</span></td></tr>
+        <tr><td class="pin" style="height:32px">› اليمن حراز <span class="sub">طبيعي</span></td><td class="n">18.00</td><td class="n">10.00</td><td class="n">0.00</td><td class="n" style="font-weight:600">8.00</td><td class="n">0.00</td><td><div class="bar er"><i style="width:16%"></i></div></td><td class="n"><span class="flag">3 أيام</span></td><td><span class="btn sm">طلب شراء</span></td></tr>
+      </tbody>
+      <tfoot><tr><td class="pin">إجمالي البن الأخضر · 14 صنفًا</td><td class="n">2,104.60</td><td class="n">402.00</td><td class="n">60.00</td><td class="n">1,642.60</td><td class="n">300.00</td><td colspan="3"></td></tr></tfoot>
+    </table>
+  </div></div>
+  <ul class="small">
+    <li>Same table for the three material types; units follow the tab (green and finished in kg; packaging in pieces with kg hidden). Mixed-unit totals never shown on <span class="ar">الكل</span>; that tab shows counts and value instead.</li>
+    <li>Column definitions come from the backend (on hand, reserved, quarantine, available, incoming). The UI does not recompute "available"; if reserved &gt; on hand, the row shows a danger flag <span class="ar">محجوز أكثر من الرصيد</span>.</li>
+    <li>Finished goods add <span class="ar">عبوات جزئية</span> as a separate column (partial packages are inventory but never sellable) and SKU weight (250g / 1kg) in the identifier subline.</li>
+    <li><b>Movements and transfers</b> (<span class="ar">الحركات والتحويلات</span>): virtualised log, compact density, columns <span class="ar">الوقت · النوع · الصنف/اللوت · من ← إلى · الكمية · الرصيد بعد · المستند · المستخدم</span>; signed quantities (+/−) with colour, the document as a link. Transfers are a two-step record (sent → received) with a status and discrepancy handling on receipt.</li>
+    <li>Lot traceability: lot drawer with a vertical timeline <span class="ar">استلام ← تحميص (دفعات) ← تعبئة (عبوات) ← تسليم (طلبات)</span>, each step with kg in/out.</li>
+  </ul>
+
+  <!-- ───────────── 12.4 Production ───────────── -->
+  <h3>12.4 Production: orders, roasting batches, QC, loss, packaging</h3>
+  <div class="mocklabel"><span>Production order detail · tablet-friendly · sample data</span><span>Stepper drives the page; every gram reconciles</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-ph" style="padding-bottom:10px"><div><div class="row"><h6>أمر إنتاج <span class="m-id" style="font-size:14px">PO-2026-118</span></h6><span class="st in">قيد التحميص</span></div><div class="meta">خلطة النخبة الخاصة · مطلوب 60.00 كغ محمص لطلب <span class="m-id">#1042</span> · الموعد 7 أكتوبر 12:00</div></div><div class="act"><span class="btn ic">⋯</span><span class="btn p">بدء دفعة تحميص</span></div></div>
+    <div style="padding:0 20px 12px"><div class="stepper"><span class="done">مخطط</span><i></i><span class="cur">تحميص · 2 من 3 دفعات</span><i></i><span>الجودة</span><i></i><span>التعبئة</span><i></i><span>جاهز</span></div></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;border-top:1px solid var(--line-subtle)">
+      <div style="padding:12px 20px">
+        <table class="m-tbl">
+          <thead><tr><th>الدفعة</th><th>المحمصة</th><th class="n">أخضر داخل (كغ)</th><th class="n">محمص خارج (كغ)</th><th class="n">الفاقد</th><th>الجودة</th></tr></thead>
+          <tbody>
+            <tr><td><span class="m-id">B-20261006-4821</span></td><td>Giesen W15</td><td class="n">24.00</td><td class="n">20.30</td><td class="n">15.4%</td><td><span class="st ok">مقبول</span></td></tr>
+            <tr><td><span class="m-id">B-20261006-4822</span></td><td>Giesen W15</td><td class="n">24.00</td><td class="n">20.52</td><td class="n">14.5%</td><td><span class="st in">قيد الفحص</span></td></tr>
+            <tr><td><span class="sub">الدفعة 3</span></td><td class="sub">—</td><td class="n sub">24.00 مخطط</td><td class="n sub">—</td><td class="n sub">—</td><td><span class="st nu">مخطط</span></td></tr>
+          </tbody>
+          <tfoot><tr><td>الإجمالي</td><td></td><td class="n">48.00</td><td class="n">40.82</td><td class="n">15.0%</td><td></td></tr></tfoot>
+        </table>
+      </div>
+      <div style="padding:12px 16px;border-inline-start:1px solid var(--line-subtle)">
+        <div style="font-weight:600;margin-bottom:6px">مطابقة الدفعة <span class="m-id">4821</span></div>
+        <div class="sub">20.30 كغ محمص يجب أن تُوزّع بالكامل</div>
+        <div style="display:flex;height:14px;border-radius:3px;overflow:hidden;margin:8px 0;gap:2px">
+          <i style="flex:16;background:var(--chart-1)"></i><i style="flex:2.75;background:var(--chart-2)"></i><i style="flex:.3;background:var(--danger)"></i><i style="flex:1.25;background:var(--sunken);border:1px dashed var(--line-control)"></i>
+        </div>
+        <dl class="props" style="grid-template-columns:auto minmax(0,1fr)">
+          <dt><i style="display:inline-block;width:8px;height:8px;background:var(--chart-1);border-radius:2px"></i> عبوات كاملة</dt><dd class="m-n">16.00 كغ <span class="sub">(16 × 1 كغ)</span></dd>
+          <dt><i style="display:inline-block;width:8px;height:8px;background:var(--chart-2);border-radius:2px"></i> عبوات جزئية</dt><dd class="m-n">2.75 كغ <span class="sub">(1 × 750غ)</span></dd>
+          <dt><i style="display:inline-block;width:8px;height:8px;background:var(--danger);border-radius:2px"></i> فاقد مُعلن</dt><dd class="m-n">0.30 كغ <span class="sub">انسكاب</span></dd>
+          <dt><i style="display:inline-block;width:8px;height:8px;border:1px dashed var(--line-control);border-radius:2px"></i> غير معبأ</dt><dd class="m-n">1.25 كغ</dd>
+        </dl>
+        <div class="alert" style="margin-top:10px;background:var(--success-bg);border-color:transparent;color:var(--success)">المجموع 20.30 = المحمص 20.30 ✓</div>
+      </div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li><b>Production orders list</b>: views <span class="ar">اليوم · هذا الأسبوع · بانتظار الجودة · جاهز للتعبئة · متأخر</span>; columns: order, blend/origin, required kg, roasted kg (progress bar to required), due, linked sales orders, status. Board view by step for the floor screen.</li>
+    <li><b>Roasting batch entry</b> (tablet, touch density): one batch per screen; fields green lot (combobox showing available kg per lot), green kg in, roasted kg out, roaster, profile, start/end time; loss computed live with its formula shown (<span class="ar">الفاقد = (الأخضر − المحمص) ÷ الأخضر</span>) and compared with the origin's expected band (from settings, not hard-coded). Outliers ask for a note before saving.</li>
+    <li><b>QC</b>: queue as a table sorted by waiting time; QC form with score fields, defects, decision (<span class="ar">مقبول · مرفوض · إعادة فحص</span>), and reason required for reject. Guest/external QC links keep their own minimal layout using the same tokens.</li>
+    <li><b>Packaging</b>: the reconciliation bar above is the signature component, the four destinations defined by the domain (complete, partial, declared loss, unpacked remainder), always summing to the roasted weight, with the check line in success colour or a danger alert stating the gap in grams.</li>
+    <li><b>Finished goods</b>: lands in inventory with lot links; packaging completion offers <span class="ar">طباعة الملصقات (16)</span> as the next action.</li>
+  </ul>
+
+  <!-- ───────────── 12.5 Finance ───────────── -->
+  <h3>12.5 Finance: cash, income, expenses, budget, AR, AP, banking, allocation</h3>
+  <div class="mocklabel"><span>Cash and banks (<span class="ar">النقد والبنوك</span>) · sample data</span><span>Actual solid, projected dashed</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-ph"><div><h6>النقد والبنوك</h6><div class="meta">جميع الفروع · بالريال السعودي · محدّث 09:40</div></div><div class="act"><span class="btn">تسوية بنكية</span><span class="btn">تحويل بين الحسابات</span><span class="btn p">تسجيل دفعة</span></div></div>
+    <div style="padding:12px 20px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:16px">
+      <div class="pane"><div class="pane-h"><div class="metric"><div class="l">النقد المتاح اليوم</div><div class="v" style="font-size:32px;line-height:40px">412,900<small>ر.س</small></div></div><span class="sp"></span><span class="btn sm">30 يومًا ⌄</span></div>
+        <div class="pane-b">{{CHART_CASH}}
+          <div class="row sub" style="gap:16px;flex-wrap:wrap"><span>متوقع بعد 30 يومًا: <b class="m-n" style="color:var(--ink)">338,500</b></span><span>تحصيلات متوقعة: <b class="m-n" style="color:var(--ink)">+142,000</b></span><span>التزامات: <b class="m-n" style="color:var(--ink)">−216,400</b></span></div>
+        </div></div>
+      <div class="pane"><div class="pane-h">الحسابات<span class="sp"></span><span class="sub">رصيد البنك · في الدفاتر</span></div>
+        <div class="pane-b list">
+          <div><div class="sp">الراجحي — جاري <span class="m-id">…4412</span><div class="sub">آخر مطابقة 5 أكتوبر</div></div><div class="m-n" style="text-align:end">298,410<div class="sub">298,410</div></div></div>
+          <div><div class="sp">الأهلي — رواتب <span class="m-id">…0931</span><div class="sub"><span class="flag" style="color:var(--warning)">14 حركة غير مطابقة</span></div></div><div class="m-n" style="text-align:end">96,240<div class="sub" style="color:var(--warning)">91,870</div></div></div>
+          <div><div class="sp">الصندوق — المقهى<div class="sub">جرد 6 أكتوبر</div></div><div class="m-n" style="text-align:end">18,250<div class="sub">18,250</div></div></div>
+        </div></div>
+    </div>
+    <div style="padding:0 20px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+      <div class="pane"><div class="pane-h">الذمم المدينة<span class="sub">147,800 ر.س</span><span class="sp"></span><span class="btn g sm">عرض ‹</span></div><div class="pane-b">
+        <div style="display:flex;height:12px;gap:2px;border-radius:3px;overflow:hidden"><i style="flex:90.5;background:var(--chart-1)"></i><i style="flex:31;background:var(--chart-2)"></i><i style="flex:16;background:var(--warning)"></i><i style="flex:10.3;background:var(--danger)"></i></div>
+        <div class="row sub" style="gap:12px;margin-top:8px;flex-wrap:wrap"><span>جارٍ <b class="m-n" style="color:var(--ink)">90,500</b></span><span>1–30 <b class="m-n" style="color:var(--ink)">31,000</b></span><span>31–60 <b class="m-n" style="color:var(--ink)">16,000</b></span><span>+60 <b class="m-n" style="color:var(--danger)">10,300</b></span></div></div></div>
+      <div class="pane"><div class="pane-h">الميزانية · أكتوبر<span class="sub">الفعلي مقابل المعتمد</span><span class="sp"></span><span class="btn g sm">عرض ‹</span></div><div class="pane-b list" style="font-size:12.5px">
+        <div><span style="width:110px">بن أخضر</span><div class="sp"><div class="bar"><i style="width:58%"></i></div></div><span class="m-n">58%</span></div>
+        <div><span style="width:110px">رواتب</span><div class="sp"><div class="bar"><i style="width:100%"></i></div></div><span class="m-n">100%</span></div>
+        <div><span style="width:110px">تسويق</span><div class="sp"><div class="bar er"><i style="width:100%"></i></div></div><span class="m-n" style="color:var(--danger)">118%</span></div>
+      </div></div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li><b>Cash position</b>: one display figure (today's available cash), one 30/60/90 line (actual solid, projected dashed, labelled), and three driver numbers. Bank vs books per account, with unreconciled count as a flag linking to reconciliation.</li>
+    <li><b>Income and expenses</b>: monthly bars (income chart-1, expenses chart-2) with a net line, Gregorian months, Arabic month names; table below with the same data and drill-down to transactions.</li>
+    <li><b>Budget vs actual</b>: table per pattern 13 with <span class="ar">المعتمد · الفعلي · الملتزم · المتبقي · نسبة الاستهلاك</span>; period status (open/closed) as a tag in the header; closing needs a dialog stating that reopening requires approval.</li>
+    <li><b>Accounts receivable</b>: ageing bar + customer table (balance, oldest invoice, days overdue, last payment, owner) with bulk <span class="ar">إرسال تذكير</span>. <b>Accounts payable / supplier bills</b>: Xero-style tabs <span class="ar">مسودة · بانتظار الاعتماد · بانتظار الدفع · مدفوعة</span> with counts, bulk approve, scheduled payment date column, and approval and payment as two separate states.</li>
+    <li><b>Banking and reconciliation</b>: two-pane matcher (bank lines at the start, ledger suggestions at the end) with keyboard accept (<span class="kbd">Enter</span>) and split/create actions.</li>
+    <li><b>Cash allocation</b> (receipt allocation): customer receipt at the top, open invoices table with an "allocate" amount column, remaining-to-allocate counter sticky in the footer; cannot exceed receipt (validation inline). Allocations never appear as cash movements in charts.</li>
+  </ul>
+
+  <!-- ───────────── 12.6 Tasks ───────────── -->
+  <h3>12.6 Employee tasks</h3>
+  <div class="mocklabel"><span>My tasks with detail panel · sample data</span><span>"Overdue" is a flag, not a status</span></div>
+  <div class="mockwrap"><div class="mock" dir="rtl" lang="ar" style="background:var(--surface)">
+    <div class="m-ph"><div><h6>المهام</h6></div><div class="act"><span class="btn p">مهمة جديدة</span></div></div>
+    <div class="m-tabs"><span class="on">مهامي <span class="c">11</span></span><span>أنشأتُها <span class="c">4</span></span><span>فريقي <span class="c">37</span></span><span>مكتملة</span></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px">
+      <div style="padding:6px 20px 14px">
+        <div class="sub" style="padding:8px 0 4px;font-weight:600;color:var(--danger)">متأخرة · 2</div>
+        <table class="m-tbl"><tbody>
+          <tr class="sel"><td style="width:24px"><span class="cb"></span></td><td><span class="m-id">T-311</span> مكالمة تأكيد الكميات <span class="sub">· صفقة محمصة النخبة</span></td><td><span class="st in">قيد التنفيذ</span></td><td><span class="flag">4 أكتوبر</span></td><td><span class="st er" style="background:none;padding:0">عالية</span></td></tr>
+          <tr><td><span class="cb"></span></td><td><span class="m-id">T-305</span> جرد مواد التعبئة <span class="sub">· المستودع</span></td><td><span class="st nu">لم تبدأ</span></td><td><span class="flag">5 أكتوبر</span></td><td class="sub">متوسطة</td></tr>
+        </tbody></table>
+        <div class="sub" style="padding:12px 0 4px;font-weight:600">اليوم · 3</div>
+        <table class="m-tbl"><tbody>
+          <tr><td style="width:24px"><span class="cb"></span></td><td><span class="m-id">T-318</span> زيارة مقهى ذوّاقة لتذوق العينة</td><td><span class="st nu">لم تبدأ</span></td><td>16:00</td><td class="sub">متوسطة</td></tr>
+          <tr><td><span class="cb"></span></td><td><span class="m-id">T-320</span> مراجعة فاتورة المورد <span class="m-id">INV-7781</span></td><td><span class="st wa">معطلة</span></td><td>17:00</td><td class="sub">عالية</td></tr>
+        </tbody></table>
+      </div>
+      <div class="drawer" style="box-shadow:none;padding:14px 16px">
+        <div class="row"><span class="m-id">T-311</span><span class="sp" style="flex:1"></span><span class="btn sm">فتح</span><span class="btn sm ic">×</span></div>
+        <div style="font-size:15px;font-weight:600;margin:6px 0 10px">مكالمة تأكيد الكميات</div>
+        <dl class="props">
+          <dt>الحالة</dt><dd><span class="st in">قيد التنفيذ</span></dd>
+          <dt>الموعد</dt><dd>4 أكتوبر 2026، 12:00 <span class="flag">متأخرة يومين</span></dd>
+          <dt>المكلّف</dt><dd><span class="av">ف</span>فهد العتيبي</dd>
+          <dt>أنشأها</dt><dd>نورة السبيعي · 1 أكتوبر</dd>
+          <dt>الأولوية</dt><dd>عالية</dd>
+          <dt>مرتبطة بـ</dt><dd><span class="lnk">صفقة محمصة النخبة</span></dd>
+          <dt>الإثبات</dt><dd class="sub">مطلوب: ملاحظة نتيجة المكالمة</dd>
+        </dl>
+        <div class="tl" style="margin-top:12px;font-size:12px">
+          <div>نورة: «العميل طلب الاتصال بعد الظهر» <span class="sub">· أمس</span></div>
+          <div>تصعيد تلقائي إلى المدير بعد 24 ساعة من الموعد <span class="sub">· اليوم 12:00</span></div>
+        </div>
+        <div class="row" style="margin-top:12px"><span class="btn p" style="flex:1;justify-content:center">إكمال مع ملاحظة</span><span class="btn">تأجيل</span></div>
+      </div>
+    </div>
+  </div></div>
+  <ul class="small">
+    <li>Fields: ID, title, description, assignee, creator, due date <i>and time</i> with timezone, priority (urgent/high/normal/low, shown as text, colour only for urgent/high), status (not started, in progress, blocked, in review, done, cancelled), linked record, attachments, completion evidence rule.</li>
+    <li><b>Escalation</b>: policy in settings (e.g. notify assignee at T−2h, manager at T+24h); escalation events appear in the task timeline and the manager's inbox. Near-due threshold is configurable per task type, not a fixed 24h.</li>
+    <li><b>Manager visibility</b>: <span class="ar">فريقي</span> view grouped by assignee with counts (open / overdue / done this week) in each group header; filter by linked module. Bulk reassign and reschedule.</li>
+    <li><b>Comments and attachments</b>: in the task timeline; @mentions notify; attachments show type, size and upload state with retry.</li>
+    <li>Completion stores the completion time and stops the overdue clock; the overdue flag becomes <span class="ar">أُنجزت متأخرة يومين</span> in history.</li>
+  </ul>
+</section>

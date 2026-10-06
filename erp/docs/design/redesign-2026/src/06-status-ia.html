@@ -1,0 +1,96 @@
+<section class="sec" id="status">
+  <p class="eyebrow">09</p>
+  <h2>Status system</h2>
+  <p>Six tones. Every business status maps to exactly one, with a fixed Arabic label. Derived conditions are <b>flags</b>, shown beside the status, never instead of it. Implement as one TypeScript map (<code>lib/status/registry.ts</code>) consumed by <code>&lt;StatusTag entity="order" value="WAITING_APPROVAL" /&gt;</code>.</p>
+  <div class="mock" dir="rtl" lang="ar" style="padding:14px 20px;background:var(--surface)">
+    <div class="row" style="flex-wrap:wrap;gap:8px">
+      <span class="st nu">مسودة</span><span class="st in">قيد التحضير</span><span class="st wa">بانتظار الاعتماد</span><span class="st ok">مكتمل</span><span class="st er">مرفوض</span><span class="st x">ملغى</span><span class="flag">متأخر 2 يوم</span><span class="flag" style="color:var(--warning)">مخزون منخفض</span>
+    </div>
+  </div>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Tone</th><th>Meaning</th><th>Sales / CRM</th><th>Orders and dispatch</th><th>Production and QC</th><th>Inventory</th><th>Finance</th><th>Tasks</th></tr></thead>
+    <tbody>
+      <tr><td><span class="st nu ar">محايد</span></td><td>Not started, draft</td><td class="ar">جديد · مسودة عرض</td><td class="ar">مسودة</td><td class="ar">مخطط</td><td class="ar">—</td><td class="ar">مسودة · غير مرحّل</td><td class="ar">لم تبدأ</td></tr>
+      <tr><td><span class="st in ar">معلومة</span></td><td>In progress, open, sent</td><td class="ar">تم التواصل · مؤهّل · عرض صادر</td><td class="ar">قيد التحضير · جاهز للشحن*</td><td class="ar">قيد التحميص · قيد الفحص · قيد التعبئة</td><td class="ar">في الطريق (وارد)</td><td class="ar">صادرة · مرحّل</td><td class="ar">قيد التنفيذ · قيد المراجعة</td></tr>
+      <tr><td><span class="st wa ar">تنبيه</span></td><td>Waiting on someone, partial, on hold</td><td class="ar">بانتظار اعتماد الخصم</td><td class="ar">بانتظار الاعتماد · معلّق · تسليم جزئي</td><td class="ar">إنتاج جزئي · إعادة فحص</td><td class="ar">حجر جودة</td><td class="ar">بانتظار الاعتماد · مدفوعة جزئيًا</td><td class="ar">معطلة</td></tr>
+      <tr><td><span class="st ok ar">نجاح</span></td><td>Done, approved, paid, won</td><td class="ar">مقبول · رابح · محوّل</td><td class="ar">مكتمل · مُسلَّم</td><td class="ar">مقبول (QC) · مكتمل</td><td class="ar">متاح</td><td class="ar">معتمدة · مدفوعة · مسوّاة</td><td class="ar">مكتملة</td></tr>
+      <tr><td><span class="st er ar">خطر</span></td><td>Failed, rejected, blocked, lost</td><td class="ar">خاسر · غير مؤهّل</td><td class="ar">مرفوض · محظور (بند)</td><td class="ar">مرفوض (QC)</td><td class="ar">منتهي الصلاحية</td><td class="ar">مرفوضة · فشل السداد</td><td class="ar">—</td></tr>
+      <tr><td><span class="st x ar">منتهٍ</span></td><td>Cancelled, archived, superseded</td><td class="ar">مستبدل (عرض)</td><td class="ar">ملغى</td><td class="ar">ملغى</td><td class="ar">مؤرشف</td><td class="ar">ملغاة · معكوسة</td><td class="ar">ملغاة</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="small">
+    <li>*Ready for shipping stays in the info tone with a distinct label; the current teal (<code>--oo-status-ready</code>) is retired because a seventh hue is not distinguishable from success at 20px.</li>
+    <li>Rejected (order) vs Blocked (item) keep different labels and icons inside the danger tone, preserving the distinction documented in <code>globals.css</code>.</li>
+    <li><b>Flags</b> (red or amber text with a leading glyph, no tint): <span class="ar">متأخر</span>, <span class="ar">بلا متابعة</span>, <span class="ar">مخزون منخفض</span>, <span class="ar">قارب الانتهاء</span>, <span class="ar">متوقفة منذ 14 يومًا</span>. Flags are computed server-side from a configurable policy and carry the absolute date in a tooltip.</li>
+    <li>Fulfilment and payment are two columns, two tags. Never combine them into one status.</li>
+    <li>Labels are a data dictionary: the same state has one Arabic label everywhere (fixes <span class="ar">رابح/ربح</span>, <span class="ar">خاسر/خسارة</span>).</li>
+  </ul>
+</section>
+
+<section class="sec" id="ia">
+  <p class="eyebrow">10</p>
+  <h2>Information architecture</h2>
+  <p>Two levels in the sidebar, a third as page tabs. Leaves are named after the objects people look for. The existing registry mechanics (<code>anyOf</code>, <code>requiresAll</code>, <code>unlessAny</code>) stay; only the tree changes.</p>
+
+  <h3>10.1 Proposed tree</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Section (label only)</th><th>Sidebar leaves</th><th>Page tabs / views</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="ar">—</td><td class="ar">الرئيسية · الوارد (اعتمادات، مهام، تنبيهات)</td><td class="ar">الوارد: الكل · اعتمادات · مهامي · تنبيهات</td><td>Home is role-scoped (§12.1). Inbox count = items needing me.</td></tr>
+      <tr><td class="ar">المفضلة</td><td>User-pinned views and records (max 8)</td><td></td><td>Pin from any view's <span class="ar">⋯</span> or record header.</td></tr>
+      <tr><td class="ar">المبيعات</td><td class="ar">العملاء المحتملون · الصفقات · العملاء · عروض الأسعار · طلبات البيع · التحصيلات</td><td class="ar">الصفقات: مسار | قائمة · العملاء: الكل · B2B · موزعون</td><td><span class="ar">مسار الصفقات</span> becomes a view of <span class="ar">الصفقات</span>. Activities move into Inbox and record timelines.</td></tr>
+      <tr><td class="ar">العمليات</td><td class="ar">أوامر الإنتاج · دفعات التحميص · الجودة والتذوق · التعبئة · تجهيز الطلبات · التسليم</td><td class="ar">الجودة: بانتظار الفحص · جلسات التذوق · السجل</td><td>Orders appear here only for people without the Sales module (current <code>unlessAny</code> rule).</td></tr>
+      <tr><td class="ar">المخزون</td><td class="ar">الأرصدة · الحركات والتحويلات · المشتريات · الموردون · المنتجات و SKU · الملصقات</td><td class="ar">الأرصدة: بن أخضر · مواد تعبئة · منتج نهائي · الكل</td><td>Green coffee, packaging and finished goods are tabs of one balance table (same columns, different units).</td></tr>
+      <tr><td class="ar">المالية</td><td class="ar">النقد والبنوك · الذمم المدينة · فواتير الموردين · المصروفات · الميزانية · المحاسبة · العمولات</td><td class="ar">المحاسبة: القيود · دفتر الأستاذ · ميزان المراجعة · الفترات</td><td>Today's <span class="ar">النقد والميزانية</span> page with six internal tabs splits into leaves.</td></tr>
+      <tr><td class="ar">التقارير</td><td class="ar">مكتبة التقارير</td><td class="ar">مبيعات · إنتاج · مخزون · مالية · فريق</td><td>One library; each module also links to its reports.</td></tr>
+      <tr><td class="ar">الفريق</td><td class="ar">المهام · الموظفون · الأهداف</td><td class="ar">المهام: مهامي · فريقي · الكل</td><td>HR workflows (leave, attendance) slot in here later.</td></tr>
+      <tr><td class="ar">الإدارة</td><td class="ar">المستخدمون والأدوار · سجل التدقيق · الإعدادات</td><td class="ar">الإعدادات: عام · المبيعات · الإنتاج · المالية</td><td>Module settings move here from inside modules.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>10.2 Naming rules</h3>
+  <ul class="small">
+    <li>Leaves are plural object nouns (<span class="ar">عروض الأسعار</span>), not activities (<span class="ar">إدارة العملاء</span>) or containers (<span class="ar">الفرص والمتابعات</span>).</li>
+    <li>Page title = sidebar label. Record title = the record's name, with its ID in mono beside it.</li>
+    <li>Views are named by their filter in plain words (<span class="ar">متأخرة</span>, <span class="ar">بانتظار اعتمادي</span>), not codes.</li>
+    <li>One term per concept across modules (data dictionary): <span class="ar">عميل محتمل</span> not <span class="ar">ليد</span>; <span class="ar">طلب بيع</span> not <span class="ar">طلبية</span>; <span class="ar">دفعة تحميص</span> not <span class="ar">باتش</span>.</li>
+  </ul>
+
+  <h3>10.3 Breadcrumbs, back and URL state</h3>
+  <ul class="small">
+    <li>Breadcrumb: <span class="ar">المبيعات ‹ الصفقات ‹ محمصة النخبة — خلطة خاصة</span>. Section label is not a link; list link restores the list's last filters and scroll.</li>
+    <li>Separator glyph <span class="ar">‹</span> (points left in RTL). Truncate middle crumbs first; the current page never truncates below 24 characters.</li>
+    <li>All list state (view, filters, sort, page, density) is in the URL query; record drawers add <code>?open=deal_123</code> so a link opens the same drawer.</li>
+  </ul>
+
+  <h3>10.4 Global search and command palette</h3>
+  <div class="mockwrap narrow"><div class="mock" dir="rtl" lang="ar" style="max-width:640px;background:var(--surface);box-shadow:var(--shadow-2)">
+    <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)"><span class="ico c"></span><span style="font-size:15px">النخب</span><span class="kbd" style="margin-inline-start:auto">Esc</span></div>
+    <div style="padding:6px">
+      <div class="m-sec">سجلات</div>
+      <div class="m-it on">محمصة النخبة<span class="sub">عميل · الرياض</span><span class="ct">↵</span></div>
+      <div class="m-it">محمصة النخبة — خلطة خاصة<span class="sub">صفقة · تفاوض · <span class="m-n">90,000</span> ر.س</span></div>
+      <div class="m-it"><span class="m-id">#1042</span><span class="sub">طلب بيع · محمصة النخبة · قيد التحضير</span></div>
+      <div class="m-sec">إجراءات</div>
+      <div class="m-it">إنشاء عرض سعر لـ «محمصة النخبة»<span class="ct"><span class="kbd">Q</span></span></div>
+      <div class="m-it">تسجيل متابعة<span class="ct"><span class="kbd">F</span></span></div>
+      <div class="m-sec">صفحات</div>
+      <div class="m-it">الذمم المدينة · المالية</div>
+    </div>
+    <div style="display:flex;gap:16px;padding:8px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--ink-3)"><span><span class="kbd">↑</span> <span class="kbd">↓</span> تنقل</span><span><span class="kbd">↵</span> فتح</span><span><span class="kbd">Ctrl</span>+<span class="kbd">↵</span> فتح في لوحة جانبية</span></div>
+  </div></div>
+  <ul class="small">
+    <li>Opens with <span class="kbd">Ctrl K</span>/<span class="kbd">⌘ K</span> or <span class="kbd">/</span>. Empty state shows <span class="ar">الأخيرة</span> (last 8 records) and <span class="ar">إجراءات سريعة</span>.</li>
+    <li>Searches records the user may see (server-side, permission-filtered), pages, actions and settings. Sections ordered: exact ID match, records, actions, pages.</li>
+    <li>Arabic normalisation: alef variants, taa marbuta/haa, alef maqsura/yaa, tashkeel and tatweel stripped, Arabic-Indic ↔ Latin digits; Latin transliteration hits (<span class="m-n">nokhba</span> → <span class="ar">النخبة</span>) as a later enhancement.</li>
+    <li>ID patterns jump directly: <code>#1042</code>, <code>OF-1042</code>, <code>GB-014</code>, <code>B-20261006-4821</code>, <code>INV-…</code>.</li>
+  </ul>
+
+  <h3>10.5 Quick create, recents, favourites, shortcuts</h3>
+  <ul class="small">
+    <li><b>Quick create</b> (<span class="ar">+ جديد</span>, <span class="kbd">C</span>): lead, deal, quote, sales order, production order, stock transfer, expense, supplier bill, task. Small objects open a drawer over the current page; quotes, orders and bills open their full editor. Context-aware: on a customer page, <span class="ar">عرض سعر</span> pre-fills the customer.</li>
+    <li><b>Recents</b>: last 8 records (stored per user server-side), in the palette and as a collapsible sidebar section.</li>
+    <li><b>Favourites</b>: pinned views and records at the top of the sidebar; drag to reorder.</li>
+    <li><b>Shortcuts</b> (bound to <code>event.code</code>, shown in tooltips and in a <span class="kbd">?</span> sheet): <span class="kbd">G</span> then <span class="kbd">H/S/O/I/F</span> go to home/sales/operations/inventory/finance · <span class="kbd">J</span>/<span class="kbd">K</span> next/previous row · <span class="kbd">X</span> select row · <span class="kbd">Enter</span> open · <span class="kbd">E</span> edit · <span class="kbd">M</span> move stage · <span class="kbd">A</span> assign.</li>
+  </ul>
+</section>

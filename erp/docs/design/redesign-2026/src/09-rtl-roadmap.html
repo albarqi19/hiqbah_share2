@@ -1,0 +1,235 @@
+<section class="sec" id="rtl">
+  <p class="eyebrow">13</p>
+  <h2>RTL specification</h2>
+  <p>Arabic is the primary layout. Mirroring is the default for layout and direction-of-progress; it is not applied to things that have an intrinsic direction (numbers, codes, media, clocks, brand marks).</p>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Topic</th><th>Rule</th><th>Implementation</th></tr></thead>
+    <tbody>
+      <tr><td>Document</td><td><code>&lt;html lang="ar" dir="rtl"&gt;</code> from the user's preference (already done in <code>app/layout.tsx</code>).</td><td>Only logical CSS: <code>ms-/me-/ps-/pe-/start-/end-/text-start/text-end</code>, <code>inset-inline-*</code>, <code>border-inline-*</code>. ESLint rule bans physical utilities in <code>src/</code>.</td></tr>
+      <tr><td>Navigation</td><td>Sidebar at the right; drawers enter from the left (end); toasts bottom-right (start). Tab order follows visual reading order (right → left).</td><td>DOM order = reading order; never reorder with <code>flex-direction: row-reverse</code> to fake RTL.</td></tr>
+      <tr><td>Breadcrumbs</td><td>Start at the right; separator <span class="ar">‹</span>; back arrow in headers points right (→) because "back" is toward the start.</td><td>Use a <code>ChevronStart</code>/<code>ChevronEnd</code> icon pair resolved by direction, not ad-hoc <code>rtl:rotate-180</code>.</td></tr>
+      <tr><td>Icons to mirror</td><td>Arrows, chevrons, back/forward, undo/redo, send, reply, list-indent, progress steppers, "external link", sidebar collapse.</td><td><code>&lt;Icon mirror /&gt;</code> prop applies <code>scaleX(-1)</code> under <code>[dir=rtl]</code>.</td></tr>
+      <tr><td>Icons not to mirror</td><td>Checkmark, search, clock, calendar, play/pause, download/upload, charts' glyphs, brand logos, the question mark, currency symbols.</td><td>Default <code>mirror=false</code>.</td></tr>
+      <tr><td>Numbers</td><td>Latin digits (<span class="m-n">0–9</span>) everywhere in the UI, Arabic units and words around them. Inputs accept Arabic-Indic digits and normalise. Numbers never reversed.</td><td><code>Intl.NumberFormat("ar-SA-u-nu-latn", …)</code>; numeric cells <code>dir="ltr"</code> isolated only when they contain signs or ranges.</td></tr>
+      <tr><td>Currency</td><td>Amount then unit: <span class="ar">31,250.00 ر.س</span>. In table cells the unit lives in the header. ISO code (<code>SAR</code>) in exports and multi-currency views. State VAT inclusion near totals.</td><td><code>formatMoney(value, {decimals, unit: "short"|"none"|"iso"})</code>; never concatenate strings manually.</td></tr>
+      <tr><td>Dates</td><td>Gregorian, Arabic month names, Latin digits: <span class="ar">8 أكتوبر 2026</span>; time 24h <span class="m-n">14:05</span> with <span class="ar">بتوقيت الرياض</span> on deadlines. Week starts Sunday.</td><td><code>new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-latn", …)</code>. <code>ar-SA</code> alone defaults to the Umm al-Qura calendar: always pass <code>ca-gregory</code>. Store UTC, display <code>Asia/Riyadh</code>. Replaces <code>lib/utils.ts formatDate</code> and every <code>toLocaleDateString("en-…")</code>.</td></tr>
+      <tr><td>Mixed content</td><td>Order numbers, SKUs, lot codes, emails, phone numbers, IBANs, URLs are LTR islands.</td><td><code>&lt;bdi&gt;</code> or <code>dir="ltr"</code> + <code>unicode-bidi: isolate</code> via a <code>&lt;Code&gt;</code> component; phone as <code>+966 55 214 8890</code> in one isolate.</td></tr>
+      <tr><td>Tables</td><td>First column at the right; text columns align start (right), numbers align end (left) so decimal points line up; sort arrows after the label.</td><td><code>text-align: end</code> + <code>tabular-nums</code> on numeric columns; never <code>text-left</code>.</td></tr>
+      <tr><td>Charts</td><td>Time axis runs right → left (oldest at the right), matching steppers, timelines and the pipeline in this product. Value axis on the right. Legends start at the right.</td><td>One <code>ChartFrame</code> prop <code>timeDirection</code> defaults to <code>"rtl"</code>. Validate with three staff in the first usability round; if they read LTR time axes more accurately, flip the default in one place.</td></tr>
+      <tr><td>Timelines and steppers</td><td>Rail and dots on the start side; steps progress right → left.</td><td>Logical properties only.</td></tr>
+      <tr><td>Side panels</td><td>Properties panel at the end (left); drawers from the end. Main content keeps the start side.</td><td></td></tr>
+      <tr><td>Forms</td><td>Labels above fields, aligned start; unit suffix at the end side inside the field; helper and errors below, aligned start. Two-column forms read right column first.</td><td>Do not place labels beside fields: Arabic label lengths vary too much for a fixed label column.</td></tr>
+      <tr><td>Typography</td><td>No letter-spacing, no italics, no all-caps; ellipsis at the end side.</td><td>Lint for <code>tracking-*</code> and <code>italic</code> on Arabic content.</td></tr>
+      <tr><td>Shortcuts</td><td>Work on Arabic keyboard layouts.</td><td>Match <code>event.code</code> (<code>KeyK</code>), not <code>event.key</code>.</td></tr>
+      <tr><td>Search</td><td>Arabic normalisation and digit equivalence (§10.4) in toolbar search and the palette; server-side in Postgres via an unaccented, normalised search column.</td><td></td></tr>
+      <tr><td>English mode</td><td>Same components, <code>dir="ltr"</code>; test for truncation since English labels run ~30% longer than Arabic in this domain.</td><td>Playwright visual run in both languages.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="sec" id="responsive">
+  <p class="eyebrow">14</p>
+  <h2>Responsive behaviour</h2>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Breakpoint</th><th>Shell</th><th>Lists</th><th>Records and forms</th><th>Typical device and user</th></tr></thead>
+    <tbody>
+      <tr><td><b>≥1440</b></td><td>Sidebar 232 expanded</td><td>Full tables, default density</td><td>Main + properties panel</td><td>Office desktops: finance, sales management</td></tr>
+      <tr><td><b>1280–1439</b></td><td>Sidebar expanded, collapsible to 56px rail</td><td>Priority-3 columns optional</td><td>Main + panel (panel 300px)</td><td>Laptops</td></tr>
+      <tr><td><b>1024–1279</b></td><td>Rail (56px icons + tooltips); expands as overlay</td><td>Pinned identifier + horizontal scroll; touch density on coarse pointers</td><td>Panel collapses under the header as a 2-column property grid</td><td>Floor tablets: production, packaging, QC, preparation</td></tr>
+      <tr><td><b>640–1023</b></td><td>Top bar with menu button; sidebar as drawer</td><td>Priority 1–2 columns</td><td>Single column; sticky action footer</td><td>Small tablets, landscape phones</td></tr>
+      <tr><td><b>&lt;640</b></td><td>Top bar + bottom tab bar (Home, Inbox, Search, Create, More)</td><td>List rows, filters in bottom sheet</td><td>Full-screen sheets; one primary action pinned at the bottom</td><td>Sales reps on visits, managers approving</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="small">
+    <li>Never hide amounts, units, deadlines or status on small screens; hide secondary columns instead.</li>
+    <li>Production and packaging screens are designed at 1024×768 first, with 48px rows and 40px controls, and one primary action per step.</li>
+    <li>Mobile priorities: approvals (approve/reject with reason), tasks, customer lookup and history, logging a visit, checking stock availability. Data entry with line items is not a mobile target.</li>
+    <li>Test at 390, 768, 1024, 1280, 1440 and at 200% zoom (WCAG 1.4.10 reflow at 320 CSS px for non-table content).</li>
+  </ul>
+</section>
+
+<section class="sec" id="a11y">
+  <p class="eyebrow">15</p>
+  <h2>Accessibility</h2>
+  <div class="grid g2">
+    <div class="box"><h4>Contrast</h4><p class="small">Text ≥4.5:1; <code>fg-muted</code> is the floor (5.65:1 on white). Control borders 3.56:1. Status tags ≥4.96:1 on their tints. Replace all 217 uses of the 2.5:1 greys.</p></div>
+    <div class="box"><h4>Keyboard</h4><p class="small">Every action reachable by keyboard; visible 2px focus ring; table row navigation; drag-and-drop has a "Move to" alternative; dialogs trap and return focus; skip link to main content.</p></div>
+    <div class="box"><h4>Semantics</h4><p class="small">Tables use <code>th scope</code>, <code>aria-sort</code>, caption (visually hidden) naming the view and count. Status tags have text. Charts have a table alternative and an <code>aria-label</code> summary.</p></div>
+    <div class="box"><h4>Targets and motion</h4><p class="small">24×24 minimum (2.5.8), 40×40 on touch layouts. Reduced motion disables skeleton shimmer and drawer slide. No information conveyed by hover alone.</p></div>
+    <div class="box"><h4>Language</h4><p class="small"><code>lang</code> on mixed-language fragments (<code>lang="en"</code> on English product names) so screen readers switch voices.</p></div>
+    <div class="box"><h4>Errors</h4><p class="small">Errors identified in text, associated with fields, with a fix; form summary links to fields; nothing saved silently fails.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="roadmap">
+  <p class="eyebrow">16</p>
+  <h2>Implementation roadmap</h2>
+  <p>Five phases. Each ends with a measurable gate. Phases 1–2 are prerequisites; 3–5 can overlap by module.</p>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Phase</th><th>Scope</th><th>Findings closed</th><th>Gate (done when)</th></tr></thead>
+    <tbody>
+      <tr><td><b>0 · Decide</b><br><span class="sub">1 week</span></td><td>Approve the visual direction, the font (IBM Plex Sans Arabic vs Cairo), the status registry labels and the IA tree with the owner. Record decisions in the design skill.</td><td>—</td><td>Signed-off token values and label dictionary.</td></tr>
+      <tr><td><b>1 · Foundations</b><br><span class="sub">2 weeks</span><br><span class="tag P0">P0</span></td><td>Tokens in <code>globals.css</code> + Tailwind theme; font swap; <code>format.ts</code> (dates, money, numbers, weights); status registry + <code>StatusTag</code>/<code>RiskFlag</code>; ESLint rules (no raw palette, no physical direction, no arbitrary font sizes, no <code>alert/confirm</code>); Figma variables collection <code>hiqbah/core</code>.</td><td>A1, A3, A4, A6, A9, B9, B10, C9</td><td>0 raw palette classes, 0 sizes &lt;12px, 0 <code>en-US</code> date calls, contrast check passes on 10 key screens.</td></tr>
+      <tr><td><b>2 · Core kit</b><br><span class="sub">3 weeks</span><br><span class="tag P0">P0</span></td><td><code>src/components/ui/</code>: Button, IconButton, Input, NumberField, MoneyField, Select, Combobox, DatePicker, Checkbox, Tabs, Segmented, Dialog, Drawer, Menu, Tooltip, Toast, InlineAlert, EmptyState, Skeleton, PermissionState, Pane, MetricStrip, ChartFrame, ActivityTimeline, PropertiesPanel, BulkActionBar, <b>DataTable</b>. Module kits re-export, then are deleted.</td><td>A2, A5, A7, A8, B6, B11, C1</td><td>Sales and Finance kits deleted; 0 <code>fixed inset-0</code> outside Dialog/Drawer; DataTable used by 3 pilot lists.</td></tr>
+      <tr><td><b>3 · Shell and IA</b><br><span class="sub">2 weeks</span><br><span class="tag P1">P1</span></td><td>Light sidebar, top bar, breadcrumbs, command palette with Arabic normalisation, quick create, recents, favourites, inbox; registry tree relabelled per §10.</td><td>B1, B3, B12, C2, C6</td><td>Task test: 5 staff find 8 named destinations in ≤ 10s each without help.</td></tr>
+      <tr><td><b>4 · Module rebuilds</b><br><span class="sub">6–8 weeks</span><br><span class="tag P1">P1</span></td><td>In order of daily use: Orders → Inventory → Production/Packaging → CRM (leads, pipeline, deal) → Finance (cash, AR, AP, budget) → Tasks → Command center. Each: list on DataTable with saved views, record page pattern, drawer quick actions, states.</td><td>B2, B4, B5, B7, B8, B13, C7</td><td>Per module: Playwright visual baselines at 390/1024/1440 in ar and en; regression suites green; time-on-task for the top 2 tasks measured before/after.</td></tr>
+      <tr><td><b>5 · Polish</b><br><span class="sub">ongoing</span><br><span class="tag P2">P2</span></td><td>Print styles for quotes and delivery notes, icon mirroring audit, empty-state copy, dark mode (tokens already defined), notification policy tuning.</td><td>C3, C4, C5, C8</td><td>Accessibility review (WCAG 2.2 AA checklist) on 15 screens.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Changes relative to the draft design skill v1.0</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Item</th><th>Draft skill</th><th>This spec</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Font</td><td>Cairo</td><td>IBM Plex Sans Arabic</td><td>Tighter at 12–13px table sizes, matched Latin, mono companion for codes. Needs sign-off.</td></tr>
+      <tr><td>Primary action</td><td><code>#405F4D</code></td><td><code>#1F3A2C</code> action, <code>#3E6B52</code> accent</td><td>Separates "do this" from "selected/link/success", which were all the same green.</td></tr>
+      <tr><td>Row heights</td><td>36 / 44 / 52</td><td>32 / 40 / 48</td><td>15 rows at 1440×900 with 13px text; touch density still 48.</td></tr>
+      <tr><td>Type scale</td><td>12 / 14 / 16 / 26 / 30</td><td>12 / 13 / 14 / 15 / 18 / 22 / 24 / 32</td><td>Adds a 13px cell size and lowers the page title from 26 to 22 to reduce header height.</td></tr>
+      <tr><td>Radius</td><td>6 / 8 / 12</td><td>4 / 6 / 8 / 12</td><td>Tags and checkboxes need a smaller step.</td></tr>
+      <tr><td>Muted text</td><td><code>#68756D</code> (4.53:1 on canvas)</td><td><code>#5E6A62</code> (5.26:1 on canvas)</td><td>Clears 4.5:1 on every surface, including sunken.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Token block (copy into <code>globals.css</code>)</h3>
+  <pre class="box" style="overflow:auto;font-family:var(--f-mono);font-size:12px;line-height:1.55;white-space:pre;margin:0"><code style="border:0;background:none;padding:0">:root {
+  /* surfaces */
+  --bg-canvas: #F6F7F5; --bg-surface: #FFFFFF; --bg-sunken: #F0F2EF;
+  --bg-hover: #F3F5F2;  --bg-selected: #E9F1EB;
+  /* lines */
+  --border-subtle: #E4E8E3; --border: #D5DBD4; --border-control: #7E8B82;
+  /* text */
+  --fg: #18221C; --fg-secondary: #3F4C44; --fg-muted: #5E6A62; --fg-disabled: #8A958D;
+  /* action and accents */
+  --action-primary: #1F3A2C; --action-primary-hover: #284A38; --on-primary: #FFFFFF;
+  --accent-brand: #3E6B52; --accent-brand-soft: #E9F1EB; --accent-roast: #8A5A2B;
+  /* status */
+  --success: #2D7048; --success-bg: #E7F2EA;  --warning: #8F5E14; --warning-bg: #FBF1DF;
+  --danger:  #B1382B; --danger-bg:  #FBEAE7;  --info:    #2C628C; --info-bg:    #E8F0F7;
+  --neutral: #4D5952; --neutral-bg: #EEF1EE;
+  /* charts */
+  --chart-1: #3E6B52; --chart-2: #B07A3E; --chart-3: #2C628C; --chart-4: #8C6D9E; --chart-5: #9AA39C;
+  /* type */
+  --font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans", "Noto Sans Arabic", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --text-caption: 12px/18px; --text-cell: 13px/20px; --text-body: 14px/22px;
+  --text-title-sm: 15px/22px; --text-title: 18px/26px; --text-page: 22px/30px;
+  --text-metric: 24px/32px; --text-display: 32px/40px;
+  /* space, size, shape */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --control-h: 32px; --control-h-sm: 28px; --control-h-touch: 40px;
+  --row-compact: 32px; --row-default: 40px; --row-touch: 48px;
+  --sidebar-w: 232px; --sidebar-rail: 56px; --topbar-h: 44px; --drawer-w: 480px;
+  --radius-xs: 4px; --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px;
+  --elev-1: 0 4px 12px rgb(24 34 28 / .08); --elev-2: 0 16px 40px rgb(24 34 28 / .16);
+  --motion-fast: 120ms; --motion-base: 180ms; --motion-slow: 220ms;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+}</code></pre>
+  <p class="small muted">Font shorthand values are written as size/line pairs for reading; split them into <code>-size</code> and <code>-line</code> variables when wiring Tailwind's theme.</p>
+
+  <h3>Handoff checklist for the Figma rebuild</h3>
+  <ol class="small">
+    <li>Create variable collection <code>hiqbah/core</code> (modes light, dark) with the token block; text styles for the 9 type tokens; effect styles <code>elev-1</code>, <code>elev-2</code>.</li>
+    <li>Build components with variants named exactly as code props (<code>variant</code>, <code>size</code>, <code>state</code>, <code>density</code>), Auto Layout with logical padding, and RTL as the base frame direction.</li>
+    <li>Page templates: List (shell + tabs + toolbar + DataTable + footer), Record (header + stepper + tabs + main + properties), Board, Command center, Form page, Drawer, Dialog.</li>
+    <li>Rebuild in roadmap order using real Arabic sample data; mark every prototype interaction as prototype.</li>
+    <li>Do not mark any screen as an approved reference until the owner signs it off.</li>
+  </ol>
+</section>
+
+<section class="sec" id="appendix">
+  <p class="eyebrow">17</p>
+  <h2>Reference index</h2>
+  <p class="small">All Mobbin screens cited in this report, grouped by topic. Opened and reviewed on 6 October 2026.</p>
+  <div class="grid g3 small">
+    <div><h4>Tables, filters, views</h4><ul>
+      <li><a href="https://mobbin.com/screens/668f28bb-5ee6-45d3-885e-fa94cc4c3651">Twenty · companies table, filter fields</a></li>
+      <li><a href="https://mobbin.com/screens/e2205dbe-6e99-4b94-b47c-0be070a76fe1">Xero · bills with status tabs</a></li>
+      <li><a href="https://mobbin.com/screens/412227e3-0cf1-4d07-a31b-315f000268fc">Xero · draft bills, bulk approve</a></li>
+      <li><a href="https://mobbin.com/screens/4cbe7498-0064-49a8-a80c-692431aaaae3">Remote · team expenses</a></li>
+      <li><a href="https://mobbin.com/screens/46a43a9c-a04e-4e29-9ab4-2749c81067aa">Airtable · grid with summary</a></li>
+      <li><a href="https://mobbin.com/screens/ba8b613b-e6df-4db1-b64d-0f7e20f5440c">Canny · group by</a></li>
+      <li><a href="https://mobbin.com/screens/926541e1-1d12-4677-8faf-54193a709b17">Neon · filter builder</a></li>
+      <li><a href="https://mobbin.com/screens/3f1181dc-6264-4b7f-921f-9a0824bbe19a">Salesforce · bulk actions</a></li>
+      <li><a href="https://mobbin.com/screens/5ade4fc8-0a7a-453e-ad54-a197591dda30">Jira · list, saved filters, export</a></li>
+      <li><a href="https://mobbin.com/screens/6a5d9ce9-a20a-40cc-85cb-d07559009076">Rox · column filters and sort</a></li>
+    </ul></div>
+    <div><h4>CRM</h4><ul>
+      <li><a href="https://mobbin.com/screens/2ff3c977-7902-48b5-8361-0c89710e5c2e">Pipedrive · deals board</a></li>
+      <li><a href="https://mobbin.com/screens/fedd9c09-b271-46a7-819c-956f51723a30">HubSpot · board with totals</a></li>
+      <li><a href="https://mobbin.com/screens/fb3596aa-f981-487b-996b-b30230e8b771">Zoho CRM · stage view</a></li>
+      <li><a href="https://mobbin.com/screens/e275641a-a3e8-440a-b53e-983bb9cec7c7">Attio · pipeline template</a></li>
+      <li><a href="https://mobbin.com/screens/719c5483-f836-4cef-b6cd-da66c60ced13">Zendesk Sell · board summary</a></li>
+      <li><a href="https://mobbin.com/screens/e6e1045a-9c10-4578-9bcf-ea3b6c72b0c7">Apollo · deals board</a></li>
+      <li><a href="https://mobbin.com/screens/297adfeb-8312-496b-8acf-41839a6cf775">Attio · record activity diffs</a></li>
+      <li><a href="https://mobbin.com/screens/88631280-beda-4e91-b556-6c4a7630bf4a">Pipedrive · organisation, focus</a></li>
+      <li><a href="https://mobbin.com/screens/f0170497-9df6-4b27-9bdc-ab606ee77530">Twenty · record and side panel</a></li>
+      <li><a href="https://mobbin.com/screens/591c4be5-9288-4c2c-a053-c69e213dd25c">Apollo · deal record</a></li>
+      <li><a href="https://mobbin.com/screens/edb25210-fb3c-4cd4-8736-85569882b93e">Lightfield · account record</a></li>
+      <li><a href="https://mobbin.com/screens/fe7e0ef9-62e6-43d7-8bb6-679f301119c4">Salesforce · lead record</a></li>
+      <li><a href="https://mobbin.com/screens/6f6dff54-17e8-4cf7-8f83-14feab509d52">Zoho CRM · record related lists</a></li>
+    </ul></div>
+    <div><h4>Finance and analytics</h4><ul>
+      <li><a href="https://mobbin.com/screens/d7179a06-0195-4f94-97a9-19e781e3f50e">Xero · short-term cash flow</a></li>
+      <li><a href="https://mobbin.com/screens/a1576a19-53f6-498d-80a7-02ece64072d8">QuickBooks · business at a glance</a></li>
+      <li><a href="https://mobbin.com/screens/aaf74c3f-e1df-4376-b05b-cb4a9b290ee2">Monarch · accounts</a></li>
+      <li><a href="https://mobbin.com/screens/9ee2c231-6dda-49b7-b0c3-4557363d3f9f">HoneyBook · finance overview</a></li>
+      <li><a href="https://mobbin.com/screens/c619f130-9193-472a-b1e2-1533aa227fd7">Quicken · dashboard</a></li>
+      <li><a href="https://mobbin.com/screens/7263637d-25a7-4b26-b1c5-58f5e11c379a">Copilot Money · budget</a></li>
+      <li><a href="https://mobbin.com/screens/83db4774-ef6b-48fd-ab1a-62a0104ef713">Xero analytics · income vs expenses</a></li>
+      <li><a href="https://mobbin.com/screens/5cb8990c-d8b1-46dc-b30f-5b69c1602026">Square · category sales</a></li>
+      <li><a href="https://mobbin.com/screens/42f45ba0-07e9-4edc-ba6e-87f7acd9ad3a">Klaviyo · comparison period</a></li>
+      <li><a href="https://mobbin.com/screens/d9696f0c-790a-4272-a15e-690eef0d3182">Mintlify · metric tabs</a></li>
+      <li><a href="https://mobbin.com/screens/938ac496-e3f5-4490-9b09-a46b9325f1e3">DoorDash · sales overview</a></li>
+      <li><a href="https://mobbin.com/screens/6e267440-5f3e-470f-b69a-465ba480df46">Square · traffic comparison</a></li>
+      <li><a href="https://mobbin.com/screens/9cd8cfa8-2ca7-449a-b5b2-9d4a2e8e94ea">Salesforce · home widgets (avoid)</a></li>
+    </ul></div>
+    <div><h4>Inventory, orders, production</h4><ul>
+      <li><a href="https://mobbin.com/screens/d9deb551-88bf-4c93-91b3-43ef6659ccef">Shopify · inventory</a></li>
+      <li><a href="https://mobbin.com/screens/78f2c018-e2c9-440c-8b5c-e631b2539163">Square · item library</a></li>
+      <li><a href="https://mobbin.com/screens/11985bd5-233f-4b4e-96e3-7a7911f3afeb">Xero · products and services</a></li>
+      <li><a href="https://mobbin.com/screens/19b1e434-a104-48ff-ac86-8194c9f5c875">DoorDash · product mix</a></li>
+      <li><a href="https://mobbin.com/screens/2d749fed-77f8-4378-af70-5d636fd6025d">Shopify · create purchase order</a></li>
+      <li><a href="https://mobbin.com/screens/10bda18e-95a0-4c93-8be9-3b3775477e90">Shopify · batch pick/print/pack</a></li>
+      <li><a href="https://mobbin.com/screens/147163b2-eef8-40be-b199-dae113a33d9c">DoorDash · order drawer</a></li>
+      <li><a href="https://mobbin.com/screens/2b2c6bc8-1991-4cce-8a70-cc056d32facc">Shopify · Bill Pay bulk bar</a></li>
+      <li><a href="https://mobbin.com/screens/c70df137-fb09-4dda-8c8b-9da3cba51deb">Square · invoice line items</a></li>
+      <li><a href="https://mobbin.com/screens/e432b17f-be69-4544-94ee-9d3110bbf90d">Midday · invoice drawer, empty state</a></li>
+    </ul></div>
+    <div><h4>Navigation, tasks, notifications</h4><ul>
+      <li><a href="https://mobbin.com/screens/593d7acd-2e16-4365-bcd6-02ce52f48f3b">Vapi · command palette</a></li>
+      <li><a href="https://mobbin.com/screens/2af813bf-0129-45d1-81ed-069edee76e16">Juicebox · command palette</a></li>
+      <li><a href="https://mobbin.com/screens/14ceb943-f04a-460f-b4f5-2ebd78d74aff">Magnific · palette with recents</a></li>
+      <li><a href="https://mobbin.com/screens/5f353fc3-d9ce-4d1c-be9b-cc1b4ad07578">v0 · quick actions</a></li>
+      <li><a href="https://mobbin.com/screens/fc208a44-dbf9-4f79-b9b0-db57f9840964">Linear · board, hidden columns</a></li>
+      <li><a href="https://mobbin.com/screens/f00cc4fb-4083-43fc-a0fb-703a6c4ef771">Linear · issue detail</a></li>
+      <li><a href="https://mobbin.com/screens/ed6163fd-12f3-4aad-a6ed-62707cb7c21e">Linear · project updates</a></li>
+      <li><a href="https://mobbin.com/screens/defd2114-8885-46fd-964e-796e112c3212">Plain · tasks with side panel</a></li>
+      <li><a href="https://mobbin.com/screens/fe8c92bf-f0ef-46a5-a006-3f4b92a7be23">Basecamp · assigned to me</a></li>
+      <li><a href="https://mobbin.com/screens/180250b5-b758-4c51-bff7-90bc419c1e0b">HoneyBook · task management</a></li>
+      <li><a href="https://mobbin.com/screens/2146514d-1011-4f03-8b62-cef4040e0c42">Workable · inbox with actions</a></li>
+      <li><a href="https://mobbin.com/screens/d7f3f613-38ca-49f3-a382-e51c1f1d435c">fal · notifications</a></li>
+      <li><a href="https://mobbin.com/screens/dc3adbc9-3ae0-45fd-9f43-c8ab60a19052">Langdock · inbox</a></li>
+    </ul></div>
+    <div><h4>Admin, states, mobile</h4><ul>
+      <li><a href="https://mobbin.com/screens/2deef352-1f6b-4757-a4c9-dcce106b0e6a">Toggl · audit log from → to</a></li>
+      <li><a href="https://mobbin.com/screens/1f44450b-8a6f-4d19-83e8-24addf2ca0e8">Klaviyo · activity log</a></li>
+      <li><a href="https://mobbin.com/screens/673656da-327b-4e01-98fd-8a23f21718a4">Grok · audit with histogram</a></li>
+      <li><a href="https://mobbin.com/screens/decad923-b3e9-4e22-8166-7b20e6c22140">Customer.io · audit logs</a></li>
+      <li><a href="https://mobbin.com/screens/8a478eef-4fda-457e-90ea-77218ede07ef">Shopify · permission tree</a></li>
+      <li><a href="https://mobbin.com/screens/0a9158f6-3c02-4718-aead-7ad8e7051f85">Klaviyo · create role</a></li>
+      <li><a href="https://mobbin.com/screens/3d8ae5cd-4f87-4b5b-9613-406b993c9e95">Twenty · role permissions</a></li>
+      <li><a href="https://mobbin.com/screens/09371ef3-f0d0-4fc9-8ab1-607ab3d0e4ab">Square · skeleton</a></li>
+      <li><a href="https://mobbin.com/screens/f470af91-c889-487f-a2a2-87d69a60a781">DoorDash · table skeleton</a></li>
+      <li><a href="https://mobbin.com/screens/845ae1bd-e832-40ba-90bf-23d72b31bbf3">v0 · empty states</a></li>
+      <li><a href="https://mobbin.com/screens/830087fe-1ffe-40bf-b406-f277e8c12e0e">Square · inline info banner</a></li>
+      <li><a href="https://mobbin.com/screens/f6465633-16e9-4618-abbb-9e544c3d6e20">Klaviyo · flow steps</a></li>
+      <li><a href="https://mobbin.com/screens/0a8866fc-d1b9-4ca0-9a1b-985eff471f55">Copilot iOS · grouped list</a></li>
+      <li><a href="https://mobbin.com/screens/5fd5f93b-46c4-4187-8a06-e8b0e9c96973">Shopify iOS · segmented filter</a></li>
+    </ul></div>
+  </div>
+  <hr>
+  <p class="small muted">Prepared from the repository <code>ibrahim1440/hiqbah_share2</code> (branch <code>claude/amazing-mccarthy-2094dq</code>) and Mobbin. Source of this page: <code>erp/docs/design/redesign-2026/</code>. Sample data in mockups is illustrative.</p>
+</section>
+</main>
+</div>

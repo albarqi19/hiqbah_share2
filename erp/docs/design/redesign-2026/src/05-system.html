@@ -1,0 +1,221 @@
+<section class="sec" id="principles">
+  <p class="eyebrow">06</p>
+  <h2>Design principles</h2>
+  <p>Eight rules to settle arguments. Each has a test you can apply to a screen.</p>
+  <div class="grid g2">
+    <div class="box"><h4>1 · The next action is never more than one glance away</h4><p class="small">Test: cover everything except the page header and the first row of content. Can you say what to do next? Record pages show one primary action; lists show the next action per row.</p></div>
+    <div class="box"><h4>2 · Structure before containers</h4><p class="small">Test: count bordered boxes. A page earns a box only for an independent object (a pane, a drawer, a table). Groups inside use headings, dividers and alignment.</p></div>
+    <div class="box"><h4>3 · Every number has a unit, a period and a source</h4><p class="small">Test: point at any figure and ask "of what, when, compared to what". Answer must be on screen or one hover away.</p></div>
+    <div class="box"><h4>4 · Status is text first</h4><p class="small">Test: view in greyscale. Every state remains distinguishable by its label and shape.</p></div>
+    <div class="box"><h4>5 · Arabic is the design, English is the translation</h4><p class="small">Test: design in Arabic with real names (<span class="ar">محمصة النخبة</span>, <span class="ar">إثيوبيا يرغاتشيفي</span>), then check the English mode for truncation, not the other way round.</p></div>
+    <div class="box"><h4>6 · Dense, not cramped</h4><p class="small">Test: 15 rows on a 1440×900 screen with 12px+ text and 4.5:1 contrast. Density comes from removing boxes and copy, never from shrinking type.</p></div>
+    <div class="box"><h4>7 · Context survives every action</h4><p class="small">Test: filter a list, open a record, go back. Filters, scroll and selection are intact. Quick edits happen in a drawer over the list.</p></div>
+    <div class="box"><h4>8 · Calm by default, loud by exception</h4><p class="small">Test: on a normal day the screen has no red. Red, amber and motion are reserved for things a person must act on.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="direction">
+  <p class="eyebrow">07</p>
+  <h2>Visual direction: <span class="ar">«سجلّ المحمصة»</span> · the roastery ledger</h2>
+  <p class="lede">A working ledger, not a dashboard template. Ink on paper-white, green-bean greys for structure, one deep espresso-green for action and a roast-copper accent reserved for data. Arabic set in IBM Plex Sans Arabic, which holds up at 12–13px in tables where Tajawal and Cairo get loose.</p>
+
+  <div class="grid g3" style="margin:20px 0">
+    <div class="box"><h4>Materials</h4><p class="small">Paper (white surfaces), ledger lines (1px hairlines), ink (near-black green text), green bean (neutral tint and brand), roast copper (second data series, highlights in charts). No gradients, glass or glow.</p></div>
+    <div class="box"><h4>What makes it Hiqbah</h4><p class="small">The green-tinted neutral system (no product in the benchmark uses it), Arabic-first type at table sizes, units and lot codes treated as first-class content, the four-way gram reconciliation as a signature visual (<a href="#pages">§12.4</a>).</p></div>
+    <div class="box"><h4>What it is not</h4><p class="small">Not violet SaaS, not a dark admin template, not cream-and-serif "artisan coffee" branding. The café brand can be warm; the operations tool is precise.</p></div>
+  </div>
+
+  <h3>Palette</h3>
+  <div class="sw">
+    <div><i style="background:var(--canvas)"></i><span><b>canvas</b><br><code>#F6F7F5</code> app background, sidebar</span></div>
+    <div><i style="background:var(--surface)"></i><span><b>surface</b><br><code>#FFFFFF</code> tables, panes</span></div>
+    <div><i style="background:var(--sunken)"></i><span><b>sunken</b><br><code>#F0F2EF</code> headers, footers</span></div>
+    <div><i style="background:var(--line)"></i><span><b>line</b><br><code>#D5DBD4</code> container borders</span></div>
+    <div><i style="background:var(--line-control)"></i><span><b>line-control</b><br><code>#7E8B82</code> inputs · 3.56:1</span></div>
+    <div><i style="background:var(--ink)"></i><span><b>ink</b><br><code>#18221C</code> text · 16.4:1</span></div>
+    <div><i style="background:var(--ink-3)"></i><span><b>ink-3</b><br><code>#5E6A62</code> meta · 5.65:1</span></div>
+    <div><i style="background:var(--primary)"></i><span><b>primary</b><br><code>#1F3A2C</code> espresso green · 12.4:1</span></div>
+    <div><i style="background:var(--brand)"></i><span><b>brand</b><br><code>#3E6B52</code> green bean · links, focus, chart 1</span></div>
+    <div><i style="background:var(--roast)"></i><span><b>roast</b><br><code>#8A5A2B</code> copper · accents</span></div>
+    <div><i style="background:var(--success)"></i><span><b>success</b><br><code>#2D7048</code> on <code>#E7F2EA</code> · 5.19:1</span></div>
+    <div><i style="background:var(--warning)"></i><span><b>warning</b><br><code>#8F5E14</code> on <code>#FBF1DF</code> · 4.96:1</span></div>
+    <div><i style="background:var(--danger)"></i><span><b>danger</b><br><code>#B1382B</code> on <code>#FBEAE7</code> · 5.19:1</span></div>
+    <div><i style="background:var(--info)"></i><span><b>info</b><br><code>#2C628C</code> on <code>#E8F0F7</code> · 5.64:1</span></div>
+    <div><i style="background:var(--neutral)"></i><span><b>neutral</b><br><code>#4D5952</code> on <code>#EEF1EE</code> · 6.44:1</span></div>
+  </div>
+  <p class="small muted">Contrast ratios computed with the WCAG 2.x formula against white unless a pair is given. Brand and success are both green: success is never used without its text label and dot, and brand is never used for a status.</p>
+
+  <h3>Type specimen</h3>
+  <div class="mock" dir="rtl" lang="ar" style="padding:20px 24px;background:var(--surface)">
+    <div style="font-size:12px;color:var(--ink-3)">caption 12/18 · 500</div>
+    <div style="font-size:22px;line-height:30px;font-weight:600">طلب البيع <span class="m-id" style="font-size:14px">#1042</span> · محمصة النخبة</div>
+    <div style="font-size:14px;line-height:22px;margin-top:6px;max-width:60ch">إثيوبيا يرغاتشيفي، تحميص فاتح، 12 كيس × 1 كغ. التسليم المتوقع الخميس 8 أكتوبر 2026، الساعة 10:00 بتوقيت الرياض.</div>
+    <div class="row" style="gap:24px;margin-top:12px;flex-wrap:wrap">
+      <div class="metric"><div class="l">صافي المبيعات · أكتوبر حتى اليوم</div><div class="v">184,250<small>ر.س</small></div><div class="d"><span class="up">▲ 8%</span> مقارنة بأول 6 أيام من سبتمبر</div></div>
+      <div class="metric"><div class="l">بن أخضر متاح</div><div class="v">1,248.6<small>كغ</small></div><div class="d">يغطي 23 يومًا بمعدل التحميص الحالي</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="system">
+  <p class="eyebrow">08</p>
+  <h2>Design system specification</h2>
+  <p>Values below are final proposals, not ranges. Names map one-to-one to CSS custom properties and Figma variables (collection <code>hiqbah/core</code>, modes <code>light</code> and <code>dark</code>; dark is specified for completeness, light ships first).</p>
+
+  <h3>8.1 Typography</h3>
+  <dl class="kv">
+    <dt>Family</dt><dd><code>--font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans", "Noto Sans Arabic", system-ui, sans-serif</code>. One family for Arabic and Latin; it ships matched Latin glyphs, so mixed strings (<span class="ar">طلب #1042 · SKU ETH-YRG-1KG</span>) share one rhythm.</dd>
+    <dt>Numbers</dt><dd><code>.num</code> = <code>font-variant-numeric: tabular-nums</code> on every numeric cell, metric and amount. Verify the <code>tnum</code> feature in the loaded build; if absent, set <code>--font-num: "IBM Plex Sans"</code> on <code>.num</code> only.</dd>
+    <dt>Codes</dt><dd><code>--font-mono: "IBM Plex Mono"</code> 12px for IDs, lot codes, SKUs, IBANs, always <code>dir="ltr"</code> + <code>unicode-bidi: isolate</code>.</dd>
+    <dt>Weights</dt><dd>400 body · 500 labels, buttons, table headers · 600 titles and metric values. Nothing above 600 in product UI (700 only in print headers).</dd>
+    <dt>Decision needed</dt><dd>This replaces Tajawal (production) and Cairo (draft skill v1.0). If brand keeps Cairo, raise every line height by 2px and the table row by 4px; Cairo's taller ascenders clip at 40px rows with 13px text.</dd>
+  </dl>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Token</th><th>Size / line</th><th>Weight</th><th>Use</th><th>Never</th></tr></thead>
+    <tbody>
+      <tr><td><code>text-caption</code></td><td class="n">12 / 18</td><td>400–500</td><td>Meta, table headers, helper text, badges</td><td>Body copy, anything below 12px</td></tr>
+      <tr><td><code>text-cell</code></td><td class="n">13 / 20</td><td>400</td><td>Table cells, dense lists, sidebar items</td><td>Long-form text</td></tr>
+      <tr><td><code>text-body</code></td><td class="n">14 / 22</td><td>400</td><td>Default UI and form inputs, drawer content</td><td></td></tr>
+      <tr><td><code>text-label</code></td><td class="n">13 / 20</td><td>500</td><td>Buttons, field labels, tabs</td><td></td></tr>
+      <tr><td><code>text-title-sm</code></td><td class="n">15 / 22</td><td>600</td><td>Pane titles, card titles, record names in lists</td><td></td></tr>
+      <tr><td><code>text-title</code></td><td class="n">18 / 26</td><td>600</td><td>Drawer and dialog titles, section headings</td><td></td></tr>
+      <tr><td><code>text-page</code></td><td class="n">22 / 30</td><td>600</td><td>Page title (one per page)</td><td>Inside panes</td></tr>
+      <tr><td><code>text-metric</code></td><td class="n">24 / 32</td><td>600 · tnum</td><td>Metric strip values</td><td>More than 6 per screen</td></tr>
+      <tr><td><code>text-display</code></td><td class="n">32 / 40</td><td>600 · tnum</td><td>One headline figure (cash position)</td><td>More than 1 per screen</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Arabic rules: no letter-spacing on Arabic (it breaks joining); no uppercase/small-caps styling; no italics (use weight or colour); line height ≥ 1.5× for text ≥ 13px; minimum Arabic size 12px; truncation with ellipsis at the end side only for single-line cells, with full text in a tooltip.</p>
+
+  <h3>8.2 Spacing, grid and density</h3>
+  <dl class="kv">
+    <dt>Scale (px)</dt><dd><span class="m-n">0 · 2 · 4 · 6 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64</span> as <code>--space-0</code> … <code>--space-64</code>. 2 and 6 only inside components.</dd>
+    <dt>Page</dt><dd>Gutter 24px ≥1280, 20px 768–1279, 16px &lt;768. Max content width: none for tables; 1200px for forms and detail pages; 720px for single-column forms.</dd>
+    <dt>Vertical rhythm</dt><dd>Page header to toolbar 12px · toolbar to table 0 (toolbar sits on the table) · between panes 16px · between page sections 24px · form field to field 16px · label to input 6px.</dd>
+    <dt>Grid</dt><dd>12 columns, 16px gutter at ≥1280. Detail pages: main 8 / properties 4 (min 300, max 360px). Dashboards: 12-column bands.</dd>
+    <dt>Density modes</dt><dd>Per table, persisted per user: <b>compact</b> row 32px (ledgers, movements); <b>default</b> 40px; <b>touch</b> 48px (auto on <code>pointer: coarse</code>, production and packaging tablets).</dd>
+    <dt>Controls</dt><dd>Height 32px desktop (sm 28px in toolbars/rows), 40px touch. Icon buttons 32×32 with 16px icons. Minimum target 24×24 (WCAG 2.5.8), 40×40 on touch.</dd>
+  </dl>
+
+  <h3>8.3 Shape, borders, elevation, layers</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Token</th><th>Value</th><th>Applies to</th></tr></thead>
+    <tbody>
+      <tr><td><code>radius-xs</code></td><td>4px</td><td>Status tags, checkboxes, kbd, chips inside inputs</td></tr>
+      <tr><td><code>radius-sm</code></td><td>6px</td><td>Buttons, inputs, selects, menu items, filter chips, sidebar items</td></tr>
+      <tr><td><code>radius-md</code></td><td>8px</td><td>Panes, tables' outer frame, popovers, toasts, kanban columns</td></tr>
+      <tr><td><code>radius-lg</code></td><td>12px</td><td>Dialogs only</td></tr>
+      <tr><td><code>radius-full</code></td><td>9999px</td><td>Avatars, dots, toggles</td></tr>
+      <tr><td><code>border-subtle</code></td><td>1px <code>#E4E8E3</code></td><td>Row dividers, inner separators</td></tr>
+      <tr><td><code>border</code></td><td>1px <code>#D5DBD4</code></td><td>Panes, table frame, cards in boards, sidebar edge</td></tr>
+      <tr><td><code>border-control</code></td><td>1px <code>#7E8B82</code></td><td>Text inputs, selects, checkboxes (meets 3:1, WCAG 1.4.11)</td></tr>
+      <tr><td><code>elev-0</code></td><td>none</td><td>Everything in the page flow. No shadow on cards or panes.</td></tr>
+      <tr><td><code>elev-1</code></td><td><code>0 4px 12px rgb(24 34 28 / .08)</code> + border</td><td>Dropdowns, popovers, tooltips, the bulk bar</td></tr>
+      <tr><td><code>elev-2</code></td><td><code>0 16px 40px rgb(24 34 28 / .16)</code></td><td>Drawers, dialogs, command palette, toasts</td></tr>
+      <tr><td>Layers</td><td>canvas → surface → sunken</td><td>Canvas: app background and sidebar. Surface: the working area (tables and panes are white). Sunken: table header, footer, toolbars, read-only inputs, kanban columns.</td></tr>
+      <tr><td>z-index</td><td>sticky 10 · header 20 · dropdown 30 · drawer 40 · dialog 50 · toast 60 · palette 70</td><td>Named tokens; no literal z-indexes.</td></tr>
+      <tr><td>Motion</td><td>120ms (hover, press) · 180ms (menus) · 220ms (drawers) · <code>cubic-bezier(.2,0,0,1)</code></td><td>All set to 0 under <code>prefers-reduced-motion</code>. No bounce, no entrance animations on data.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.4 Colour roles</h3>
+  <p class="small">Components reference roles, never raw values. Full CSS block in the <a href="#roadmap">roadmap</a> deliverables.</p>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Role</th><th>Light</th><th>Dark</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td><code>fg-default / fg-secondary / fg-muted / fg-disabled</code></td><td><code>#18221C / #3F4C44 / #5E6A62 / #8A958D</code></td><td><code>#E8ECE9 / #C2CAC4 / #98A39C / #6E7A72</code></td><td><code>fg-disabled</code> never carries information.</td></tr>
+      <tr><td><code>bg-canvas / surface / sunken / hover / selected</code></td><td><code>#F6F7F5 / #FFF / #F0F2EF / #F3F5F2 / #E9F1EB</code></td><td><code>#121714 / #191F1B / #1F2621 / #222A25 / #22332A</code></td><td>Selected rows use <code>selected</code> + checkbox; hover never alone.</td></tr>
+      <tr><td><code>action-primary</code></td><td><code>#1F3A2C</code> (hover <code>#284A38</code>)</td><td><code>#CFE3D6</code></td><td>One per region.</td></tr>
+      <tr><td><code>accent-brand</code></td><td><code>#3E6B52</code></td><td><code>#7FB394</code></td><td>Links, focus ring, active nav rule, chart series 1.</td></tr>
+      <tr><td><code>accent-roast</code></td><td><code>#8A5A2B</code></td><td><code>#D19A62</code></td><td>Chart series 2, roast-related highlights. Not for buttons.</td></tr>
+      <tr><td><code>status-*</code></td><td>see palette</td><td>see palette</td><td>Six tones (§9). Foreground on its own tint ≥4.5:1.</td></tr>
+      <tr><td><code>chart-1…5</code></td><td><code>#3E6B52 #B07A3E #2C628C #8C6D9E #9AA39C</code></td><td><code>#7FB394 #D19A62 #7DB2DE #B79AC8 #6E7A72</code></td><td>Max 5 series; series 5 is "other". Each series also differs in dash or marker.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.5 Buttons</h3>
+  <div class="mock" dir="rtl" lang="ar" style="padding:16px 20px;background:var(--surface)">
+    <div class="row" style="flex-wrap:wrap;gap:8px">
+      <span class="btn p">إرسال للاعتماد</span><span class="btn">حفظ كمسودة</span><span class="btn g">إلغاء</span><span class="btn d">حذف الطلب</span><span class="btn ic" aria-label="المزيد">⋯</span><span class="btn sm">تصدير</span><span class="btn p" style="opacity:.45">جارٍ الحفظ…</span>
+    </div>
+  </div>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Variant</th><th>Spec</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td>Primary</td><td>bg <code>action-primary</code>, fg white, 32px, padding-inline 12px, radius 6, label 13/500</td><td>The one action that completes the region's job. Max one per page header, one per drawer/dialog footer.</td></tr>
+      <tr><td>Secondary</td><td>surface bg, 1px <code>border</code>, fg ink</td><td>All other actions that deserve a visible button (max two next to the primary). Rest goes in <span class="ar">⋯</span>.</td></tr>
+      <tr><td>Ghost</td><td>transparent, fg <code>fg-secondary</code>, hover <code>bg-hover</code></td><td>Toolbar actions, Cancel, inline row actions.</td></tr>
+      <tr><td>Danger</td><td>secondary shape with fg <code>danger</code>; solid danger only inside the confirm dialog</td><td>Delete, mark lost, reject. Never next to the primary in a page header; lives in <span class="ar">⋯</span>.</td></tr>
+      <tr><td>States</td><td>hover (−4% L), pressed (−8% L), focus 2px <code>accent-brand</code> ring offset 2, disabled 45% opacity + <code>aria-disabled</code> + tooltip with the reason, loading spinner replaces icon and label becomes progressive (<span class="ar">جارٍ الحفظ…</span>)</td><td>Loading disables repeat submit. Disabled buttons always explain why on hover/focus.</td></tr>
+      <tr><td>Labels</td><td>Verb + object: <span class="ar">إنشاء عرض سعر</span>, <span class="ar">تأكيد الاستلام</span>, <span class="ar">إرسال للاعتماد</span></td><td>Never <span class="ar">تم</span>, <span class="ar">موافق</span> or <span class="ar">إرسال</span> alone.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.6 Inputs, selects, search, date</h3>
+  <div class="mock" dir="rtl" lang="ar" style="padding:16px 20px;background:var(--surface)">
+    <div class="grid g3" style="gap:16px">
+      <div><div style="font-weight:500;margin-bottom:6px">العميل <span style="color:var(--danger)">*</span></div><div class="inp" style="min-width:0;width:100%;color:var(--ink)">محمصة النخبة<span style="margin-inline-start:auto;color:var(--ink-3)">⌄</span></div><div class="sub" style="margin-top:4px">ابحث بالاسم أو رقم السجل التجاري</div></div>
+      <div><div style="font-weight:500;margin-bottom:6px">الكمية</div><div class="inp" style="min-width:0;width:100%;color:var(--ink)"><span class="m-n">250</span><span style="margin-inline-start:auto;color:var(--ink-3)">كغ</span></div><div class="sub" style="margin-top:4px">المتاح: <span class="m-n">1,248.6</span> كغ</div></div>
+      <div><div style="font-weight:500;margin-bottom:6px">سعر الكيلو</div><div class="inp" style="min-width:0;width:100%;color:var(--ink);border-color:var(--danger);box-shadow:0 0 0 1px var(--danger)"><span class="m-n">-12</span><span style="margin-inline-start:auto;color:var(--ink-3)">ر.س</span></div><div style="margin-top:4px;font-size:12px;color:var(--danger)">أدخل سعرًا أكبر من صفر.</div></div>
+    </div>
+  </div>
+  <ul class="small">
+    <li><b>Text input</b>: 32px (40 touch), 1px <code>border-control</code>, radius 6, padding-inline 10, 14px text. Focus: border <code>accent-brand</code> + 1px inner ring. Error: border and ring <code>danger</code>, message below in 12px danger with an icon, linked via <code>aria-describedby</code>. Label always visible above (never placeholder-as-label); required marked with <span class="ar">*</span> and "required" in the accessible name; optional fields marked <span class="ar">(اختياري)</span> only when most fields are required.</li>
+    <li><b>Number / money</b>: unit or currency as a suffix inside the field at the end side; value LTR-isolated; accepts Arabic-Indic digits and the Arabic decimal separator (U+066B) on input and normalises to Latin on blur; precision from the data contract (kg 2 dp, SAR 2 dp).</li>
+    <li><b>Select vs combobox</b>: native-styled select for ≤7 static options; combobox with search for anything longer or remote (customers, products, lots), with loading, empty (<span class="ar">لا نتائج · إنشاء «…»</span> when creation is allowed) and keyboard support.</li>
+    <li><b>Search</b>: in toolbars 32px, start icon, clear button when filled, searches as you type after 250ms, matches Arabic variants (§10.4). Global search lives only in the top bar.</li>
+    <li><b>Date / datetime</b>: Gregorian calendar, week starts Sunday, display <span class="ar">8 أكتوبر 2026</span>; deadline fields include time and show <span class="ar">بتوقيت الرياض</span>. Range picker with presets on the start side.</li>
+    <li><b>Checkbox / radio / toggle</b>: 16px box, radius 4, border-control; toggle only for settings that apply immediately.</li>
+  </ul>
+
+  <h3>8.7 Filters and toolbars</h3>
+  <p class="small">Toolbar row (height 48px incl. padding) directly above the table, on the surface: search (240px) · active filter chips · dashed suggested chips · spacer · <span class="ar">ترتيب</span> · <span class="ar">العرض</span> (columns, density, group-by) · export. A filter chip reads <span class="ar">الحقل: القيمة ×</span>; multiple values collapse to <span class="ar">الحالة: 3 قيم</span>. <span class="ar">مسح الكل</span> appears with ≥2 chips. The result count sits in the table footer, not the header.</p>
+
+  <h3>8.8 Panes, cards and metrics</h3>
+  <ul class="small">
+    <li><b>Pane</b> (default container): surface, 1px border, radius 8, header 40px with 15/600 title, optional meta and actions, body padding 12/14. Use for independent blocks on a page. Never nest panes.</li>
+    <li><b>Card</b>: only in boards (kanban) and mobile lists. 1px border, radius 6, padding 8/10, no shadow; drag state adds <code>elev-1</code>.</li>
+    <li><b>Metric</b>: label 12/500 muted · value 24/32 600 tnum with unit in 12px · comparison line 12px with direction glyph and words (<span class="ar">▲ 8% عن الفترة السابقة</span>) · tooltip with definition, source and last update. Metrics live in a <b>strip</b> (one bordered row, hairline dividers), not individual cards. Max 6 per strip.</li>
+  </ul>
+
+  <h3>8.9 Charts</h3>
+  <ul class="small">
+    <li>Library: keep Recharts (already in use) wrapped in a <code>ChartFrame</code> that supplies title, unit, period, legend, loading/empty/error, and a <span class="ar">عرض كجدول</span> toggle rendering the same data as a DataTable.</li>
+    <li>Line for time trends (2px, no area fill except a single-series cash line at 8% opacity); bar for comparison (bars start at zero, 4px end radius only on the value end); stacked bar for composition and ageing. No pie/donut except a single part-of-whole with ≤3 parts, and never for money.</li>
+    <li>Grid: horizontal only, <code>border-subtle</code>, 4–5 ticks with round values. Axis labels 11–12px <code>fg-muted</code>, Latin digits, thousands separators, compact units (<span class="m-n">120k</span>) on axes only.</li>
+    <li>Time runs right-to-left in RTL (oldest at the right), the value axis on the right. Tooltips list series in legend order, aligned to the start.</li>
+    <li>Nulls break the line; projected segments are dashed and labelled. Comparison series in <code>chart-5</code> grey dashed.</li>
+  </ul>
+
+  <h3>8.10 Overlays: dropdown, tooltip, drawer, dialog, palette</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Component</th><th>Size and position</th><th>Behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>Dropdown menu</td><td>min 180px, items 32px, radius 8, <code>elev-1</code>; aligned to the trigger's start edge</td><td>Arrow keys, typeahead, Esc closes and returns focus. Destructive items at the bottom, separated, in danger colour.</td></tr>
+      <tr><td>Tooltip</td><td>max 280px, 12/18, ink bg, white text, radius 4, 6px offset</td><td>Hover 400ms delay, focus immediate; never the only place for essential info on touch (use an <span class="ar">ⓘ</span> popover there).</td></tr>
+      <tr><td>Drawer</td><td>480px (720 for wide), full height, enters from the end side (left in RTL), <code>elev-2</code>, scrim 32%</td><td>Header with title + record ID + <span class="ar">فتح الصفحة</span> + close; sticky footer with primary/secondary. Esc closes (asks if dirty). List behind keeps state.</td></tr>
+      <tr><td>Dialog</td><td>400 / 480 / 640px, radius 12, centred</td><td>Only for decisions. Title is the question (<span class="ar">حذف الطلب #1042؟</span>); body states the consequence; buttons name the action. Focus trap, return focus to trigger.</td></tr>
+      <tr><td>Command palette</td><td>640px, top 15vh, <code>elev-2</code></td><td>See §10.4.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>8.11 Tabs and segmented controls</h3>
+  <p class="small"><b>Tabs</b> switch content areas or saved views: 13/500, 2px ink underline on the active tab, counts in a sunken chip, scroll horizontally on overflow with fade edges. <b>Segmented control</b> picks one value for the same content (period, chart measure, density): 28px, sunken track, white selected segment with <code>border</code>.</p>
+
+  <h3>8.12 Feedback: toasts, alerts, empty, loading, error</h3>
+  <div class="mock" dir="rtl" lang="ar" style="padding:16px 20px;background:var(--surface);display:grid;gap:12px">
+    <div class="toast">نُقلت الصفقة «محمصة النخبة — خلطة خاصة» إلى تفاوض <a href="#system">تراجع</a></div>
+    <div class="alert wa"><b>الفترة 2026-09 مغلقة.</b> لا يمكن ترحيل قيود بتاريخ سبتمبر. اطلب إعادة الفتح من المدير المالي.</div>
+    <div class="alert er"><b>تعذّر حفظ الدفعة B-20261006-4821.</b> تغيّر رصيد اللوت GB-014 أثناء التحرير. حدّث الصفحة وأعد المحاولة؛ إدخالاتك محفوظة.</div>
+    <div class="pane"><div class="pane-b" style="display:grid;gap:10px">
+      <span class="skel" style="width:30%"></span><span class="skel" style="width:85%"></span><span class="skel" style="width:60%"></span>
+    </div></div>
+  </div>
+  <ul class="small">
+    <li><b>Toast</b>: bottom-start, 360px max, 6s, ink background, one action. Success and info only. <code>role="status"</code>.</li>
+    <li><b>Inline alert</b>: page or section scope, tinted background, 1px tinted border, icon, bold first sentence that states the fact, second sentence the remedy. <code>role="alert"</code> only for errors that just happened.</li>
+    <li><b>Field error</b>: below the field, 12px danger, describes the fix. Form-level summary at the top when ≥2 errors, linking to each field.</li>
+    <li><b>Loading</b>: skeleton after 150ms; progress bar for operations &gt;2s with a count (<span class="ar">جارٍ استيراد 120 من 480 صفًا</span>).</li>
+    <li><b>Error state</b>: replaces the region, not the page: what failed, <span class="ar">إعادة المحاولة</span>, and the time of the last good data. Never show 0.</li>
+    <li><b>Permission state</b>: names the missing ability (<span class="ar">تحتاج صلاحية «اعتماد الفواتير»</span>) and who grants it; never reveals the hidden data.</li>
+  </ul>
+</section>

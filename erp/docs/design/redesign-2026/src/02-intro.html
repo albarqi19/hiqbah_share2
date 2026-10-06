@@ -1,0 +1,107 @@
+<div class="shell">
+<nav class="toc" aria-label="Contents">
+  <div class="brandline"><span class="glyph" aria-hidden="true">ح</span><div><b>Hiqbah ERP</b><small>Redesign spec · v1 · 6 Oct 2026</small></div></div>
+  <ol>
+    <li><a href="#summary">Executive summary</a></li>
+    <li><a href="#method">Method and limits</a></li>
+    <li><a href="#references">Reference products</a></li>
+    <li><a href="#patterns">Pattern library</a></li>
+    <li><a href="#audit">Audit of the current ERP</a></li>
+    <li><a href="#principles">Design principles</a></li>
+    <li><a href="#direction">Visual direction</a></li>
+    <li><a href="#system">Design system spec</a></li>
+    <li><a href="#status">Status system</a></li>
+    <li><a href="#ia">Information architecture</a></li>
+    <li><a href="#tables">Tables</a></li>
+    <li><a href="#pages">Page redesigns</a></li>
+    <li><a href="#rtl">RTL specification</a></li>
+    <li><a href="#responsive">Responsive behaviour</a></li>
+    <li><a href="#a11y">Accessibility</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#appendix">Reference index</a></li>
+  </ol>
+</nav>
+<main>
+
+<section class="sec" id="summary">
+  <p class="eyebrow">Hiqbah / BeanFlow ERP · design benchmark and redesign specification</p>
+  <h1>One coherent operating system for a roastery, instead of three apps sharing a sidebar</h1>
+  <p class="lede">The ERP's domain logic is unusually careful: gram-level reconciliation, declared loss, partial packages, separate fulfilment and payment states, permission-aware navigation. The interface has not caught up. It ships three parallel UI kits, two accent colours, twenty-one font sizes and twenty-eight hand-built tables. This report benchmarks 70+ screens from 40+ products on Mobbin, audits the current code and screenshots, and specifies a single system precise enough to rebuild the Figma file and the production UI from.</p>
+
+  <div class="grid g4" style="margin:28px 0">
+    <div class="stat"><div class="v">3</div><div class="l">parallel UI kits (Sales, Finance, Order Ops) with their own Button, Card, Badge</div></div>
+    <div class="stat"><div class="v">21</div><div class="l">distinct font sizes in <code>src/</code>, including 9px and 10px Arabic (66 uses)</div></div>
+    <div class="stat"><div class="v">0</div><div class="l">uses of <code>@tanstack/react-table</code>, though it is installed; 28 hand-rolled tables</div></div>
+    <div class="stat"><div class="v">217</div><div class="l">text uses of greys at 2.5:1 contrast (<code>slate-light</code>, <code>oo-text-muted</code>)</div></div>
+  </div>
+
+  <h3>The five decisions that matter most</h3>
+  <ol>
+    <li><b>Collapse to one token layer and one component kit.</b> Delete <code>--orange</code> (it is violet), <code>--oo-*</code> (indigo) and the per-module kits in <code>sales/_components/ui.tsx</code> and <code>finance/_components/ui.tsx</code>. Ship one <code>src/components/ui/</code> built on the tokens in <a href="#system">§8</a>. Everything else in this report depends on it.</li>
+    <li><b>Build one DataTable and use it everywhere.</b> Sticky header, pinned identifier column, saved views as tabs, filter chips, column visibility, bulk bar, summary row, skeleton rows. Most daily work in this ERP is a table (<a href="#tables">§11</a>).</li>
+    <li><b>Replace the dark violet chrome with a calm, light, Arabic-first shell.</b> Light sidebar on the right, 44px top bar with breadcrumb and a <span class="kbd">Ctrl K</span> command palette that understands Arabic spelling variants and order numbers (<a href="#ia">§10</a>).</li>
+    <li><b>One status registry.</b> Every business status maps to one of six tones, a fixed Arabic label and a dot. "Overdue" becomes a separate flag, never a status (<a href="#status">§9</a>).</li>
+    <li><b>Fewer cards, more structure.</b> Dashboards become a metric strip, an "needs attention" queue and two charts. Detail pages become a header, a main column and a properties panel. Explanatory paragraphs move into tooltips.</li>
+  </ol>
+
+  <h3>Priority overview</h3>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Priority</th><th>Meaning</th><th>Count</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag P0">P0 · Critical</span></td><td>Misleads a decision, blocks accessibility, or makes every later fix more expensive</td><td class="n">9</td><td>Token/kit consolidation, wrong date locale (<span class="ar">Jan 1, 2099</span> in an Arabic table), funnel bars scaled by count but labelled with value, 2.5:1 text, native <code>confirm()</code> dialogs</td></tr>
+      <tr><td><span class="tag P1">P1 · High impact</span></td><td>Measurably slows daily work or causes repeat errors</td><td class="n">13</td><td>Shared DataTable, pipeline card buttons, page-header copy blocks, full-page spinners, IA labels, permanent "provisional UI" banner</td></tr>
+      <tr><td><span class="tag P2">P2 · Improvement</span></td><td>Polish and consistency once the system is in place</td><td class="n">9</td><td>Empty-state actions, Latin wordmark and "Custom Role" in Arabic shell, icon mirroring rules, print styles</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">Scope guard: nothing here changes business logic, permissions, the data model or the four-way gram reconciliation. Where a UX change touches behaviour (e.g. drag to move a deal), it calls the same server action the current buttons call.</p>
+</section>
+
+<section class="sec" id="method">
+  <p class="eyebrow">02</p>
+  <h2>Method and limits</h2>
+  <div class="grid g2">
+    <div class="box">
+      <h4>Mobbin benchmark</h4>
+      <p class="small">17 targeted searches (web, plus one iOS) covering data tables, CRM pipelines, record detail, finance dashboards, cash flow, budget vs actual, inventory, approvals and bill pay, tasks, notifications, command palettes, audit logs, roles and permissions, analytics with period comparison, quote/invoice builders, skeleton states and mobile lists. Every reference below was opened and read from its screenshot, not from metadata. Each one links to its Mobbin page in the <a href="#appendix">reference index</a>.</p>
+    </div>
+    <div class="box">
+      <h4>Codebase and screenshot audit</h4>
+      <p class="small">The <code>erp/</code> source at commit <code>841274f</code>: <code>globals.css</code>, <code>lib/nav/registry.ts</code>, the dashboard shell, all 44 dashboard pages and the three UI kits, measured with grep counts quoted in each finding. Visual evidence comes from the 59 harness screenshots in <code>tests/harness/shots/</code> and the 4 shell screenshots in <code>docs/sales/nav-shots/</code>. The draft design skill <span class="ar">«دستور واجهات حقبة» v1.0</span> was used as the starting baseline.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <p><b>Limits, stated plainly.</b></p>
+    <p>Mobbin contains no Arabic RTL ERP and no coffee-roasting or shop-floor screens. RTL guidance comes from the W3C internationalisation rules and Arabic typesetting practice, not from a reference product. Production and QC patterns are adapted from Shopify's batch fulfilment, DoorDash's order drawer and Linear's issue model.</p>
+    <p>Mobbin images could not be embedded: this environment's network policy blocks downloads from Mobbin, so references are links. The "before" screenshots are the repository's own.</p>
+    <p>The harness screenshots render Sales pages without the app shell and, in some, with a fallback font; findings about the shell use the <code>nav-shots</code> images, which do include it.</p>
+    <p>No usability testing was run. Severity is judged from task impact, not measured.</p>
+  </div>
+</section>
+
+<section class="sec" id="references">
+  <p class="eyebrow">03</p>
+  <h2>Reference products: what to take, what to leave</h2>
+  <p>Seventeen products recur across the strongest results. None is a template for Hiqbah; each contributes one or two specific mechanisms.</p>
+  <div class="tw"><table class="t">
+    <thead><tr><th>Product</th><th>Strongest at</th><th>Take</th><th>Do not copy</th></tr></thead>
+    <tbody>
+      <tr><td><b>Attio</b></td><td>Record pages, activity with attribute diffs, pipeline cards</td><td>Activity entries that show <i>field: old → new</i>; favourites and lists in the sidebar; record header with one primary action</td><td>Star ratings and decorative colour dots on every attribute</td></tr>
+      <tr><td><b>Linear</b></td><td>Density, keyboard speed, properties panel, board with hidden columns</td><td>Properties panel on the record's end side; "1 hidden by filters · Clear"; status icons that encode progress</td><td>Engineering vocabulary (cycles, estimates); monochrome to the point of losing status meaning</td></tr>
+      <tr><td><b>Twenty</b></td><td>Open-source CRM tables: filter menu split into visible and hidden fields, "Count all" footer, side panel records</td><td>Footer aggregates per column; filter field search; record side panel with "Open" to full page</td><td>Showing "System" as creator in user-facing columns</td></tr>
+      <tr><td><b>Pipedrive</b></td><td>Pipeline board, "Focus" overdue activity above history</td><td>Stage header with value and count; warning icon on stalled deals; overdue activity pinned above the history feed</td><td>Green "+ Deal" as the only colour in the chrome</td></tr>
+      <tr><td><b>HubSpot</b></td><td>Board totals and weighted totals per stage, saved views as tabs</td><td>Total and weighted total in a fixed column footer; "No activity for 3 days" on the card</td><td>Header full of orange CTAs and upsell</td></tr>
+      <tr><td><b>Xero</b></td><td>Bills: status tabs with counts, date filters, bulk approve; cash-flow projection with a drawer for overdue bills</td><td>Status tabs that carry counts; "Approve / Submit for approval" appearing only after selection; "Projected end balance" as one of three numbers</td><td>Bright blue global header; dense dropdowns for every filter</td></tr>
+      <tr><td><b>QuickBooks</b></td><td>Business-at-a-glance home</td><td>"3 to review" links inside each finance widget; bank balance vs balance in books</td><td>Nine equally weighted widgets, donut charts, "Add widget" placeholders</td></tr>
+      <tr><td><b>Shopify</b></td><td>Inventory columns, purchase orders, Bill Pay bulk bar, permission tree, batch pick → print → pack</td><td>Unavailable / Committed / Available / On hand / Incoming; floating bulk action bar; stepper with timeline under it; "Unsaved changes · Discard · Save" in the top bar</td><td>Product thumbnails in every row (green coffee has no photo)</td></tr>
+      <tr><td><b>Square</b></td><td>Item library with status dropdown in the row, invoice builder, skeletons</td><td>Line-item editor with sticky totals; skeleton that keeps the exact table geometry</td><td>Consumer-scale round buttons</td></tr>
+      <tr><td><b>Monarch / Copilot Money</b></td><td>Account groups with totals, budget vs actual bars</td><td>Grouped list with group subtotal on the same row; Spent / Budget / Left columns</td><td>Dark mode as the default; emoji categories</td></tr>
+      <tr><td><b>Klaviyo, Toggl, Customer.io, Grok</b></td><td>Audit logs</td><td>Actor · action · entity · exact time; "From → To" chips; event histogram above the log</td><td>Raw event IDs as the first column</td></tr>
+      <tr><td><b>Plain, Basecamp, HoneyBook</b></td><td>Tasks</td><td>"My tasks / All / Done" with counts; task detail as side panel; "Assigned to me" grouped by due window</td><td>Playful copy and emoji in task titles</td></tr>
+      <tr><td><b>Remote</b></td><td>Expenses with filter chips and an undoable status toast</td><td>Toast "Expense marked as reimbursed · revert"; Requested by / Created / Amount / Converted / Status</td><td>Large empty table frame when few rows exist</td></tr>
+      <tr><td><b>Salesforce, Zoho CRM</b></td><td>Breadth: related lists, bulk actions, filter sidebar</td><td>"0 items selected (limit 50)" honesty; related lists as tabs</td><td>Visual noise: icons, colours and boxes on every element</td></tr>
+      <tr><td><b>DoorDash Merchant</b></td><td>Order drawer, product mix table with totals row, analytics period comparison</td><td>Drawer that keeps the list visible; "All items" totals row at the top of a table</td><td>Red brand used as the only action colour</td></tr>
+      <tr><td><b>Mintlify, Klaviyo analytics</b></td><td>Metric tabs that switch the chart; explicit comparison period</td><td>Metric strip where each metric is a tab for the chart below; "compared to previous period" stated next to the date range</td><td>Charts with no units</td></tr>
+      <tr><td><b>Vapi, Juicebox, Magnific</b></td><td>Command palettes</td><td>Sections (Actions / Recent / Pages), shortcut hints, footer legend for keys</td><td>Voice input; dark-only palettes</td></tr>
+    </tbody>
+  </table></div>
+</section>
